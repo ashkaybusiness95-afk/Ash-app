@@ -2,28 +2,19 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
   <title>Ash Property Portfolio</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: #f1f5f9; }
-  </style>
+  <style>*{box-sizing:border-box;margin:0;padding:0}body{background:#f1f5f9}</style>
 </head>
 <body>
   <div id="root"></div>
-
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
   <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-
   <script type="text/babel">
-
-    // ── REACT GLOBALS ──────────────────────────────────────────────────────────
-    const { useState, useEffect, useRef, useCallback } = React;
-
-    // ── FIREBASE ───────────────────────────────────────────────────────────────
+    const { useState, useEffect, useRef } = React;
     firebase.initializeApp({
       apiKey: "AIzaSyAaxhoM0O6seClznekYK71iQhC_WoFdrsQ",
       authDomain: "ash-property-app.firebaseapp.com",
@@ -34,22 +25,20 @@
     });
     const db = firebase.firestore();
 
-    // ── APP CODE ───────────────────────────────────────────────────────────────
-
 const PASS = "Ashproperty1995";
 const SK = "ash-p8";
 const AUTH_KEY = "ash-auth";
 const ONE_DAY = 86400000;
 
 const PROPS = [
-  {id:"stanns",    n:"12 St Anns Mount",    town:"Burley",      ty:"HMO",v:280000,mtg:155000,mm:820.05},
-  {id:"stanmore",  n:"4 Stanmore Mount",     town:"Burley",      ty:"HMO",v:280000,mtg:169902,mm:518.10},
-  {id:"randolph",  n:"42 Randolph Street",   town:"Bramley",     ty:"BTL",v:180000,mtg:118248,mm:261.15},
-  {id:"musgrave",  n:"26 Musgrave Mount",    town:"Bramley",     ty:"BTL",v:180000,mtg:135000,mm:563.63},
-  {id:"henley",    n:"23 Henley Road",       town:"Bramley",     ty:"BTL",v:150000,mtg:115000,mm:469.69},
-  {id:"churchhill",n:"15 Church Hill Mount", town:"Stanningley", ty:"BTL",v:170000,mtg:120000,mm:466.00},
-  {id:"snowden",   n:"37 Snowden Crescent",  town:"Bramley",     ty:"BTL",v:100000,mtg:56999, mm:137.29},
-  {id:"airedale",  n:"2 Airedale House",     town:"Rodley",      ty:"BTL",v:90000, mtg:61500, mm:200.00},
+  {id:"stanns", color:"#3b82f6",    n:"12 St Anns Mount",    town:"Burley",      ty:"HMO",v:280000,mtg:155000,mm:820.05},
+  {id:"stanmore", color:"#22c55e",  n:"4 Stanmore Mount",     town:"Burley",      ty:"HMO",v:280000,mtg:169902,mm:518.10},
+  {id:"randolph", color:"#f59e0b",  n:"42 Randolph Street",   town:"Bramley",     ty:"BTL",v:180000,mtg:118248,mm:261.15},
+  {id:"musgrave", color:"#8b5cf6",  n:"26 Musgrave Mount",    town:"Bramley",     ty:"BTL",v:180000,mtg:135000,mm:563.63},
+  {id:"henley", color:"#ec4899",    n:"23 Henley Road",       town:"Bramley",     ty:"BTL",v:150000,mtg:115000,mm:469.69},
+  {id:"churchhill", color:"#14b8a6",n:"15 Church Hill Mount", town:"Stanningley", ty:"BTL",v:170000,mtg:120000,mm:466.00},
+  {id:"snowden", color:"#f97316",   n:"37 Snowden Crescent",  town:"Bramley",     ty:"BTL",v:100000,mtg:56999, mm:137.29},
+  {id:"airedale", color:"#06b6d4",  n:"2 Airedale House",     town:"Rodley",      ty:"BTL",v:90000, mtg:61500, mm:200.00},
 ];
 
 const MTGS = [
@@ -62,7 +51,7 @@ const MTGS = [
   {l:"23 Henley Road",          ldr:"GML",       ac:"25940000", b:115000,r:5.01,m:469.69,e:"2031-03-31"},
   {l:"15 Church Hill Mount",    ldr:"GML",       ac:"",         b:120000,r:4.66,m:466.00,e:"2030-02-28"},
   {l:"37 Snowden Crescent",     ldr:"GML",       ac:"",         b:56999, r:2.89,m:137.29,e:"2027-10-31"},
-  {l:"2 Airedale House",        ldr:"Unknown",   ac:"",         b:61500, r:null,m:200.00,e:null},
+  {l:"2 Airedale House",        ldr:"Unknown",   ac:"",         b:61500, r:3.76, m:198.48,e:"2031-03-23"},
 ];
 
 const CTYPES = [
@@ -209,8 +198,6 @@ function App() {
     } catch { return false; }
   });
   const [data, setData]     = useState(null);
-  const [dbLoading, setDbLoading] = useState(true);
-  const saveTimer = useRef(null);
   const [tab, setTab]       = useState("dash");
   const [more, setMore]     = useState(null);
   const [expMap, setExpMap] = useState({});
@@ -225,522 +212,39 @@ function App() {
   }, []);
 
   useEffect(() => {
-    const BACKUP_DATA = {
-  "tenants": [
-    {
-      "id": "t1",
-      "pid": "stanns",
-      "rm": "Room 1",
-      "nm": "Rick",
-      "dy": 1,
-      "rn": 500,
-      "dp": 200,
-      "rv": null,
-      "nt": ""
-    },
-    {
-      "id": "t2",
-      "pid": "stanns",
-      "rm": "Room 2",
-      "nm": "Nijil",
-      "dy": 12,
-      "rn": 500,
-      "dp": 215,
-      "rv": null,
-      "nt": ""
-    },
-    {
-      "id": "t3",
-      "pid": "stanns",
-      "rm": "Room 3",
-      "nm": "Keely",
-      "dy": 1,
-      "rn": 500,
-      "dp": 200,
-      "rv": null,
-      "nt": ""
-    },
-    {
-      "id": "t4",
-      "pid": "stanns",
-      "rm": "Room 4",
-      "nm": "Shreya",
-      "dy": 28,
-      "rn": 500,
-      "dp": null,
-      "rv": null,
-      "nt": ""
-    },
-    {
-      "id": "t5",
-      "pid": "stanns",
-      "rm": "Room 5",
-      "nm": "Anuj",
-      "dy": 11,
-      "rn": 575,
-      "dp": 187.5,
-      "rv": "2026-04-07",
-      "nt": ""
-    },
-    {
-      "id": "t6",
-      "pid": "stanns",
-      "rm": "Room 6",
-      "nm": "Ronn",
-      "dy": 31,
-      "rn": 425,
-      "dp": 225,
-      "rv": null,
-      "nt": ""
-    },
-    {
-      "id": "t7",
-      "pid": "stanmore",
-      "rm": "Room 1",
-      "nm": "Rajarshi",
-      "dy": 27,
-      "rn": 450,
-      "dp": 495,
-      "rv": null,
-      "nt": "Verify - may have moved out Jun 2021"
-    },
-    {
-      "id": "t8",
-      "pid": "stanmore",
-      "rm": "Room 2",
-      "nm": "Ashish",
-      "dy": 28,
-      "rn": 600,
-      "dp": null,
-      "rv": null,
-      "nt": ""
-    },
-    {
-      "id": "t9",
-      "pid": "stanmore",
-      "rm": "Room 3",
-      "nm": "Rory",
-      "dy": 28,
-      "rn": 525,
-      "dp": 430,
-      "rv": null,
-      "nt": "3 months notice"
-    },
-    {
-      "id": "t10",
-      "pid": "stanmore",
-      "rm": "Room 4",
-      "nm": "Rupen",
-      "dy": 20,
-      "rn": 500,
-      "dp": 450,
-      "rv": null,
-      "nt": "6 months notice"
-    },
-    {
-      "id": "t11",
-      "pid": "stanmore",
-      "rm": "Room 5",
-      "nm": "Ash (tenant)",
-      "dy": 5,
-      "rn": 450,
-      "dp": 295,
-      "rv": null,
-      "nt": ""
-    },
-    {
-      "id": "t12",
-      "pid": "randolph",
-      "rm": "Whole",
-      "nm": "Adam & Emily",
-      "dy": 2,
-      "rn": 850,
-      "dp": 595,
-      "rv": null,
-      "nt": ""
-    },
-    {
-      "id": "t13",
-      "pid": "henley",
-      "rm": "Whole",
-      "nm": "Beth",
-      "dy": 4,
-      "rn": 925,
-      "dp": null,
-      "rv": null,
-      "nt": "Rent increased from 900"
-    },
-    {
-      "id": "t14",
-      "pid": "musgrave",
-      "rm": "Whole",
-      "nm": "Rhys & Amelia",
-      "dy": 8,
-      "rn": 875,
-      "dp": null,
-      "rv": null,
-      "nt": ""
-    },
-    {
-      "id": "t15",
-      "pid": "snowden",
-      "rm": "Whole",
-      "nm": "Declan",
-      "dy": 4,
-      "rn": 795,
-      "dp": null,
-      "rv": null,
-      "nt": ""
-    },
-    {
-      "id": "t16",
-      "pid": "churchhill",
-      "rm": "Whole",
-      "nm": "Sophie",
-      "dy": 13,
-      "rn": 975,
-      "dp": null,
-      "rv": null,
-      "nt": ""
-    },
-    {
-      "id": "t17",
-      "pid": "airedale",
-      "rm": "Whole",
-      "nm": "Chelsea",
-      "dy": 10,
-      "rn": 795,
-      "dp": null,
-      "rv": null,
-      "nt": ""
-    }
-  ],
-  "rp": {
-    "t1-2026-3": true,
-    "t3-2026-3": true,
-    "t5-2026-3": true,
-    "t11-2026-3": true,
-    "t12-2026-3": true,
-    "t13-2026-3": true,
-    "t15-2026-3": true,
-    "t14-2026-3": true
-  },
-  "jobs": [
-    {
-      "pid": "randolph",
-      "desc": "Cut tree",
-      "cost": 230,
-      "cont": "",
-      "cat": "",
-      "id": "j1775576974811",
-      "date": "2026-04-07",
-      "status": "done"
-    },
-    {
-      "pid": "churchhill",
-      "desc": "Rubbish removal",
-      "cost": 0,
-      "cont": "",
-      "cat": "",
-      "id": "j1775581716840",
-      "date": "2026-04-07",
-      "status": "open"
-    },
-    {
-      "pid": "henley",
-      "desc": "Check roof",
-      "cost": 0,
-      "cont": "",
-      "cat": "",
-      "id": "j1775581738500",
-      "date": "2026-04-07",
-      "status": "open"
-    },
-    {
-      "pid": "churchhill",
-      "desc": "Sort gutters with neighbor",
-      "cost": 0,
-      "cont": "",
-      "cat": "",
-      "id": "j1775581759503",
-      "date": "2026-04-07",
-      "status": "open"
-    },
-    {
-      "pid": "stanmore",
-      "desc": "Order and fit new blind",
-      "cost": 0,
-      "cont": "",
-      "cat": "",
-      "id": "j1775636165494",
-      "date": "2026-04-08",
-      "status": "open"
-    }
-  ],
-  "comp": [
-    {
-      "id": "stanns-gas",
-      "pid": "stanns",
-      "type": "gas",
-      "last": "",
-      "next": "",
-      "notes": ""
-    },
-    {
-      "id": "stanns-eicr",
-      "pid": "stanns",
-      "type": "eicr",
-      "last": "",
-      "next": "",
-      "notes": ""
-    },
-    {
-      "id": "stanns-epc",
-      "pid": "stanns",
-      "type": "epc",
-      "last": "",
-      "next": "",
-      "notes": ""
-    },
-    {
-      "id": "stanns-hmo",
-      "pid": "stanns",
-      "type": "hmo",
-      "last": "",
-      "next": "",
-      "notes": ""
-    },
-    {
-      "id": "stanmore-gas",
-      "pid": "stanmore",
-      "type": "gas",
-      "last": "",
-      "next": "",
-      "notes": ""
-    },
-    {
-      "id": "stanmore-eicr",
-      "pid": "stanmore",
-      "type": "eicr",
-      "last": "",
-      "next": "",
-      "notes": ""
-    },
-    {
-      "id": "stanmore-epc",
-      "pid": "stanmore",
-      "type": "epc",
-      "last": "",
-      "next": "",
-      "notes": ""
-    },
-    {
-      "id": "stanmore-hmo",
-      "pid": "stanmore",
-      "type": "hmo",
-      "last": "",
-      "next": "",
-      "notes": ""
-    },
-    {
-      "id": "randolph-gas",
-      "pid": "randolph",
-      "type": "gas",
-      "last": "",
-      "next": "",
-      "notes": ""
-    },
-    {
-      "id": "randolph-eicr",
-      "pid": "randolph",
-      "type": "eicr",
-      "last": "",
-      "next": "",
-      "notes": ""
-    },
-    {
-      "id": "randolph-epc",
-      "pid": "randolph",
-      "type": "epc",
-      "last": "",
-      "next": "",
-      "notes": ""
-    },
-    {
-      "id": "musgrave-gas",
-      "pid": "musgrave",
-      "type": "gas",
-      "last": "",
-      "next": "",
-      "notes": ""
-    },
-    {
-      "id": "musgrave-eicr",
-      "pid": "musgrave",
-      "type": "eicr",
-      "last": "",
-      "next": "",
-      "notes": ""
-    },
-    {
-      "id": "musgrave-epc",
-      "pid": "musgrave",
-      "type": "epc",
-      "last": "",
-      "next": "",
-      "notes": ""
-    },
-    {
-      "id": "henley-gas",
-      "pid": "henley",
-      "type": "gas",
-      "last": "",
-      "next": "",
-      "notes": ""
-    },
-    {
-      "id": "henley-eicr",
-      "pid": "henley",
-      "type": "eicr",
-      "last": "",
-      "next": "",
-      "notes": ""
-    },
-    {
-      "id": "henley-epc",
-      "pid": "henley",
-      "type": "epc",
-      "last": "",
-      "next": "",
-      "notes": ""
-    },
-    {
-      "id": "churchhill-gas",
-      "pid": "churchhill",
-      "type": "gas",
-      "last": "",
-      "next": "",
-      "notes": ""
-    },
-    {
-      "id": "churchhill-eicr",
-      "pid": "churchhill",
-      "type": "eicr",
-      "last": "",
-      "next": "",
-      "notes": ""
-    },
-    {
-      "id": "churchhill-epc",
-      "pid": "churchhill",
-      "type": "epc",
-      "last": "",
-      "next": "",
-      "notes": ""
-    },
-    {
-      "id": "snowden-gas",
-      "pid": "snowden",
-      "type": "gas",
-      "last": "",
-      "next": "",
-      "notes": ""
-    },
-    {
-      "id": "snowden-eicr",
-      "pid": "snowden",
-      "type": "eicr",
-      "last": "",
-      "next": "",
-      "notes": ""
-    },
-    {
-      "id": "snowden-epc",
-      "pid": "snowden",
-      "type": "epc",
-      "last": "",
-      "next": "",
-      "notes": ""
-    },
-    {
-      "id": "airedale-gas",
-      "pid": "airedale",
-      "type": "gas",
-      "last": "",
-      "next": "",
-      "notes": ""
-    },
-    {
-      "id": "airedale-eicr",
-      "pid": "airedale",
-      "type": "eicr",
-      "last": "",
-      "next": "",
-      "notes": ""
-    },
-    {
-      "id": "airedale-epc",
-      "pid": "airedale",
-      "type": "epc",
-      "last": "",
-      "next": "",
-      "notes": ""
-    }
-  ],
-  "contractors": [],
-  "deals": [],
-  "notes": {},
-  "outgoings": {
-    "henley-2026-04": [
-      {
-        "id": "o1775582075861",
-        "label": "Electrics",
-        "amount": 75
-      }
-    ]
-  },
-  "generalNotes": "",
-  "fixedOutgoings": {},
-  "propPurchase": {},
-  "roomNotes": {}
-};
-    db.collection("ashapp").doc("data").get().then(doc => {
-      let d = doc.exists ? doc.data() : JSON.parse(JSON.stringify(BACKUP_DATA));
-      if (!d.comp)          d.comp          = seedComp();
-      if (!d.contractors)   d.contractors   = [];
-      if (!d.deals)         d.deals         = [];
-      if (!d.notes)         d.notes         = {};
-      if (!d.outgoings)     d.outgoings     = {};
-      if (!d.generalNotes)  d.generalNotes  = "";
-      if (!d.fixedOutgoings)  d.fixedOutgoings  = {};
-      if (!d.propPurchase)    d.propPurchase    = {};
-      if (!d.roomNotes)       d.roomNotes       = {};
-      if (!d.tenants.find(t => t.id === "t17")) {
-        d.tenants.push({id:"t17",pid:"airedale",rm:"Whole",nm:"Chelsea",dy:10,rn:795,dp:null,rv:null,nt:""});
-      }
-      if (!d.jobs) d.jobs = [];
+        db.collection("ashapp").doc("data").get().then(doc=>{
+      let d=doc.exists?doc.data():JSON.parse(JSON.stringify(SEED));
+      if(!d.comp)d.comp=seedComp();
+      if(!d.contractors)d.contractors=[];
+      if(!d.deals)d.deals=[];
+      if(!d.notes)d.notes={};
+      if(!d.outgoings)d.outgoings={};
+      if(!d.generalNotes)d.generalNotes="";
+      if(!d.fixedOutgoings)d.fixedOutgoings={};
+      if(!d.propPurchase)d.propPurchase={};
+      if(!d.roomNotes)d.roomNotes={};
+      if(d.savings===undefined)d.savings=0;
+      if(!d.tenants.find(t=>t.id==="t17"))d.tenants.push({id:"t17",pid:"airedale",rm:"Whole",nm:"Chelsea",dy:10,rn:795,dp:null,rv:null,nt:""});
       setData(d);
-      setDbLoading(false);
-    }).catch(() => {
-      setData(JSON.parse(JSON.stringify(SEED)));
-      setDbLoading(false);
-    });
+    }).catch(()=>setData(JSON.parse(JSON.stringify(SEED))));
   }, []);
 
+  const setSavings=v=>upd(()=>({savings:v}));
+  const stRef = useRef(null);
   useEffect(() => {
-    if (!data || dbLoading) return;
-    if (saveTimer.current) clearTimeout(saveTimer.current);
-    saveTimer.current = setTimeout(() => {
-      db.collection("ashapp").doc("data").set(JSON.parse(JSON.stringify(data))).catch(console.error);
+    if (!data) return;
+    if (stRef.current) clearTimeout(stRef.current);
+    stRef.current = setTimeout(() => {
+      db.collection("ashapp").doc("data").set(JSON.parse(JSON.stringify(data))).catch(()=>{});
     }, 1500);
-  }, [data, dbLoading]);
+  }, [data]);
 
   const upd = fn => setData(p => ({ ...p, ...fn(p) }));
 
   if (!loggedIn) return <LoginScreen onLogin={() => setLoggedIn(true)} />;
-  if (!data || dbLoading) return <div style={{ display:"flex", alignItems:"center", justifyContent:"center", height:"100vh", background:S.dark, flexDirection:"column", gap:12 }}><div style={{ fontSize:36 }}>🏠</div><div style={{ color:"#fff", fontSize:16, fontWeight:600 }}>Loading your portfolio...</div><div style={{ color:"#64748b", fontSize:13 }}>Connecting to database</div></div>;
+  if (!data) return <div style={{display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",height:"100vh",background:S.dark}}><div style={{fontSize:40}}>&#127968;</div><div style={{color:"#fff",fontWeight:700,marginTop:12}}>Loading...</div></div>;
 
-  const { tenants, rp, jobs, comp, contractors, deals, notes, outgoings, generalNotes, fixedOutgoings, propPurchase, roomNotes } = data;
+  const { tenants, rp, jobs, comp, contractors, deals, notes, outgoings, generalNotes, fixedOutgoings, propPurchase, roomNotes, savings } = data;
   // Check if outgoings entered this month for any property
   const outgoingsMissing = PROPS.some(p => {
     const k = p.id + "-" + mKey(CYR, CMO);
@@ -750,7 +254,7 @@ function App() {
   const paidNow   = tenants.filter(t => rp[t.id + "-" + CYR + "-" + CMO]).length;
   const openJobs  = jobs.filter(j => j.status === "open").length;
   const alerts    = getAlerts(comp);
-  if (outgoingsMissing) alerts.push({ t:"a", msg:"Outgoings not yet entered for " + MFULL[CMO] + " — tap More → Outgoings" });
+
   const urgent    = alerts.filter(a => a.t === "r").length;
   const greet     = now.getHours() < 12 ? "morning" : now.getHours() < 17 ? "afternoon" : "evening";
 
@@ -782,8 +286,8 @@ function App() {
   };
   const toggleExp       = pid => setExpMap(e => ({ ...e, [pid]: !e[pid] }));
 
-  const bag = { tenants, rp, jobs, comp, contractors, deals, notes, outgoings, generalNotes, fixedOutgoings, propPurchase, roomNotes, expMap, toggleRent, addJob, updateJob, deleteJob, updateComp, updateTenant, addTenant, addContractor, deleteContractor, addDeal, updateDeal, deleteDeal, setNote, toggleExp, addOutgoing, deleteOutgoing, setGeneralNotes, setFixedOutgoing, removeFixedOutgoing, setPropPurchase, setRoomNote, wide };
-  const moreLabels = { outgoings:"Outgoings", compliance:"Compliance", tenants:"Tenants", hmorooms:"HMO Rooms", calendar:"Export to Calendar", ailetters:"AI Letter Writer", dealcheck:"Deal Analyser", financials:"Financials", tax:"Tax Summary", timeline:"Timeline", rentplanner:"Rent Planner", strategy:"BTL vs HMO", notes:"Notes", refinance:"Refinance Planner", mtginterest:"Mortgage Interest", growth:"Portfolio Growth", contractors:"Contractors", deals:"Deal Pipeline", voids:"Void Tracker" };
+  const bag = { tenants, rp, jobs, comp, contractors, deals, notes, outgoings, generalNotes, fixedOutgoings, propPurchase, roomNotes, expMap, toggleRent, addJob, updateJob, deleteJob, updateComp, updateTenant, addTenant, addContractor, deleteContractor, addDeal, updateDeal, deleteDeal, setNote, toggleExp, addOutgoing, deleteOutgoing, setGeneralNotes, setFixedOutgoing, removeFixedOutgoing, setPropPurchase , setRoomNote, savings, setSavings, wide };
+  const moreLabels = { outgoings:"Outgoings", compliance:"Compliance", tenants:"Tenants", hmorooms:"HMO Rooms", calendar:"Export to Calendar", ailetters:"AI Letter Writer", aistrategy:"AI Strategy", dealcheck:"Deal Analyser", financials:"Financials", tax:"Tax Summary", timeline:"Timeline", rentplanner:"Rent Planner", strategy:"BTL vs HMO", notes:"Notes", refinance:"Refinance Planner", mtginterest:"Mortgage Interest", growth:"Portfolio Growth", contractors:"Contractors", deals:"Deal Pipeline", voids:"Void Tracker" };
 
   const maxW = wide ? 1100 : 480;
 
@@ -800,6 +304,7 @@ function App() {
             <div>
               <div style={{ fontSize:11, color:S.gray, marginBottom:2 }}>Good {greet}, Ash</div>
               <div style={{ fontSize:18, fontWeight:700 }}>Portfolio Manager</div>
+              <div style={{ fontSize:11, color:"#94a3b8", fontStyle:"italic", marginTop:4 }}>{QUOTE.a?QUOTE.t+"—"+QUOTE.a:QUOTE.t}</div>
             </div>
             <div style={{ display:"flex", alignItems:"center", gap:8 }}>
               <span style={{ fontSize:11, color:"#4ade80" }}>&#9679; Saved</span>
@@ -825,6 +330,7 @@ function App() {
             {tab === "more"  && more === "hmorooms"    && <HMORoomsPage {...bag} />}
             {tab === "more"  && more === "calendar"    && <CalendarPage {...bag} />}
             {tab === "more"  && more === "ailetters"   && <AILettersPage {...bag} />}
+            {tab === "more"  && more === "aistrategy"  && <AIStrategyPage {...bag} />}
             {tab === "more"  && more === "dealcheck"   && <DealCheckPage {...bag} />}
             {tab === "more"  && more === "financials"  && <FinPage {...bag} />}
             {tab === "more"  && more === "tax"         && <TaxPage {...bag} />}
@@ -874,8 +380,8 @@ function WideLayout({ tab, setTab, more, setMore, bag, alerts, paidNow, urgent }
     {id:"mtgs",icon:"💳",label:"Mortgages"},
     {id:"more",icon:"⋯", label:"More"},
   ];
-  const moreItems = ["outgoings","compliance","tenants","hmorooms","calendar","ailetters","dealcheck","financials","tax","timeline","rentplanner","strategy","notes","refinance","mtginterest","growth","contractors","deals","voids"];
-  const moreLabels = { outgoings:"Outgoings", compliance:"Compliance", tenants:"Tenants", hmorooms:"HMO Rooms", calendar:"Export to Calendar", ailetters:"AI Letter Writer", dealcheck:"Deal Analyser", financials:"Financials", tax:"Tax Summary", timeline:"Timeline", rentplanner:"Rent Planner", strategy:"BTL vs HMO", notes:"Notes", refinance:"Refinance Planner", mtginterest:"Mortgage Interest", growth:"Portfolio Growth", contractors:"Contractors", deals:"Deal Pipeline", voids:"Void Tracker" };
+  const moreItems = ["outgoings","compliance","tenants","hmorooms","calendar","ailetters","aistrategy","dealcheck","financials","tax","timeline","rentplanner","strategy","notes","refinance","mtginterest","growth","contractors","deals","voids"];
+  const moreLabels = { outgoings:"Outgoings", compliance:"Compliance", tenants:"Tenants", hmorooms:"HMO Rooms", calendar:"Export to Calendar", ailetters:"AI Letter Writer", aistrategy:"AI Strategy", dealcheck:"Deal Analyser", financials:"Financials", tax:"Tax Summary", timeline:"Timeline", rentplanner:"Rent Planner", strategy:"BTL vs HMO", notes:"Notes", refinance:"Refinance Planner", mtginterest:"Mortgage Interest", growth:"Portfolio Growth", contractors:"Contractors", deals:"Deal Pipeline", voids:"Void Tracker" };
 
   return (
     <div style={{ display:"grid", gridTemplateColumns:"200px 1fr", gap:16 }}>
@@ -911,6 +417,7 @@ function WideLayout({ tab, setTab, more, setMore, bag, alerts, paidNow, urgent }
         {tab === "more"  && more === "hmorooms"    && <HMORoomsPage {...bag} />}
         {tab === "more"  && more === "calendar"    && <CalendarPage {...bag} />}
         {tab === "more"  && more === "ailetters"   && <AILettersPage {...bag} />}
+            {tab === "more"  && more === "aistrategy"  && <AIStrategyPage {...bag} />}
         {tab === "more"  && more === "dealcheck"   && <DealCheckPage {...bag} />}
         {tab === "more"  && more === "financials"  && <FinPage {...bag} />}
         {tab === "more"  && more === "tax"         && <TaxPage {...bag} />}
@@ -952,20 +459,68 @@ function getAlerts(comp) {
 }
 
 // ── DASHBOARD ─────────────────────────────────────────────────────────────────
+function GoalTracker({tenants,savings,setSavings}){
+  const [ed,setEd]=useState(false);
+  const [sv,setSv]=useState(String(savings||0));
+  const inc=tenants.reduce(function(s,t){return s+t.rn;},0);
+  const ipct=Math.min(100,Math.round(inc/24500*100));
+  const pot=savings||0,ppct=Math.min(100,Math.round(pot/40000*100));
+  const net=Math.max(0,inc-MTGS.reduce(function(s,m){return s+m.m;},0));
+  const mths=net>0?Math.ceil(Math.max(0,40000-pot)/net):"?";
+  const save=()=>{if(setSavings)setSavings(parseFloat(sv)||0);setEd(false);};
+  return (
+    <div style={{background:"linear-gradient(135deg,#1e293b,#0f172a)",borderRadius:16,padding:16,marginBottom:10,color:"#fff"}}>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
+        <div>
+          <div style={{fontSize:10,color:"#64748b",fontWeight:600,marginBottom:3}}>MISSION: 50 UNITS BY FEB 2036</div>
+          <div style={{fontSize:22,fontWeight:700}}>9 <span style={{color:"#64748b",fontSize:13}}>of 50 units</span></div>
+          <div style={{fontSize:10,color:"#4ade80"}}>Sale pending &#8212; 11 soon</div>
+        </div>
+        <div style={{textAlign:"right"}}>
+          <div style={{fontSize:10,color:"#64748b"}}>Rent income</div>
+          <div style={{fontSize:17,fontWeight:700,color:"#4ade80"}}>{gbp(inc)}</div>
+          <div style={{fontSize:10,color:"#64748b"}}>target {gbp(24500)}</div>
+        </div>
+      </div>
+      <div style={{marginBottom:7}}>
+        <div style={{display:"flex",justifyContent:"space-between",fontSize:10,color:"#64748b",marginBottom:2}}><span>Units 9/50</span><span>18%</span></div>
+        <div style={{height:4,background:"#334155",borderRadius:99,overflow:"hidden"}}><div style={{height:"100%",background:"#3b82f6",width:"18%"}} /></div>
+      </div>
+      <div style={{marginBottom:10}}>
+        <div style={{display:"flex",justifyContent:"space-between",fontSize:10,color:"#64748b",marginBottom:2}}><span>Income {ipct}%</span><span>{ipct}%</span></div>
+        <div style={{height:4,background:"#334155",borderRadius:99,overflow:"hidden"}}><div style={{height:"100%",background:"#22c55e",width:ipct+"%"}} /></div>
+      </div>
+      <div style={{background:"rgba(255,255,255,0.07)",borderRadius:10,padding:10}}>
+        <div style={{display:"flex",justifyContent:"space-between",fontSize:10,color:"#94a3b8",marginBottom:5}}><span style={{fontWeight:600}}>Deposit pot</span><span>~{mths} months</span></div>
+        {ed?(
+          <div style={{display:"flex",gap:6,marginBottom:6}}>
+            <input autoFocus type="number" value={sv} onChange={e=>setSv(e.target.value)} onKeyDown={e=>e.key==="Enter"&&save()} style={{flex:1,background:"#0f172a",border:"1px solid #334155",borderRadius:7,padding:"5px 8px",color:"#fff",fontSize:13,fontFamily:"system-ui",outline:"none"}} />
+            <button onClick={save} style={{background:"#22c55e",color:"#fff",border:"none",borderRadius:7,padding:"5px 12px",fontWeight:700,cursor:"pointer",fontFamily:"system-ui"}}>Save</button>
+            <button onClick={()=>setEd(false)} style={{background:"#334155",color:"#94a3b8",border:"none",borderRadius:7,padding:"5px 8px",cursor:"pointer",fontFamily:"system-ui"}}>x</button>
+          </div>
+        ):(
+          <div onClick={()=>setEd(true)} style={{cursor:"pointer",marginBottom:5}}>
+            <span style={{fontSize:16,fontWeight:700}}>{gbp(pot)}</span><span style={{fontSize:10,color:"#64748b"}}> of &#163;40,000 &#8212; tap to update</span>
+          </div>
+        )}
+        <div style={{height:5,background:"#334155",borderRadius:99,overflow:"hidden"}}><div style={{height:"100%",background:"linear-gradient(90deg,#f59e0b,#22c55e)",width:ppct+"%",transition:"width .4s"}} /></div>
+      </div>
+    </div>
+  );
+}
 function DashPage({ alerts, paidNow, tenants, rp, jobs, comp, outgoings, wide }) {
-  const [selYr, setSelYr] = useState(CYR);
-  const [selMo, setSelMo] = useState(CMO);
-  const isCurrentMonth = selYr === CYR && selMo === CMO;
-  const goBack = () => { const d = new Date(selYr, selMo-1, 1); setSelYr(d.getFullYear()); setSelMo(d.getMonth()); };
-  const goFwd  = () => { const d = new Date(selYr, selMo+1, 1); if(d <= new Date(CYR, CMO, 1)){ setSelYr(d.getFullYear()); setSelMo(d.getMonth()); }};
-  const ms  = mKey(selYr, selMo);
-  const tr  = tenants.reduce((s, t) => s + t.rn, 0);
-  const pr  = tenants.filter(t => rp[t.id + "-" + selYr + "-" + selMo]).reduce((s, t) => s + t.rn, 0);
-  const tm  = PROPS.reduce((s, p) => s + p.mm, 0);
-  const jc  = jobs.filter(j => j.status === "done" && j.date && j.date.startsWith(ms)).reduce((s, j) => s + (j.cost || 0), 0);
-  const oc  = PROPS.reduce((s,p) => s + (outgoings[p.id+"-"+ms]||[]).reduce((x,o)=>x+(o.amount||0),0), 0);
-  const totalOut = tm + jc + oc;
-  const ncf = pr - totalOut;
+  const [selYr,setSelYr]=useState(CYR);
+  const [selMo,setSelMo]=useState(CMO);
+  const [propView,setPropView]=useState(null);
+  const isCur=selYr===CYR&&selMo===CMO;
+  const ms=mKey(selYr,selMo);
+  const tr=tenants.reduce((s,t)=>s+t.rn,0);
+  const pr=tenants.filter(t=>rp[t.id+"-"+selYr+"-"+selMo]).reduce((s,t)=>s+t.rn,0);
+  const tm=PROPS.reduce((s,p)=>s+p.mm,0);
+  const jc=jobs.filter(j=>j.status==="done"&&j.date&&j.date.startsWith(ms)).reduce((s,j)=>s+(j.cost||0),0);
+  const oc=PROPS.reduce((s,p)=>s+(outgoings[p.id+"-"+ms]||[]).reduce((x,o)=>x+(o.amount||0),0),0);
+  const totalOut=tm+jc+oc;
+  const ncf=pr-totalOut;
   const tv  = PROPS.reduce((s, p) => s + p.v, 0);
   const td  = PROPS.reduce((s, p) => s + p.mtg, 0);
   const eq  = tv - td;
@@ -984,6 +539,7 @@ function DashPage({ alerts, paidNow, tenants, rp, jobs, comp, outgoings, wide })
     }
   });
 
+  tenants.forEach(t=>{if(t.moveOut){const dO=Math.round((new Date(t.moveOut)-now)/86400000);if(dO>=0&&dO<=60){const pp=PROPS.find(x=>x.id===t.pid);actions.push({priority:dO<=14?"r":"a",icon:"&#128230;",msg:t.nm+" at "+(pp?pp.n.split(" ")[0]:"")+" moving out in "+dO+" days",category:"Void Risk"});}}});
   // Open jobs older than 7 days
   jobs.filter(j=>j.status==="open").forEach(j => {
     const age = j.date ? Math.round((now-new Date(j.date))/86400000) : 0;
@@ -1023,17 +579,14 @@ function DashPage({ alerts, paidNow, tenants, rp, jobs, comp, outgoings, wide })
         const pr2  = tenants.filter(t => t.pid === p.id).reduce((s, t) => s + t.rn, 0);
         const ncf2 = pr2 - p.mm;
         return (
-          <div key={p.id} style={{ padding:"11px 14px", display:"flex", justifyContent:"space-between", alignItems:"center", borderBottom:"1px solid #f8fafc" }}>
-            <div style={{ display:"flex", alignItems:"flex-start", gap:8 }}>
-              <div style={{ width:7, height:7, borderRadius:"50%", background:p.vc?"#f59e0b":"#22c55e", marginTop:4, flexShrink:0 }} />
-              <div>
-                <div style={{ fontSize:13, fontWeight:600 }}>{p.n}</div>
-                <div style={{ fontSize:11, color:S.gray }}>{p.town} · {p.ty}</div>
-              </div>
+          <div key={p.id} onClick={()=>setPropView(p.id)} style={{padding:"11px 14px",display:"flex",justifyContent:"space-between",alignItems:"center",borderBottom:"1px solid #f8fafc",cursor:"pointer"}}>
+            <div style={{display:"flex",alignItems:"flex-start",gap:10}}>
+              <div style={{width:10,height:10,borderRadius:"50%",background:p.color||"#94a3b8",marginTop:3,flexShrink:0}} />
+              <div><div style={{fontSize:13,fontWeight:600}}>{p.n}</div><div style={{fontSize:11,color:S.gray}}>{p.town} &middot; {p.ty}</div></div>
             </div>
-            <div style={{ textAlign:"right" }}>
-              <div style={{ fontSize:13, fontWeight:700, color:p.vc?S.amber:ncf2>0?S.green:S.red }}>{p.vc ? "Vacant" : gbp(ncf2) + "/mo"}</div>
-              <div style={{ fontSize:11, color:S.gray }}>{p.vc ? "Not let" : gbp(pr2) + " rent"}</div>
+            <div style={{textAlign:"right"}}>
+              <div style={{fontSize:13,fontWeight:700,color:p.vc?S.amber:ncf2>0?S.green:S.red}}>{p.vc?"Vacant":gbp(ncf2)+"/mo"}</div>
+              <div style={{fontSize:11,color:S.gray}}>{p.vc?"Not let":gbp(pr2)+" rent"} &#8250;</div>
             </div>
           </div>
         );
@@ -1046,7 +599,7 @@ function DashPage({ alerts, paidNow, tenants, rp, jobs, comp, outgoings, wide })
       {[
         {l:"Net Cash Flow",   v:(ncf>=0?"":"-")+gbp(Math.abs(ncf)), s:"This month",             g:ncf>0},
         {l:"Total Equity",    v:gbp(eq),  s:Math.round(eq/tv*100)+"% of value",                  g:true},
-        {l:"Portfolio Value", v:gbp(tv),  s:"8 properties",                                      g:false},
+        {l:"Net Worth",       v:gbp(eq+161564), s:"portfolio + home equity",                     g:true},
         {l:"Open Jobs",       v:oj,       s:"Maintenance items",                                 g:false},
       ].map((k, i) => (
         <div key={i} style={{ background:"#fff", borderRadius:14, border:"1px solid #e2e8f0", padding:12 }}>
@@ -1057,6 +610,42 @@ function DashPage({ alerts, paidNow, tenants, rp, jobs, comp, outgoings, wide })
       ))}
     </div>
   );
+
+  if (propView) {
+    const pv=PROPS.find(x=>x.id===propView),pvt=tenants.filter(t=>t.pid===propView);
+    const pvR=pvt.filter(t=>rp[t.id+"-"+CYR+"-"+CMO]).reduce((s,t)=>s+t.rn,0);
+    const pvMs=mKey(CYR,CMO);
+    const pvJ=jobs.filter(j=>j.status==="done"&&j.pid===propView&&j.date&&j.date.startsWith(pvMs)).reduce((s,j)=>s+(j.cost||0),0);
+    const pvO=(outgoings[propView+"-"+pvMs]||[]).reduce((s,o)=>s+(o.amount||0),0);
+    const pvN=pvR-(pv?pv.mm:0)-pvJ-pvO;
+    const pvJobs=jobs.filter(j=>j.pid===propView&&j.status==="open");
+    const pvComp=comp.filter(c=>c.pid===propView);
+    return (
+      <div>
+        <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:14}}>
+          <button onClick={()=>setPropView(null)} style={{width:36,height:36,borderRadius:"50%",border:"1px solid #e2e8f0",background:"#fff",cursor:"pointer",fontSize:18}}>&#8249;</button>
+          <div style={{display:"flex",alignItems:"center",gap:8}}>
+            <div style={{width:12,height:12,borderRadius:"50%",background:pv&&pv.color?pv.color:"#94a3b8"}} />
+            <div><div style={{fontSize:15,fontWeight:700}}>{pv&&pv.n}</div><div style={{fontSize:11,color:S.gray}}>{pv&&pv.town} &middot; {pv&&pv.ty}</div></div>
+          </div>
+        </div>
+        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:10}}>
+          <div style={{background:"#f0fdf4",borderRadius:12,padding:14}}><div style={{fontSize:11,color:S.gtx,fontWeight:600}}>Rent collected</div><div style={{fontSize:20,fontWeight:700,color:S.green}}>{gbp(pvR)}</div></div>
+          <div style={{background:pvN>=0?"#f0fdf4":"#fff5f5",borderRadius:12,padding:14}}><div style={{fontSize:11,color:pvN>=0?S.gtx:S.rtx,fontWeight:600}}>Net profit</div><div style={{fontSize:20,fontWeight:700,color:pvN>=0?S.green:S.red}}>{pvN>=0?"+":"-"}{gbp(Math.abs(pvN))}</div></div>
+        </div>
+        <div style={card}><div style={{padding:"11px 14px",background:"#f8fafc",borderBottom:"1px solid #f1f5f9",fontSize:13,fontWeight:600}}>Tenants</div>
+          {pvt.map((t,i)=><div key={t.id} style={{padding:"10px 14px",borderBottom:i<pvt.length-1?"1px solid #f8fafc":"none",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+            <div><div style={{fontSize:13,fontWeight:600}}>{pv&&pv.ty==="HMO"?t.rm+" · ":""}{t.nm}</div><div style={{fontSize:11,color:S.gray}}>{gbp(t.rn)}/mo</div>{t.moveOut&&<div style={{fontSize:11,color:S.red,fontWeight:600}}>Moving out: {new Date(t.moveOut).toLocaleDateString("en-GB")}</div>}</div>
+            <div style={{width:32,height:32,borderRadius:"50%",background:rp[t.id+"-"+CYR+"-"+CMO]?"#22c55e":"#e2e8f0",display:"flex",alignItems:"center",justifyContent:"center",color:rp[t.id+"-"+CYR+"-"+CMO]?"#fff":S.gray}}>{rp[t.id+"-"+CYR+"-"+CMO]?"&#10003;":"&#9675;"}</div>
+          </div>)}
+        </div>
+        {pvJobs.length>0&&<div style={{...card,marginTop:8}}><div style={{padding:"11px 14px",background:"#f8fafc",borderBottom:"1px solid #f1f5f9",fontSize:13,fontWeight:600}}>Open Jobs ({pvJobs.length})</div>{pvJobs.map((j,i)=><div key={j.id} style={{padding:"10px 14px",borderBottom:i<pvJobs.length-1?"1px solid #f8fafc":"none",fontSize:13}}>{j.desc}</div>)}</div>}
+        <div style={{...card,marginTop:8}}><div style={{padding:"11px 14px",background:"#f8fafc",borderBottom:"1px solid #f1f5f9",fontSize:13,fontWeight:600}}>Compliance</div>
+          {pvComp.map((c,i)=>{const ct=CTYPES.find(x=>x.k===c.type);const d2=c.next?Math.round((new Date(c.next)-now)/86400000):null;const col=!c.next?"amber":d2<=60?"red":d2<=180?"amber":"green";return(<div key={c.id} style={{padding:"10px 14px",borderBottom:i<pvComp.length-1?"1px solid #f8fafc":"none",display:"flex",justifyContent:"space-between",alignItems:"center"}}><div><div style={{fontSize:13}}>{ct?ct.l:c.type}</div><div style={{fontSize:11,color:S.gray}}>{c.next?new Date(c.next).toLocaleDateString("en-GB"):"Not set"}</div></div><Badge color={col}>{!c.next?"Unknown":d2<=0?"OVERDUE":d2+"d"}</Badge></div>);})}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -1078,6 +667,7 @@ function DashPage({ alerts, paidNow, tenants, rp, jobs, comp, outgoings, wide })
           ))}
         </div>
       )}
+      <GoalTracker tenants={tenants} savings={savings} setSavings={setSavings} />
       {actions.length === 0 && (
         <div style={{ ...card, ...cardPad, background:"#f0fdf4", borderColor:"#bbf7d0", marginBottom:10, display:"flex", alignItems:"center", gap:10 }}>
           <span style={{ fontSize:20 }}>✅</span>
@@ -1088,51 +678,36 @@ function DashPage({ alerts, paidNow, tenants, rp, jobs, comp, outgoings, wide })
         </div>
       )}
 
-      {/* Month navigation */}
-      <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:10 }}>
-        <button onClick={goBack} style={{ width:36, height:36, borderRadius:"50%", border:"1px solid #e2e8f0", background:"#fff", cursor:"pointer", fontSize:18, display:"flex", alignItems:"center", justifyContent:"center" }}>‹</button>
-        <span style={{ fontSize:15, fontWeight:700, color:S.dark }}>{MFULL[selMo]} {selYr}</span>
-        <button onClick={goFwd} disabled={isCurrentMonth} style={{ width:36, height:36, borderRadius:"50%", border:"1px solid #e2e8f0", background:isCurrentMonth?"#f8fafc":"#fff", cursor:isCurrentMonth?"default":"pointer", fontSize:18, display:"flex", alignItems:"center", justifyContent:"center", color:isCurrentMonth?S.gray:"inherit" }}>›</button>
+      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:10}}>
+        <button onClick={()=>{const d=new Date(selYr,selMo-1,1);setSelYr(d.getFullYear());setSelMo(d.getMonth());}} style={{width:36,height:36,borderRadius:"50%",border:"1px solid #e2e8f0",background:"#fff",cursor:"pointer",fontSize:18}}>&#8249;</button>
+        <span style={{fontSize:15,fontWeight:700}}>{MFULL[selMo]} {selYr}</span>
+        <button onClick={()=>{const d=new Date(selYr,selMo+1,1);if(d<=new Date(CYR,CMO,1)){setSelYr(d.getFullYear());setSelMo(d.getMonth());}}} disabled={isCur} style={{width:36,height:36,borderRadius:"50%",border:"1px solid #e2e8f0",background:isCur?"#f8fafc":"#fff",cursor:isCur?"default":"pointer",fontSize:18,color:isCur?S.gray:"inherit"}}>&#8250;</button>
       </div>
-
-      {/* Income vs Outgoings summary */}
-      <div style={{ ...card, ...cardPad, marginBottom:10 }}>
-        <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10, marginBottom:12 }}>
-          <div style={{ background:"#f0fdf4", borderRadius:12, padding:12 }}>
-            <div style={{ fontSize:11, color:S.gtx, fontWeight:600, marginBottom:3 }}>💰 Income</div>
-            <div style={{ fontSize:20, fontWeight:700, color:S.green }}>{gbp(pr)}</div>
-            <div style={{ fontSize:11, color:S.gray }}>{paidNow} of {tenants.length} paid</div>
+      <div style={{...card,...cardPad}}>
+        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:10}}>
+          <div style={{background:"#f0fdf4",borderRadius:12,padding:12}}>
+            <div style={{fontSize:11,color:S.gtx,fontWeight:600}}>Income</div>
+            <div style={{fontSize:20,fontWeight:700,color:S.green}}>{gbp(pr)}</div>
+            <div style={{fontSize:11,color:S.gray}}>{tenants.filter(t=>rp[t.id+"-"+selYr+"-"+selMo]).length} of {tenants.length} paid</div>
           </div>
-          <div style={{ background:"#fff5f5", borderRadius:12, padding:12 }}>
-            <div style={{ fontSize:11, color:S.rtx, fontWeight:600, marginBottom:3 }}>💸 Outgoings</div>
-            <div style={{ fontSize:20, fontWeight:700, color:S.red }}>{gbp(totalOut)}</div>
-            <div style={{ fontSize:11, color:S.gray }}>mortgages + bills + jobs</div>
+          <div style={{background:"#fff5f5",borderRadius:12,padding:12}}>
+            <div style={{fontSize:11,color:S.rtx,fontWeight:600}}>Outgoings</div>
+            <div style={{fontSize:20,fontWeight:700,color:S.red}}>{gbp(totalOut)}</div>
+            <div style={{fontSize:11,color:S.gray}}>mortgages + bills + jobs</div>
           </div>
         </div>
-        <div style={{ borderTop:"1px solid #f1f5f9", paddingTop:10 }}>
-          <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:6 }}>
-            <span style={{ fontSize:12, color:S.gray }}>Mortgages</span>
-            <span style={{ fontSize:12, fontWeight:600, color:S.dark }}>{gbp(tm)}</span>
-          </div>
-          <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:6 }}>
-            <span style={{ fontSize:12, color:S.gray }}>Bills & outgoings</span>
-            <span style={{ fontSize:12, fontWeight:600, color:S.dark }}>{gbp(oc)}</span>
-          </div>
-          <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:10 }}>
-            <span style={{ fontSize:12, color:S.gray }}>Job costs</span>
-            <span style={{ fontSize:12, fontWeight:600, color:S.dark }}>{gbp(jc)}</span>
-          </div>
-          <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", background:ncf>=0?"#f0fdf4":"#fff5f5", borderRadius:10, padding:"10px 12px" }}>
-            <span style={{ fontSize:13, fontWeight:700, color:ncf>=0?S.green:S.red }}>Net this month</span>
-            <span style={{ fontSize:16, fontWeight:700, color:ncf>=0?S.green:S.red }}>{ncf>=0?"+":"-"}{gbp(Math.abs(ncf))}</span>
+        <div style={{borderTop:"1px solid #f1f5f9",paddingTop:10}}>
+          {[["Mortgages",gbp(tm)],["Bills",gbp(oc)],["Job costs",gbp(jc)]].map(([l,v])=>(
+            <div key={l} style={{display:"flex",justifyContent:"space-between",marginBottom:5}}>
+              <span style={{fontSize:12,color:S.gray}}>{l}</span><span style={{fontSize:12,fontWeight:600}}>{v}</span>
+            </div>
+          ))}
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",background:ncf>=0?"#f0fdf4":"#fff5f5",borderRadius:10,padding:"10px 12px",marginTop:6}}>
+            <span style={{fontSize:13,fontWeight:700,color:ncf>=0?S.green:S.red}}>Net this month</span>
+            <span style={{fontSize:16,fontWeight:700,color:ncf>=0?S.green:S.red}}>{ncf>=0?"+":"-"}{gbp(Math.abs(ncf))}</span>
           </div>
         </div>
-        {isCurrentMonth && tr - pr > 0 && (
-          <div style={{ marginTop:8, display:"flex", justifyContent:"space-between", alignItems:"center", background:"#fffbeb", borderRadius:10, padding:"8px 12px" }}>
-            <span style={{ fontSize:12, color:S.atx, fontWeight:600 }}>Rent still to collect</span>
-            <span style={{ fontSize:13, fontWeight:700, color:S.amber }}>{gbp(tr - pr)}</span>
-          </div>
-        )}
+        {isCur&&tr-pr>0&&<div style={{marginTop:8,display:"flex",justifyContent:"space-between",background:"#fffbeb",borderRadius:10,padding:"8px 12px"}}><span style={{fontSize:12,color:S.atx,fontWeight:600}}>Still to collect</span><span style={{fontSize:13,fontWeight:700,color:S.amber}}>{gbp(tr-pr)}</span></div>}
       </div>
       {wide ? (
         <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:16 }}>
@@ -1142,11 +717,7 @@ function DashPage({ alerts, paidNow, tenants, rp, jobs, comp, outgoings, wide })
       ) : (
         <>{stats}{propList}</>
       )}
-      <div style={{ background:S.dark, borderRadius:15, padding:14, marginBottom:10 }}>
-        <div style={{ fontSize:10, color:S.gray, textTransform:"uppercase", letterSpacing:".5px", marginBottom:6, fontWeight:600 }}>Thought for today</div>
-        <div style={{ fontSize:13, color:"#fff", lineHeight:1.6 }}>"{QUOTE.t}"</div>
-        {QUOTE.a && <div style={{ fontSize:11, color:S.gray, marginTop:6 }}>— {QUOTE.a}</div>}
-      </div>
+
     </div>
   );
 }
@@ -1309,10 +880,8 @@ function JobsPage({ jobs, addJob, updateJob, deleteJob, wide }) {
   };
 
   const saveEdit = id => {
-    const cost = parseFloat(editF.cost) || 0;
-    const currentJob = jobs.find(j => j.id === id);
-    updateJob(id, { desc:editF.desc, cont:editF.cont, cat:editF.cat, cost,
-      status: cost > 0 ? "done" : (currentJob ? currentJob.status : "open") });
+    const c2=parseFloat(editF.cost)||0,cj=jobs.find(j=>j.id===id);
+    updateJob(id,{desc:editF.desc,cont:editF.cont,cat:editF.cat,cost:c2,status:c2>0?"done":(cj?cj.status:"open")});
     setEdit(null);
   };
 
@@ -1589,8 +1158,8 @@ function TenantsPage({ tenants, updateTenant, notes, setNote, wide }) {
   const [ef, setEf] = useState({});
   const grid = wide ? { display:"grid", gridTemplateColumns:"1fr 1fr", gap:16 } : {};
 
-  const startEdit = t => { setEditing(t.id); setEf({ nm:t.nm, rn:String(t.rn), dy:String(t.dy), dp:t.dp!=null?String(t.dp):"", nt:t.nt||"" }); };
-  const saveEdit  = id => { updateTenant(id, { nm:ef.nm, rn:parseFloat(ef.rn)||0, dy:parseInt(ef.dy)||1, dp:ef.dp!==""?parseFloat(ef.dp):null, nt:ef.nt }); setEditing(null); };
+  const startEdit = t => { setEditing(t.id); setEf({ nm:t.nm, rn:String(t.rn), dy:String(t.dy), dp:t.dp!=null?String(t.dp):"", nt:t.nt||"", mo:t.moveOut||"" }); };
+  const saveEdit  = id => { updateTenant(id, { nm:ef.nm, rn:parseFloat(ef.rn)||0, dy:parseInt(ef.dy)||1, dp:ef.dp!==""?parseFloat(ef.dp):null, nt:ef.nt, moveOut:ef.mo||null }); setEditing(null); };
 
   return (
     <div style={grid}>
@@ -1636,6 +1205,7 @@ function TenantsPage({ tenants, updateTenant, notes, setNote, wide }) {
                         <div style={{ fontSize:11, color:S.gray, marginBottom:3 }}>Notes</div>
                         <Inp value={ef.nt} onChange={e=>setEf(f=>({...f,nt:e.target.value}))} style={{marginBottom:0}} />
                       </div>
+                      <div style={{marginTop:8}}><div style={{fontSize:11,color:S.gray,marginBottom:3}}>Move-out date</div><input type="date" value={ef.mo||""} onChange={e=>setEf(f=>({...f,mo:e.target.value}))} style={{width:"100%",border:"1px solid #e2e8f0",borderRadius:10,padding:"10px 12px",fontSize:14,fontFamily:"system-ui",outline:"none",marginBottom:8}} /></div>
                       <div style={{ display:"flex", gap:8, marginTop:12 }}>
                         <Btn onClick={() => saveEdit(t.id)} style={{ flex:1, padding:10, marginBottom:0 }}>Save Changes</Btn>
                         <button onClick={() => setEditing(null)} style={{ padding:"10px 14px", borderRadius:10, background:S.light, border:"none", cursor:"pointer", fontFamily:"system-ui", fontWeight:600 }}>Cancel</button>
@@ -1648,6 +1218,7 @@ function TenantsPage({ tenants, updateTenant, notes, setNote, wide }) {
                         <div style={{ fontSize:11, color:S.gray }}>Pays on {t.dy}{sx(t.dy)} · {gbp(t.rn)}/mo</div>
                         {t.dp != null && <div style={{ fontSize:11, color:S.gray }}>Deposit: {gbp(t.dp)}</div>}
                         {t.nt && <div style={{ fontSize:11, color:S.amber, marginTop:3 }}>{t.nt}</div>}
+                        {t.moveOut && <div style={{ fontSize:11, color:S.red, fontWeight:600 }}>Moving out: {new Date(t.moveOut).toLocaleDateString("en-GB")}</div>}
                       </div>
                       <div style={{ display:"flex", flexDirection:"column", alignItems:"flex-end", gap:4, marginLeft:8, flexShrink:0 }}>
                         <div style={{ fontSize:13, fontWeight:700 }}>{gbp(t.rn*12)}/yr</div>
@@ -1933,7 +1504,7 @@ function FinCharts({ tenants, jobs, rp, outgoings }) {
 }
 
 // ── OUTGOINGS ─────────────────────────────────────────────────────────────────
-function OutgoingsPage({ outgoings, addOutgoing, deleteOutgoing, fixedOutgoings, setFixedOutgoing, removeFixedOutgoing, jobs, wide }) {
+function OutgoingsPage({ outgoings, addOutgoing, deleteOutgoing, fixedOutgoings, setFixedOutgoing, removeFixedOutgoing, wide }) {
   const [selYr, setSelYr]         = useState(CYR);
   const [selMo, setSelMo]         = useState(CMO);
   const [addingTo, setAddingTo]   = useState(null);
@@ -2063,24 +1634,6 @@ function OutgoingsPage({ outgoings, addOutgoing, deleteOutgoing, fixedOutgoings,
                   )}
                 </div>
               ))}
-
-              {/* Job costs this month */}
-              {(() => {
-                const mk = p.id + "-" + mKey(selYr, selMo);
-                const propJobs = (jobs||[]).filter(j => j.pid === p.id && j.cost > 0 && j.date && j.date.startsWith(mKey(selYr, selMo)));
-                if (!propJobs.length) return null;
-                return (
-                  <div style={{ borderTop:"1px solid #f1f5f9", background:"#f8fafc" }}>
-                    <div style={{ padding:"6px 14px", fontSize:11, color:S.gray, fontWeight:600 }}>🔧 Job costs (from Jobs tab)</div>
-                    {propJobs.map(j => (
-                      <div key={j.id} style={{ padding:"7px 14px", display:"flex", justifyContent:"space-between", alignItems:"center", borderBottom:"1px solid #f1f5f9" }}>
-                        <span style={{ fontSize:12, color:S.mid }}>{j.desc}</span>
-                        <span style={{ fontSize:12, fontWeight:600, color:S.red }}>{gbp(j.cost)}</span>
-                      </div>
-                    ))}
-                  </div>
-                );
-              })()}
 
               {/* Add new */}
               <div style={{ padding:"10px 14px" }}>
@@ -2305,6 +1858,27 @@ function RefinancePage() {
   );
 }
 
+function GrowthProjector({tv}){
+  const [gr,setGr]=useState(5);
+  return (
+    <div style={{background:"#fff",borderRadius:14,border:"1px solid #e2e8f0",padding:14,marginBottom:12}}>
+      <div style={{fontSize:13,fontWeight:600,marginBottom:8}}>Portfolio Growth Projector</div>
+      <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:10}}>
+        <input type="range" min="1" max="10" step="0.5" value={gr} onChange={e=>setGr(parseFloat(e.target.value))} style={{flex:1}} />
+        <span style={{fontSize:16,fontWeight:700,color:"#16a34a",minWidth:38}}>{gr}%</span>
+      </div>
+      <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:8}}>
+        {[1,3,5,10].map(yr=>{const p=Math.round(tv*Math.pow(1+gr/100,yr));return(
+          <div key={yr} style={{background:"#f0fdf4",borderRadius:10,padding:10,textAlign:"center"}}>
+            <div style={{fontSize:10,color:"#94a3b8"}}>{yr}yr</div>
+            <div style={{fontSize:13,fontWeight:700,color:"#16a34a"}}>&#163;{(p/1000).toFixed(0)}k</div>
+            <div style={{fontSize:10,color:"#15803d"}}>+&#163;{((p-tv)/1000).toFixed(0)}k</div>
+          </div>
+        );})}
+      </div>
+    </div>
+  );
+}
 // ── PORTFOLIO GROWTH ──────────────────────────────────────────────────────────
 function GrowthPage({ tenants, propPurchase, setPropPurchase }) {
   const SK_VALS = "ash-prop-vals";
@@ -2725,7 +2299,8 @@ function TimelinePage({ tenants, comp, wide }) {
   events.sort((a,b) => a.date - b.date);
 
   const formatDate = d => d.toLocaleDateString("en-GB",{weekday:"short",day:"numeric",month:"short"});
-  const daysUntilEv = d => Math.round((d-now)/86400000);
+  const t0=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+  const daysUntilEv=d=>Math.round((new Date(d.getFullYear(),d.getMonth(),d.getDate())-t0)/86400000);
 
   return (
     <div>
@@ -2772,6 +2347,7 @@ function TimelinePage({ tenants, comp, wide }) {
 // ── RENT PLANNER ──────────────────────────────────────────────────────────────
 function RentPlannerPage({ tenants, updateTenant, wide }) {
   const [rate, setRate] = useState(5);
+  const [sv, setSv] = useState(5);
   const [confirmed, setConfirmed] = useState(null);
   const total    = tenants.reduce((s,t)=>s+t.rn,0);
   const newTotal = Math.round(total * (1 + rate/100));
@@ -2787,8 +2363,8 @@ function RentPlannerPage({ tenants, updateTenant, wide }) {
       <div style={{ ...card, ...cardPad, marginBottom:12 }}>
         <div style={{ fontSize:13, fontWeight:600, marginBottom:4 }}>Increase rate</div>
         <div style={{ display:"flex", alignItems:"center", gap:12, marginBottom:8 }}>
-          <input type="range" min="1" max="20" step="0.5" value={rate} onChange={e=>setRate(parseFloat(e.target.value))} style={{ flex:1 }} />
-          <span style={{ fontSize:18, fontWeight:700, minWidth:50 }}>{rate}%</span>
+          <input type="range" min="1" max="20" step="0.5" value={sv} onChange={e=>setSv(parseFloat(e.target.value))} onMouseUp={e=>setRate(parseFloat(e.target.value))} onTouchEnd={e=>setRate(parseFloat(e.target.value))} style={{ flex:1 }} />
+          <span style={{ fontSize:18, fontWeight:700, minWidth:50 }}>{sv}%</span>
         </div>
         <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10 }}>
           <div style={{ background:S.light, borderRadius:10, padding:10 }}>
@@ -3353,6 +2929,39 @@ function DealCheckPage({ wide }) {
   );
 }
 
+function AIStrategyPage({tenants,jobs,rp,outgoings}){
+  const [res,setRes]=useState(""),[load,setLoad]=useState(false),[tab,setTab]=useState("");
+  const inc=tenants.reduce((s,t)=>s+t.rn,0),mtg=MTGS.filter(m=>m.l!=="70 Coal Hill Lane (Home)").reduce((s,m)=>s+m.m,0),eq=PROPS.reduce((s,p)=>s+(p.v-p.mtg),0);
+  const ms=mKey(CYR,CMO),jc=jobs.filter(j=>j.status==="done"&&j.date&&j.date.startsWith(ms)).reduce((s,j)=>s+(j.cost||0),0),oc=PROPS.reduce((s,p)=>s+(outgoings[p.id+"-"+ms]||[]).reduce((x,o)=>x+(o.amount||0),0),0);
+  const base="Leeds landlord: 9 units, 2HMO+7BTL, target 50. Rent £"+inc+"/mo, net £"+(inc-mtg-jc-oc)+"/mo, equity £"+eq+".";
+  const go=async t=>{
+    const k=localStorage.getItem("ash-api-key")||"";
+    if(!k){setRes("Save API key in More > AI Letter Writer (console.anthropic.com).");setTab(t);return;}
+    setTab(t);setLoad(true);setRes("");
+    const ps={strategy:base+" 4 ways to scale faster.",finance:base+" Best 3 finance options for next deal.",next:base+" BTL or HMO next? Leeds specific."};
+    try{const r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json","x-api-key":k,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:350,messages:[{role:"user",content:ps[t]}]})});const d=await r.json();setRes(d.content?.map(c=>c.text||"").join("")||"Error.");}catch(e){setRes("Error.");}
+    setLoad(false);
+  };
+  return (
+    <div>
+      <div style={{background:"#1e293b",borderRadius:13,padding:12,marginBottom:12,display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:8,color:"#fff"}}>
+        {[["Rent",gbp(inc)],["Net",gbp(inc-mtg-jc-oc)],["Equity",gbp(eq)]].map(([l,v])=>(
+          <div key={l} style={{background:"rgba(255,255,255,0.08)",borderRadius:9,padding:9,textAlign:"center"}}>
+            <div style={{fontSize:10,color:"#64748b"}}>{l}</div><div style={{fontSize:12,fontWeight:700,color:"#4ade80"}}>{v}</div>
+          </div>
+        ))}
+      </div>
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:8,marginBottom:12}}>
+        {[["strategy","Growth"],["finance","Finance"],["next","Next Buy"]].map(([t,l])=>(
+          <button key={t} onClick={()=>go(t)} style={{padding:"10px 4px",borderRadius:10,border:"none",cursor:"pointer",fontFamily:"system-ui",fontWeight:600,fontSize:12,background:tab===t&&res?"#1e293b":S.light,color:tab===t&&res?"#fff":S.dark}}>{load&&tab===t?"...":l}</button>
+        ))}
+      </div>
+      {load&&<div style={{textAlign:"center",padding:"24px",color:S.gray}}>Analysing...</div>}
+      {res&&!load&&<div style={{background:"#fff",borderRadius:13,border:"1px solid #e2e8f0",padding:14}}><div style={{fontSize:13,lineHeight:1.8,whiteSpace:"pre-wrap"}}>{res}</div></div>}
+      {!res&&!load&&<div style={{textAlign:"center",padding:"24px",color:S.gray,fontSize:12}}>Tap a button. Needs API key from console.anthropic.com</div>}
+    </div>
+  );
+}
 // ── VOIDS ─────────────────────────────────────────────────────────────────────
 function VoidsPage({ tenants }) {
   const vacant = PROPS.filter(p => p.vc && tenants.filter(t => t.pid === p.id).length === 0);
@@ -3379,12 +2988,7 @@ function VoidsPage({ tenants }) {
   );
 }
 
-
-    // ── RENDER ─────────────────────────────────────────────────────────────────
-    const container = document.getElementById("root");
-    const root = ReactDOM.createRoot(container);
-    root.render(<App />);
-
+    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
   </script>
 </body>
 </html>
