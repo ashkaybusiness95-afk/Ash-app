@@ -520,7 +520,7 @@ function GoalTracker({tenants, savings, setSavings}) {
     </div>
   );
 }
-function DashPage({ alerts, paidNow, tenants, rp, jobs, comp, outgoings, wide }) {
+function DashPage({ alerts, paidNow, tenants, rp, jobs, comp, outgoings, wide, savings, setSavings }) {
   const [selYr,setSelYr]=useState(CYR);
   const [selMo,setSelMo]=useState(CMO);
   const [propView,setPropView]=useState(null);
