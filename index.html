@@ -287,7 +287,7 @@ function App() {
   const toggleExp       = pid => setExpMap(e => ({ ...e, [pid]: !e[pid] }));
 
   const bag = { tenants, rp, jobs, comp, contractors, deals, notes, outgoings, generalNotes, fixedOutgoings, propPurchase, roomNotes, expMap, toggleRent, addJob, updateJob, deleteJob, updateComp, updateTenant, addTenant, addContractor, deleteContractor, addDeal, updateDeal, deleteDeal, setNote, toggleExp, addOutgoing, deleteOutgoing, setGeneralNotes, setFixedOutgoing, removeFixedOutgoing, setPropPurchase , setRoomNote, savings, setSavings, wide };
-  const moreLabels = { outgoings:"Outgoings", compliance:"Compliance", tenants:"Tenants", hmorooms:"HMO Rooms", calendar:"Export to Calendar", ailetters:"AI Letter Writer", aistrategy:"AI Strategy", dealcheck:"Deal Analyser", financials:"Financials", tax:"Tax Summary", timeline:"Timeline", rentplanner:"Rent Planner", strategy:"BTL vs HMO", notes:"Notes", refinance:"Refinance Planner", mtginterest:"Mortgage Interest", growth:"Portfolio Growth", contractors:"Contractors", deals:"Deal Pipeline", voids:"Void Tracker" };
+  const moreLabels = { outgoings:"Outgoings", compliance:"Compliance", tenants:"Tenants", ailetters:"AI Letter Writer", aistrategy:"AI Strategy", dealcheck:"Deal Analyser", financials:"Financials", tax:"Tax Summary", timeline:"Timeline", rentplanner:"Rent Planner", notes:"Notes", refinance:"Refinance Planner", mtginterest:"Mortgage Interest", growth:"Portfolio Growth", contractors:"Contractors", deals:"Deal Pipeline", voids:"Void Tracker" };
 
   const maxW = wide ? 1100 : 480;
 
@@ -326,17 +326,14 @@ function App() {
             {tab === "more"  && !more && <MoreMenu {...bag} setMore={setMore} data={data} />}
             {tab === "more"  && more === "outgoings"   && <OutgoingsPage {...bag} />}
             {tab === "more"  && more === "compliance"  && <CompPage {...bag} />}
-            {tab === "more"  && more === "tenants"     && <TenantsPage {...bag} />}
-            {tab === "more"  && more === "hmorooms"    && <HMORoomsPage {...bag} />}
-            {tab === "more"  && more === "calendar"    && <CalendarPage {...bag} />}
+            {tab === "more"  && more === "tenants"     && <TenantsPage {...bag} />} />} />}
             {tab === "more"  && more === "ailetters"   && <AILettersPage {...bag} />}
             {tab === "more"  && more === "aistrategy"  && <AIStrategyPage {...bag} />}
             {tab === "more"  && more === "dealcheck"   && <DealCheckPage {...bag} />}
             {tab === "more"  && more === "financials"  && <FinPage {...bag} />}
             {tab === "more"  && more === "tax"         && <TaxPage {...bag} />}
             {tab === "more"  && more === "timeline"    && <TimelinePage {...bag} />}
-            {tab === "more"  && more === "rentplanner" && <RentPlannerPage {...bag} />}
-            {tab === "more"  && more === "strategy"    && <StrategyPage {...bag} />}
+            {tab === "more"  && more === "rentplanner" && <RentPlannerPage {...bag} />} />}
             {tab === "more"  && more === "notes"       && <NotesPage {...bag} />}
             {tab === "more"  && more === "refinance"   && <RefinancePage />}
             {tab === "more"  && more === "mtginterest" && <MtgInterestPage {...bag} />}
@@ -380,8 +377,8 @@ function WideLayout({ tab, setTab, more, setMore, bag, alerts, paidNow, urgent }
     {id:"mtgs",icon:"💳",label:"Mortgages"},
     {id:"more",icon:"⋯", label:"More"},
   ];
-  const moreItems = ["outgoings","compliance","tenants","hmorooms","calendar","ailetters","aistrategy","dealcheck","financials","tax","timeline","rentplanner","strategy","notes","refinance","mtginterest","growth","contractors","deals","voids"];
-  const moreLabels = { outgoings:"Outgoings", compliance:"Compliance", tenants:"Tenants", hmorooms:"HMO Rooms", calendar:"Export to Calendar", ailetters:"AI Letter Writer", aistrategy:"AI Strategy", dealcheck:"Deal Analyser", financials:"Financials", tax:"Tax Summary", timeline:"Timeline", rentplanner:"Rent Planner", strategy:"BTL vs HMO", notes:"Notes", refinance:"Refinance Planner", mtginterest:"Mortgage Interest", growth:"Portfolio Growth", contractors:"Contractors", deals:"Deal Pipeline", voids:"Void Tracker" };
+  const moreItems = ["outgoings","compliance","tenants","ailetters","aistrategy","dealcheck","financials","tax","timeline","rentplanner","notes","refinance","mtginterest","growth","contractors","deals","voids"];
+  const moreLabels = { outgoings:"Outgoings", compliance:"Compliance", tenants:"Tenants", ailetters:"AI Letter Writer", aistrategy:"AI Strategy", dealcheck:"Deal Analyser", financials:"Financials", tax:"Tax Summary", timeline:"Timeline", rentplanner:"Rent Planner", notes:"Notes", refinance:"Refinance Planner", mtginterest:"Mortgage Interest", growth:"Portfolio Growth", contractors:"Contractors", deals:"Deal Pipeline", voids:"Void Tracker" };
 
   return (
     <div style={{ display:"grid", gridTemplateColumns:"200px 1fr", gap:16 }}>
@@ -413,17 +410,14 @@ function WideLayout({ tab, setTab, more, setMore, bag, alerts, paidNow, urgent }
         {tab === "more"  && !more && <MoreMenu {...bag} setMore={setMore} data={bag} />}
         {tab === "more"  && more === "outgoings"   && <OutgoingsPage {...bag} />}
         {tab === "more"  && more === "compliance"  && <CompPage {...bag} />}
-        {tab === "more"  && more === "tenants"     && <TenantsPage {...bag} />}
-        {tab === "more"  && more === "hmorooms"    && <HMORoomsPage {...bag} />}
-        {tab === "more"  && more === "calendar"    && <CalendarPage {...bag} />}
+        {tab === "more"  && more === "tenants"     && <TenantsPage {...bag} />} />} />}
         {tab === "more"  && more === "ailetters"   && <AILettersPage {...bag} />}
             {tab === "more"  && more === "aistrategy"  && <AIStrategyPage {...bag} />}
         {tab === "more"  && more === "dealcheck"   && <DealCheckPage {...bag} />}
         {tab === "more"  && more === "financials"  && <FinPage {...bag} />}
         {tab === "more"  && more === "tax"         && <TaxPage {...bag} />}
         {tab === "more"  && more === "timeline"    && <TimelinePage {...bag} />}
-        {tab === "more"  && more === "rentplanner" && <RentPlannerPage {...bag} />}
-        {tab === "more"  && more === "strategy"    && <StrategyPage {...bag} />}
+        {tab === "more"  && more === "rentplanner" && <RentPlannerPage {...bag} />} />}
         {tab === "more"  && more === "notes"       && <NotesPage {...bag} />}
         {tab === "more"  && more === "refinance"   && <RefinancePage />}
         {tab === "more"  && more === "mtginterest" && <MtgInterestPage {...bag} />}
@@ -460,20 +454,17 @@ function getAlerts(comp) {
 
 // ── DASHBOARD ─────────────────────────────────────────────────────────────────
 function GoalTracker({tenants,savings,setSavings}){
-  const [ed,setEd]=useState(false);
-  const [sv,setSv]=useState(String(savings||0));
-  const inc=tenants.reduce(function(s,t){return s+t.rn;},0);
-  const ipct=Math.min(100,Math.round(inc/24500*100));
+  const [ed,setEd]=useState(false),[sv,setSv]=useState(String(savings||0));
+  const inc=tenants.reduce(function(s,t){return s+t.rn;},0),ipct=Math.min(100,Math.round(inc/24500*100));
   const pot=savings||0,ppct=Math.min(100,Math.round(pot/40000*100));
-  const net=Math.max(0,inc-MTGS.reduce(function(s,m){return s+m.m;},0));
-  const mths=net>0?Math.ceil(Math.max(0,40000-pot)/net):"?";
+  const net=Math.max(0,inc-MTGS.reduce(function(s,m){return s+m.m;},0)),mths=net>0?Math.ceil(Math.max(0,40000-pot)/net):"?";
   const save=()=>{if(setSavings)setSavings(parseFloat(sv)||0);setEd(false);};
   return (
     <div style={{background:"linear-gradient(135deg,#1e293b,#0f172a)",borderRadius:16,padding:16,marginBottom:10,color:"#fff"}}>
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
         <div>
           <div style={{fontSize:10,color:"#64748b",fontWeight:600,marginBottom:3}}>MISSION: 50 UNITS BY FEB 2036</div>
-          <div style={{fontSize:22,fontWeight:700}}>9 <span style={{color:"#64748b",fontSize:13}}>of 50 units</span></div>
+          <div style={{fontSize:22,fontWeight:700}}>9 <span style={{color:"#64748b",fontSize:13}}>of 50</span></div>
           <div style={{fontSize:10,color:"#4ade80"}}>Sale pending &#8212; 11 soon</div>
         </div>
         <div style={{textAlign:"right"}}>
@@ -482,27 +473,11 @@ function GoalTracker({tenants,savings,setSavings}){
           <div style={{fontSize:10,color:"#64748b"}}>target {gbp(24500)}</div>
         </div>
       </div>
-      <div style={{marginBottom:7}}>
-        <div style={{display:"flex",justifyContent:"space-between",fontSize:10,color:"#64748b",marginBottom:2}}><span>Units 9/50</span><span>18%</span></div>
-        <div style={{height:4,background:"#334155",borderRadius:99,overflow:"hidden"}}><div style={{height:"100%",background:"#3b82f6",width:"18%"}} /></div>
-      </div>
-      <div style={{marginBottom:10}}>
-        <div style={{display:"flex",justifyContent:"space-between",fontSize:10,color:"#64748b",marginBottom:2}}><span>Income {ipct}%</span><span>{ipct}%</span></div>
-        <div style={{height:4,background:"#334155",borderRadius:99,overflow:"hidden"}}><div style={{height:"100%",background:"#22c55e",width:ipct+"%"}} /></div>
-      </div>
+      <div style={{marginBottom:7}}><div style={{display:"flex",justifyContent:"space-between",fontSize:10,color:"#64748b",marginBottom:2}}><span>Units 9/50</span><span>18%</span></div><div style={{height:4,background:"#334155",borderRadius:99,overflow:"hidden"}}><div style={{height:"100%",background:"#3b82f6",width:"18%"}} /></div></div>
+      <div style={{marginBottom:10}}><div style={{display:"flex",justifyContent:"space-between",fontSize:10,color:"#64748b",marginBottom:2}}><span>Income {ipct}%</span><span>{ipct}%</span></div><div style={{height:4,background:"#334155",borderRadius:99,overflow:"hidden"}}><div style={{height:"100%",background:"#22c55e",width:ipct+"%"}} /></div></div>
       <div style={{background:"rgba(255,255,255,0.07)",borderRadius:10,padding:10}}>
         <div style={{display:"flex",justifyContent:"space-between",fontSize:10,color:"#94a3b8",marginBottom:5}}><span style={{fontWeight:600}}>Deposit pot</span><span>~{mths} months</span></div>
-        {ed?(
-          <div style={{display:"flex",gap:6,marginBottom:6}}>
-            <input autoFocus type="number" value={sv} onChange={e=>setSv(e.target.value)} onKeyDown={e=>e.key==="Enter"&&save()} style={{flex:1,background:"#0f172a",border:"1px solid #334155",borderRadius:7,padding:"5px 8px",color:"#fff",fontSize:13,fontFamily:"system-ui",outline:"none"}} />
-            <button onClick={save} style={{background:"#22c55e",color:"#fff",border:"none",borderRadius:7,padding:"5px 12px",fontWeight:700,cursor:"pointer",fontFamily:"system-ui"}}>Save</button>
-            <button onClick={()=>setEd(false)} style={{background:"#334155",color:"#94a3b8",border:"none",borderRadius:7,padding:"5px 8px",cursor:"pointer",fontFamily:"system-ui"}}>x</button>
-          </div>
-        ):(
-          <div onClick={()=>setEd(true)} style={{cursor:"pointer",marginBottom:5}}>
-            <span style={{fontSize:16,fontWeight:700}}>{gbp(pot)}</span><span style={{fontSize:10,color:"#64748b"}}> of &#163;40,000 &#8212; tap to update</span>
-          </div>
-        )}
+        {ed?(<div style={{display:"flex",gap:6,marginBottom:6}}><input autoFocus type="number" value={sv} onChange={e=>setSv(e.target.value)} onKeyDown={e=>e.key==="Enter"&&save()} style={{flex:1,background:"#0f172a",border:"1px solid #334155",borderRadius:7,padding:"5px 8px",color:"#fff",fontSize:13,fontFamily:"system-ui",outline:"none"}} /><button onClick={save} style={{background:"#22c55e",color:"#fff",border:"none",borderRadius:7,padding:"5px 12px",fontWeight:700,cursor:"pointer",fontFamily:"system-ui"}}>Save</button><button onClick={()=>setEd(false)} style={{background:"#334155",color:"#94a3b8",border:"none",borderRadius:7,padding:"5px 8px",cursor:"pointer",fontFamily:"system-ui"}}>x</button></div>):(<div onClick={()=>setEd(true)} style={{cursor:"pointer",marginBottom:5}}><span style={{fontSize:16,fontWeight:700}}>{gbp(pot)}</span><span style={{fontSize:10,color:"#64748b"}}> of &#163;40,000 &#8212; tap to update</span></div>)}
         <div style={{height:5,background:"#334155",borderRadius:99,overflow:"hidden"}}><div style={{height:"100%",background:"linear-gradient(90deg,#f59e0b,#22c55e)",width:ppct+"%",transition:"width .4s"}} /></div>
       </div>
     </div>
@@ -1047,14 +1022,14 @@ function MoreMenu({ tenants, contractors, deals, setMore, data }) {
         {id:"outgoings",   icon:"💸", label:"Outgoings",        sub:"Bills & expenses per property"},
         {id:"compliance",  icon:"🛡", label:"Compliance",        sub:"Gas, EICR, EPC, HMO licence"},
         {id:"tenants",     icon:"👥", label:"Tenants",           sub:tenants.length+" tenants · 8 properties"},
-        {id:"hmorooms",    icon:"🚪", label:"HMO Rooms",         sub:"Room-by-room management"},
+        {id:,    icon:"🚪", label:"HMO Rooms",         sub:"Room-by-room management"},
         {id:"financials",  icon:"📊", label:"Financials",        sub:"Monthly & per-property breakdown"},
         {id:"tax",         icon:"🧾", label:"Tax Summary",       sub:"Annual P&L for self assessment"},
-        {id:"calendar",    icon:"📆", label:"Export to Calendar", sub:"Add all events to Google Calendar"},
+        {id:,    icon:"📆", label:"Export to Calendar", sub:"Add all events to Google Calendar"},
         {id:"ailetters",   icon:"✉️", label:"AI Letter Writer",   sub:"Draft personalised letters & messages"},
         {id:"dealcheck",   icon:"🔍", label:"Deal Analyser",      sub:"Check if a new property stacks up"},
         {id:"rentplanner", icon:"🔖", label:"Rent Planner",      sub:"Plan rent increases systematically"},
-        {id:"strategy",    icon:"⚖️", label:"BTL vs HMO",        sub:"Strategy comparison & recommendation"},
+        {id:,    icon:"⚖️", label:"BTL vs HMO",        sub:"Strategy comparison & recommendation"},
         {id:"notes",       icon:"📝", label:"Notes",             sub:"General notepad & property notes"},
         {id:"refinance",   icon:"🔄", label:"Refinance Planner", sub:"Upcoming mortgage expiries & rates"},
         {id:"mtginterest", icon:"💳", label:"Mortgage Interest", sub:"Interest paid vs equity growth"},
@@ -1860,24 +1835,7 @@ function RefinancePage() {
 
 function GrowthProjector({tv}){
   const [gr,setGr]=useState(5);
-  return (
-    <div style={{background:"#fff",borderRadius:14,border:"1px solid #e2e8f0",padding:14,marginBottom:12}}>
-      <div style={{fontSize:13,fontWeight:600,marginBottom:8}}>Portfolio Growth Projector</div>
-      <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:10}}>
-        <input type="range" min="1" max="10" step="0.5" value={gr} onChange={e=>setGr(parseFloat(e.target.value))} style={{flex:1}} />
-        <span style={{fontSize:16,fontWeight:700,color:"#16a34a",minWidth:38}}>{gr}%</span>
-      </div>
-      <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:8}}>
-        {[1,3,5,10].map(yr=>{const p=Math.round(tv*Math.pow(1+gr/100,yr));return(
-          <div key={yr} style={{background:"#f0fdf4",borderRadius:10,padding:10,textAlign:"center"}}>
-            <div style={{fontSize:10,color:"#94a3b8"}}>{yr}yr</div>
-            <div style={{fontSize:13,fontWeight:700,color:"#16a34a"}}>&#163;{(p/1000).toFixed(0)}k</div>
-            <div style={{fontSize:10,color:"#15803d"}}>+&#163;{((p-tv)/1000).toFixed(0)}k</div>
-          </div>
-        );})}
-      </div>
-    </div>
-  );
+  return (<div style={{background:"#fff",borderRadius:14,border:"1px solid #e2e8f0",padding:14,marginBottom:12}}><div style={{fontSize:13,fontWeight:600,marginBottom:8}}>Portfolio Growth Projector</div><div style={{display:"flex",alignItems:"center",gap:10,marginBottom:10}}><input type="range" min="1" max="10" step="0.5" value={gr} onChange={e=>setGr(parseFloat(e.target.value))} style={{flex:1}} /><span style={{fontSize:16,fontWeight:700,color:"#16a34a",minWidth:38}}>{gr}%</span></div><div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:8}}>{[1,3,5,10].map(yr=>{const p=Math.round(tv*Math.pow(1+gr/100,yr));return(<div key={yr} style={{background:"#f0fdf4",borderRadius:10,padding:10,textAlign:"center"}}><div style={{fontSize:10,color:"#94a3b8"}}>{yr}yr</div><div style={{fontSize:13,fontWeight:700,color:"#16a34a"}}>&#163;{(p/1000).toFixed(0)}k</div><div style={{fontSize:10,color:"#15803d"}}>+&#163;{((p-tv)/1000).toFixed(0)}k</div></div>);})}</div></div>);
 }
 // ── PORTFOLIO GROWTH ──────────────────────────────────────────────────────────
 function GrowthPage({ tenants, propPurchase, setPropPurchase }) {
@@ -2211,59 +2169,6 @@ function NotesPage({ generalNotes, setGeneralNotes, notes, setNote, wide }) {
   );
 }
 
-// ── HMO ROOMS ─────────────────────────────────────────────────────────────────
-function HMORoomsPage({ tenants, roomNotes, setRoomNote, wide }) {
-  const hmos = PROPS.filter(p => p.ty === "HMO");
-  const grid = wide ? { display:"grid", gridTemplateColumns:"1fr 1fr", gap:16 } : {};
-  return (
-    <div>
-      <div style={{ background:S.abg, borderRadius:11, padding:"10px 14px", marginBottom:12, fontSize:12, color:S.atx }}>
-        Room-by-room overview for your HMO properties. Add condition notes per room — useful if there's ever a dispute about damage.
-      </div>
-      <div style={grid}>
-        {hmos.map(p => {
-          const pt = tenants.filter(t => t.pid === p.id);
-          return (
-            <div key={p.id} style={card}>
-              <div style={{ padding:"11px 14px", background:"#f8fafc", borderBottom:"1px solid #f1f5f9" }}>
-                <div style={{ fontSize:13, fontWeight:600 }}>{p.n}</div>
-                <div style={{ fontSize:11, color:S.gray }}>{p.town} · {pt.length} rooms occupied of {p.beds}</div>
-              </div>
-              {Array.from({length: p.beds}, (_,i) => {
-                const rm = "Room "+(i+1);
-                const t  = pt.find(t => t.rm === rm);
-                const nk = p.id+"-"+rm;
-                return (
-                  <div key={rm} style={{ padding:"11px 14px", borderBottom:"1px solid #f8fafc" }}>
-                    <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:6 }}>
-                      <div>
-                        <div style={{ fontSize:13, fontWeight:600 }}>{rm}</div>
-                        {t ? (
-                          <div style={{ fontSize:11, color:S.gray }}>{t.nm} · {gbp(t.rn)}/mo · due {t.dy}{sx(t.dy)}</div>
-                        ) : (
-                          <div style={{ fontSize:11, color:S.amber }}>Vacant</div>
-                        )}
-                      </div>
-                      {t && <Badge color="green">Occupied</Badge>}
-                      {!t && <Badge color="amber">Vacant</Badge>}
-                    </div>
-                    <textarea
-                      placeholder="Condition notes — flooring, walls, fixtures..."
-                      value={roomNotes[nk] || ""}
-                      onChange={e => setRoomNote(nk, e.target.value)}
-                      style={{ width:"100%", border:"1px solid #e2e8f0", borderRadius:9, padding:"7px 10px", fontSize:12, fontFamily:"system-ui", resize:"none", height:60, outline:"none" }}
-                    />
-                  </div>
-                );
-              })}
-            </div>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
-
 // ── TIMELINE ──────────────────────────────────────────────────────────────────
 function TimelinePage({ tenants, comp, wide }) {
   const [days, setDays] = useState(30);
@@ -2422,80 +2327,6 @@ function RentPlannerPage({ tenants, updateTenant, wide }) {
   );
 }
 
-// ── STRATEGY COMPARISON ───────────────────────────────────────────────────────
-function StrategyPage({ tenants, jobs, rp, outgoings, wide }) {
-  const ms = mKey(CYR, CMO);
-
-  const calcType = type => {
-    const props = PROPS.filter(p => p.ty === type);
-    const propTenants = tenants.filter(t => props.find(p=>p.id===t.pid));
-    const monthlyRent = propTenants.reduce((s,t)=>s+t.rn,0);
-    const monthlyMtg  = props.reduce((s,p)=>s+p.mm,0);
-    const tv          = props.reduce((s,p)=>s+p.v,0);
-    const td          = props.reduce((s,p)=>s+p.mtg,0);
-    const eq          = tv - td;
-    const yield_      = tv>0?((monthlyRent*12)/tv*100).toFixed(1):"0";
-    const ltv         = tv>0?Math.round(td/tv*100):0;
-    const jobCosts    = jobs.filter(j=>j.status==="done"&&j.date&&j.date.startsWith(ms)&&props.find(p=>p.id===j.pid)).reduce((s,j)=>s+(j.cost||0),0);
-    const billCosts   = props.reduce((s,p)=>s+(outgoings[p.id+"-"+ms]||[]).reduce((x,o)=>x+(o.amount||0),0),0);
-    const ncf         = monthlyRent - monthlyMtg - jobCosts - billCosts;
-    const avgYield    = props.length>0?parseFloat(yield_)/props.length*props.length:0;
-    return { props, monthlyRent, monthlyMtg, tv, td, eq, yield_, ltv, ncf, count:props.length, jobCosts, billCosts };
-  };
-
-  const btl = calcType("BTL");
-  const hmo = calcType("HMO");
-
-  // Recommendation logic
-  const btlScore = (parseFloat(btl.yield_)||0) + (btl.ncf > 0 ? 2 : 0) + (btl.ltv < 70 ? 1 : 0);
-  const hmoScore = (parseFloat(hmo.yield_)||0) + (hmo.ncf > 0 ? 2 : 0) + (hmo.ltv < 70 ? 1 : 0) + 2; // HMO bonus for higher yield potential
-  const winner   = hmoScore > btlScore ? "HMO" : "BTL";
-
-  const Row = ({l, btlV, hmoV, better}) => (
-    <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr 1fr", padding:"9px 14px", borderBottom:"1px solid #f8fafc", fontSize:12 }}>
-      <span style={{ color:S.gray, fontWeight:600 }}>{l}</span>
-      <span style={{ textAlign:"center", fontWeight:better==="btl"?700:400, color:better==="btl"?S.green:S.dark }}>{btlV}</span>
-      <span style={{ textAlign:"center", fontWeight:better==="hmo"?700:400, color:better==="hmo"?S.green:S.dark }}>{hmoV}</span>
-    </div>
-  );
-
-  return (
-    <div>
-      <div style={card}>
-        <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr 1fr", padding:"11px 14px", background:"#f8fafc", borderBottom:"1px solid #f1f5f9", fontSize:12, fontWeight:700 }}>
-          <span style={{ color:S.gray }}>Metric</span>
-          <span style={{ textAlign:"center" }}>BTL ({btl.count})</span>
-          <span style={{ textAlign:"center" }}>HMO ({hmo.count})</span>
-        </div>
-        <Row l="Monthly rent"    btlV={gbp(btl.monthlyRent)} hmoV={gbp(hmo.monthlyRent)} better={btl.monthlyRent>hmo.monthlyRent?"btl":"hmo"} />
-        <Row l="Monthly mortgages" btlV={gbp(btl.monthlyMtg)} hmoV={gbp(hmo.monthlyMtg)} better={btl.monthlyMtg<hmo.monthlyMtg?"btl":"hmo"} />
-        <Row l="Net cash flow"   btlV={(btl.ncf>=0?"":"-")+gbp(Math.abs(btl.ncf))} hmoV={(hmo.ncf>=0?"":"-")+gbp(Math.abs(hmo.ncf))} better={btl.ncf>hmo.ncf?"btl":"hmo"} />
-        <Row l="Total value"     btlV={gbp(btl.tv)} hmoV={gbp(hmo.tv)} better={btl.tv>hmo.tv?"btl":"hmo"} />
-        <Row l="Total equity"    btlV={gbp(btl.eq)} hmoV={gbp(hmo.eq)} better={btl.eq>hmo.eq?"btl":"hmo"} />
-        <Row l="Gross yield"     btlV={btl.yield_+"%"} hmoV={hmo.yield_+"%"} better={parseFloat(btl.yield_)>parseFloat(hmo.yield_)?"btl":"hmo"} />
-        <Row l="LTV"             btlV={btl.ltv+"%"} hmoV={hmo.ltv+"%"} better={btl.ltv<hmo.ltv?"btl":"hmo"} />
-      </div>
-
-      <div style={{ ...card, ...cardPad, background: winner==="HMO"?"#f0fdf4":"#eff6ff", borderColor: winner==="HMO"?"#bbf7d0":"#bfdbfe", marginTop:2 }}>
-        <div style={{ fontSize:13, fontWeight:700, color:winner==="HMO"?S.green:S.blue, marginBottom:8 }}>
-          📊 Recommendation: Focus on {winner}
-        </div>
-        {winner === "HMO" ? (
-          <div style={{ fontSize:12, color:S.dark, lineHeight:1.7 }}>
-            Your HMOs are generating higher gross yields and despite the higher mortgage costs, the rental income from multiple rooms gives you stronger cash flow resilience. A single BTL vacancy kills all income from that property — an HMO vacancy only removes one room. Given you self-manage, HMO expansion makes sense as you already have the systems in place for St Anns and Stanmore.
-            <div style={{ marginTop:8, fontWeight:600 }}>Watch out for: higher management burden, HMO licence renewals, and bill costs eating into profit.</div>
-          </div>
-        ) : (
-          <div style={{ fontSize:12, color:S.dark, lineHeight:1.7 }}>
-            Your BTL properties are delivering stronger net cash flow relative to their size and management burden. Lower mortgage costs and simpler management make them more efficient per pound invested.
-            <div style={{ marginTop:8, fontWeight:600 }}>Watch out for: single-tenant risk — one void means zero income from that property until it's re-let.</div>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
-
 // ── MORTGAGE INTEREST TRACKER ─────────────────────────────────────────────────
 function MtgInterestPage({ wide }) {
   const SK_VALS = "ash-prop-vals";
@@ -2575,132 +2406,6 @@ function MtgInterestPage({ wide }) {
         </div>
         <div style={{ fontSize:11, color:S.gray, marginTop:8 }}>Note: 3% appreciation is conservative. Leeds has historically grown faster. Update your property values in Portfolio Growth to see accurate figures.</div>
       </div>
-    </div>
-  );
-}
-
-// ── CALENDAR EXPORT ───────────────────────────────────────────────────────────
-function CalendarPage({ tenants, comp }) {
-  const [exported, setExported] = useState(false);
-
-  const pad = n => String(n).padStart(2,"0");
-  const icsDate = d => {
-    const dt = new Date(d);
-    return dt.getFullYear()+pad(dt.getMonth()+1)+pad(dt.getDate());
-  };
-  const icsDateTime = () => {
-    const d = new Date();
-    return d.getFullYear()+pad(d.getMonth()+1)+pad(d.getDate())+"T"+pad(d.getHours())+pad(d.getMinutes())+pad(d.getSeconds())+"Z";
-  };
-
-  const buildEvents = () => {
-    const lines = ["BEGIN:VCALENDAR","VERSION:2.0","CALSCALE:GREGORIAN","PRODID:-//Portfolio Manager//EN"];
-
-    // Compliance expiries
-    comp.forEach(c => {
-      if (!c.next) return;
-      const ct = CTYPES.find(x=>x.k===c.type);
-      const pp = PROPS.find(p=>p.id===c.pid);
-      const d90 = new Date(c.next); d90.setDate(d90.getDate()-90);
-      const d30 = new Date(c.next); d30.setDate(d30.getDate()-30);
-      [
-        { date:c.next,  title:(pp?pp.n:"")+" — "+(ct?ct.l:"Compliance")+" EXPIRES" },
-        { date:d90.toISOString().split("T")[0], title:(pp?pp.n:"")+" — "+(ct?ct.l:"Compliance")+" due in 90 days" },
-        { date:d30.toISOString().split("T")[0], title:(pp?pp.n:"")+" — "+(ct?ct.l:"Compliance")+" due in 30 days" },
-      ].forEach(ev => {
-        lines.push("BEGIN:VEVENT",
-          "UID:"+ev.date+"-comp-"+c.id+"@portfolio",
-          "DTSTAMP:"+icsDateTime(),
-          "DTSTART;VALUE=DATE:"+ev.date.replace(/-/g,""),
-          "DTEND;VALUE=DATE:"+ev.date.replace(/-/g,""),
-          "SUMMARY:🛡 "+ev.title,
-          "END:VEVENT");
-      });
-    });
-
-    // Mortgage expiries
-    MTGS.forEach(m => {
-      if (!m.e) return;
-      const d90 = new Date(m.e); d90.setDate(d90.getDate()-90);
-      const d30 = new Date(m.e); d30.setDate(d30.getDate()-30);
-      [
-        { date:m.e, title:m.l+" mortgage EXPIRES — contact broker" },
-        { date:d90.toISOString().split("T")[0], title:m.l+" mortgage expires in 90 days" },
-        { date:d30.toISOString().split("T")[0], title:m.l+" mortgage expires in 30 days" },
-      ].forEach(ev => {
-        lines.push("BEGIN:VEVENT",
-          "UID:"+ev.date+"-mtg-"+m.l.replace(/\s/g,"")+"@portfolio",
-          "DTSTAMP:"+icsDateTime(),
-          "DTSTART;VALUE=DATE:"+ev.date.replace(/-/g,""),
-          "DTEND;VALUE=DATE:"+ev.date.replace(/-/g,""),
-          "SUMMARY:💳 "+ev.title,
-          "END:VEVENT");
-      });
-    });
-
-    // Rent due dates — next 3 months
-    for (let i = 0; i < 3; i++) {
-      const d = new Date(CYR, CMO + i, 1);
-      const y = d.getFullYear(), m = d.getMonth();
-      tenants.forEach(t => {
-        const p = PROPS.find(x=>x.id===t.pid);
-        const day = Math.min(t.dy, new Date(y,m+1,0).getDate());
-        const dateStr = y+pad(m+1)+pad(day);
-        lines.push("BEGIN:VEVENT",
-          "UID:rent-"+t.id+"-"+dateStr+"@portfolio",
-          "DTSTAMP:"+icsDateTime(),
-          "DTSTART;VALUE=DATE:"+dateStr,
-          "DTEND;VALUE=DATE:"+dateStr,
-          "SUMMARY:💷 Rent due — "+t.nm+(p?" ("+p.n.split(" ")[0]+")":""),
-          "END:VEVENT");
-      });
-    }
-
-    lines.push("END:VCALENDAR");
-    return lines.join("\r\n");
-  };
-
-  const download = () => {
-    const blob = new Blob([buildEvents()], { type:"text/calendar;charset=utf-8" });
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = "portfolio-calendar.ics";
-    document.body.appendChild(a); a.click(); document.body.removeChild(a);
-    setExported(true);
-    setTimeout(() => setExported(false), 3000);
-  };
-
-  const compCount  = comp.filter(c=>c.next).length * 3;
-  const mtgCount   = MTGS.filter(m=>m.e).length * 3;
-  const rentCount  = tenants.length * 3;
-
-  return (
-    <div>
-      <div style={{ ...card, ...cardPad, marginBottom:10 }}>
-        <div style={{ fontSize:13, fontWeight:600, marginBottom:8 }}>What gets exported</div>
-        {[
-          { icon:"🛡", label:"Compliance expiry dates", count:comp.filter(c=>c.next).length, detail:"With 90-day and 30-day reminders" },
-          { icon:"💳", label:"Mortgage expiry dates",  count:MTGS.filter(m=>m.e).length,    detail:"With 90-day and 30-day reminders" },
-          { icon:"💷", label:"Rent due dates",          count:tenants.length,                detail:"Next 3 months for all tenants" },
-        ].map((item,i) => (
-          <div key={i} style={{ display:"flex", alignItems:"center", gap:10, padding:"8px 0", borderBottom:i<2?"1px solid #f8fafc":"none" }}>
-            <span style={{ fontSize:20 }}>{item.icon}</span>
-            <div style={{ flex:1 }}>
-              <div style={{ fontSize:13, fontWeight:600 }}>{item.label}</div>
-              <div style={{ fontSize:11, color:S.gray }}>{item.detail}</div>
-            </div>
-            <Badge color="gray">{item.count} events</Badge>
-          </div>
-        ))}
-      </div>
-
-      <div style={{ background:S.abg, borderRadius:11, padding:"10px 14px", marginBottom:14, fontSize:12, color:S.atx, lineHeight:1.6 }}>
-        📱 <strong>How to import:</strong> Tap Download, then open the file on your phone. Google Calendar will ask to import it automatically. All {compCount + mtgCount + rentCount} events added in one go.
-      </div>
-
-      <Btn onClick={download} style={{ background: exported ? S.green : S.dark }}>
-        {exported ? "✓ Downloaded — open to import to Google Calendar" : "📆 Download Calendar File (.ics)"}
-      </Btn>
     </div>
   );
 }
@@ -2933,34 +2638,16 @@ function AIStrategyPage({tenants,jobs,rp,outgoings}){
   const [res,setRes]=useState(""),[load,setLoad]=useState(false),[tab,setTab]=useState("");
   const inc=tenants.reduce((s,t)=>s+t.rn,0),mtg=MTGS.filter(m=>m.l!=="70 Coal Hill Lane (Home)").reduce((s,m)=>s+m.m,0),eq=PROPS.reduce((s,p)=>s+(p.v-p.mtg),0);
   const ms=mKey(CYR,CMO),jc=jobs.filter(j=>j.status==="done"&&j.date&&j.date.startsWith(ms)).reduce((s,j)=>s+(j.cost||0),0),oc=PROPS.reduce((s,p)=>s+(outgoings[p.id+"-"+ms]||[]).reduce((x,o)=>x+(o.amount||0),0),0);
-  const base="Leeds landlord: 9 units, 2HMO+7BTL, target 50. Rent £"+inc+"/mo, net £"+(inc-mtg-jc-oc)+"/mo, equity £"+eq+".";
+  const base="Leeds landlord: 9 units, 2HMO+7BTL, target 50. Rent \u00a3"+inc+"/mo, net \u00a3"+(inc-mtg-jc-oc)+"/mo, equity \u00a3"+eq+".";
   const go=async t=>{
     const k=localStorage.getItem("ash-api-key")||"";
-    if(!k){setRes("Save API key in More > AI Letter Writer (console.anthropic.com).");setTab(t);return;}
+    if(!k){setRes("Save API key in More > AI Letter Writer first.");setTab(t);return;}
     setTab(t);setLoad(true);setRes("");
-    const ps={strategy:base+" 4 ways to scale faster.",finance:base+" Best 3 finance options for next deal.",next:base+" BTL or HMO next? Leeds specific."};
+    const ps={strategy:base+" 4 ways to scale faster.",finance:base+" Best 3 finance options.",next:base+" BTL or HMO next? Leeds specific."};
     try{const r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json","x-api-key":k,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:350,messages:[{role:"user",content:ps[t]}]})});const d=await r.json();setRes(d.content?.map(c=>c.text||"").join("")||"Error.");}catch(e){setRes("Error.");}
     setLoad(false);
   };
-  return (
-    <div>
-      <div style={{background:"#1e293b",borderRadius:13,padding:12,marginBottom:12,display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:8,color:"#fff"}}>
-        {[["Rent",gbp(inc)],["Net",gbp(inc-mtg-jc-oc)],["Equity",gbp(eq)]].map(([l,v])=>(
-          <div key={l} style={{background:"rgba(255,255,255,0.08)",borderRadius:9,padding:9,textAlign:"center"}}>
-            <div style={{fontSize:10,color:"#64748b"}}>{l}</div><div style={{fontSize:12,fontWeight:700,color:"#4ade80"}}>{v}</div>
-          </div>
-        ))}
-      </div>
-      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:8,marginBottom:12}}>
-        {[["strategy","Growth"],["finance","Finance"],["next","Next Buy"]].map(([t,l])=>(
-          <button key={t} onClick={()=>go(t)} style={{padding:"10px 4px",borderRadius:10,border:"none",cursor:"pointer",fontFamily:"system-ui",fontWeight:600,fontSize:12,background:tab===t&&res?"#1e293b":S.light,color:tab===t&&res?"#fff":S.dark}}>{load&&tab===t?"...":l}</button>
-        ))}
-      </div>
-      {load&&<div style={{textAlign:"center",padding:"24px",color:S.gray}}>Analysing...</div>}
-      {res&&!load&&<div style={{background:"#fff",borderRadius:13,border:"1px solid #e2e8f0",padding:14}}><div style={{fontSize:13,lineHeight:1.8,whiteSpace:"pre-wrap"}}>{res}</div></div>}
-      {!res&&!load&&<div style={{textAlign:"center",padding:"24px",color:S.gray,fontSize:12}}>Tap a button. Needs API key from console.anthropic.com</div>}
-    </div>
-  );
+  return (<div><div style={{background:"#1e293b",borderRadius:13,padding:12,marginBottom:12,display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:8,color:"#fff"}}>{[["Rent",gbp(inc)],["Net",gbp(inc-mtg-jc-oc)],["Equity",gbp(eq)]].map(([l,v])=>(<div key={l} style={{background:"rgba(255,255,255,0.08)",borderRadius:9,padding:9,textAlign:"center"}}><div style={{fontSize:10,color:"#64748b"}}>{l}</div><div style={{fontSize:12,fontWeight:700,color:"#4ade80"}}>{v}</div></div>))}</div><div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:8,marginBottom:12}}>{[["strategy","Growth"],["finance","Finance"],["next","Next Buy"]].map(([t,l])=>(<button key={t} onClick={()=>go(t)} style={{padding:"10px 4px",borderRadius:10,border:"none",cursor:"pointer",fontFamily:"system-ui",fontWeight:600,fontSize:12,background:tab===t&&res?"#1e293b":S.light,color:tab===t&&res?"#fff":S.dark}}>{load&&tab===t?"...":l}</button>))}</div>{load&&<div style={{textAlign:"center",padding:"24px",color:S.gray}}>Analysing...</div>}{res&&!load&&<div style={{background:"#fff",borderRadius:13,border:"1px solid #e2e8f0",padding:14}}><div style={{fontSize:13,lineHeight:1.8,whiteSpace:"pre-wrap"}}>{res}</div></div>}{!res&&!load&&<div style={{textAlign:"center",padding:"24px",color:S.gray,fontSize:12}}>Tap a button. Needs API key from console.anthropic.com</div>}</div>);
 }
 // ── VOIDS ─────────────────────────────────────────────────────────────────────
 function VoidsPage({ tenants }) {
