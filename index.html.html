@@ -1,0 +1,2798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
+  <title>Ash Property Portfolio</title>
+  <style>*{box-sizing:border-box;margin:0;padding:0}body{background:#f1f5f9}</style>
+</head>
+<body>
+  <div id="root"></div>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script type="text/babel">
+    const { useState, useEffect, useRef } = React;
+    firebase.initializeApp({
+      apiKey: "AIzaSyAaxhoM0O6seClznekYK71iQhC_WoFdrsQ",
+      authDomain: "ash-property-app.firebaseapp.com",
+      projectId: "ash-property-app",
+      storageBucket: "ash-property-app.firebasestorage.app",
+      messagingSenderId: "170227737480",
+      appId: "1:170227737480:web:523be104809c515783d03d"
+    });
+    const db = firebase.firestore();
+
+const PASS = "Ashproperty1995";
+const SK = "ash-p8";
+const AUTH_KEY = "ash-auth";
+const ONE_DAY = 86400000;
+
+const PROPS = [
+  {id:"stanns", color:"#3b82f6",    n:"12 St Anns Mount",    town:"Burley",      ty:"HMO",v:280000,mtg:155000,mm:820.05},
+  {id:"stanmore", color:"#22c55e",  n:"4 Stanmore Mount",     town:"Burley",      ty:"HMO",v:280000,mtg:169902,mm:518.10},
+  {id:"randolph", color:"#f59e0b",  n:"42 Randolph Street",   town:"Bramley",     ty:"BTL",v:180000,mtg:118248,mm:261.15},
+  {id:"musgrave", color:"#8b5cf6",  n:"26 Musgrave Mount",    town:"Bramley",     ty:"BTL",v:180000,mtg:135000,mm:563.63},
+  {id:"henley", color:"#ec4899",    n:"23 Henley Road",       town:"Bramley",     ty:"BTL",v:150000,mtg:115000,mm:469.69},
+  {id:"churchhill", color:"#14b8a6",n:"15 Church Hill Mount", town:"Stanningley", ty:"BTL",v:170000,mtg:120000,mm:466.00},
+  {id:"snowden", color:"#f97316",   n:"37 Snowden Crescent",  town:"Bramley",     ty:"BTL",v:100000,mtg:56999, mm:137.29},
+  {id:"airedale", color:"#06b6d4",  n:"2 Airedale House",     town:"Rodley",      ty:"BTL",v:90000, mtg:61500, mm:200.00},
+];
+
+const MTGS = [
+  {l:"70 Coal Hill Lane (Home)",ldr:"TMW",       ac:"P20401104",b:98436, r:4.89,m:401.44,e:"2027-04-01"},
+  {l:"12 St Anns Mount",        ldr:"Kensington",ac:"",         b:155000,r:6.50,m:820.05,e:"2026-10-31"},
+  {l:"4 Stanmore Mount (L1)",   ldr:"TMW",       ac:"",         b:127806,r:2.74,m:291.95,e:"2031-04-30"},
+  {l:"4 Stanmore Mount (L2)",   ldr:"Unknown",   ac:"15424731", b:42096, r:6.44,m:226.15,e:"2027-04-01"},
+  {l:"42 Randolph Street",      ldr:"GML",       ac:"",         b:118248,r:2.65,m:261.15,e:"2027-10-31"},
+  {l:"26 Musgrave Mount",       ldr:"GML",       ac:"25943010", b:135000,r:5.01,m:563.63,e:"2031-03-31"},
+  {l:"23 Henley Road",          ldr:"GML",       ac:"25940000", b:115000,r:5.01,m:469.69,e:"2031-03-31"},
+  {l:"15 Church Hill Mount",    ldr:"GML",       ac:"",         b:120000,r:4.66,m:466.00,e:"2030-02-28"},
+  {l:"37 Snowden Crescent",     ldr:"GML",       ac:"",         b:56999, r:2.89,m:137.29,e:"2027-10-31"},
+  {l:"2 Airedale House",        ldr:"Unknown",   ac:"",         b:61500, r:3.76, m:198.48,e:"2031-03-23"},
+];
+
+const CTYPES = [
+  {k:"gas", l:"Gas Safety",     n:"Annual",  h:false},
+  {k:"eicr",l:"Electrical EICR",n:"5 years", h:false},
+  {k:"epc", l:"EPC",            n:"10 years",h:false},
+  {k:"hmo", l:"HMO Licence",    n:"5 years", h:true},
+];
+
+const JCATS = ["Repairs","Plumbing","Electrical","Heating","Cleaning","Decorating","Appliances","Other"];
+const TRADES = ["Plumber","Gas Engineer","Electrician","Handyman","Builder","Decorator","Roofer","Locksmith","Other"];
+const DEALST = ["Researching","Viewing","Offer Made","Under Offer","Completed","Dead"];
+const MFULL  = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+const MSHORT = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+const QUOTES = [
+  {t:"Don't wait to buy real estate. Buy real estate and wait.",a:"Will Rogers"},
+  {t:"The best investment on earth is earth.",a:"Louis Glickman"},
+  {t:"Buy land, they're not making it anymore.",a:"Mark Twain"},
+  {t:"The goal isn't to own properties. The goal is to build a life on your terms.",a:""},
+  {t:"Financial freedom is available to those who learn about it and work for it.",a:"Robert Kiyosaki"},
+  {t:"Landlords grow rich in their sleep without working, risking or economising.",a:"John Stuart Mill"},
+  {t:"What you do today can improve all your tomorrows.",a:"Ralph Marston"},
+  {t:"It's not about working harder — it's about building systems that work for you.",a:""},
+];
+
+const SEED_T = [
+  {id:"t1", pid:"stanns",    rm:"Room 1",nm:"Rick",         dy:1, rn:500,dp:200,  rv:null,nt:""},
+  {id:"t2", pid:"stanns",    rm:"Room 2",nm:"Nijil",        dy:12,rn:500,dp:215,  rv:null,nt:""},
+  {id:"t3", pid:"stanns",    rm:"Room 3",nm:"Keely",        dy:1, rn:500,dp:200,  rv:null,nt:""},
+  {id:"t4", pid:"stanns",    rm:"Room 4",nm:"Shreya",       dy:28,rn:500,dp:null, rv:null,nt:""},
+  {id:"t5", pid:"stanns",    rm:"Room 5",nm:"Anuj",         dy:11,rn:575,dp:187.5,rv:"2026-04-07",nt:""},
+  {id:"t6", pid:"stanns",    rm:"Room 6",nm:"Ronn",         dy:31,rn:425,dp:225,  rv:null,nt:""},
+  {id:"t7", pid:"stanmore",  rm:"Room 1",nm:"Rajarshi",     dy:27,rn:450,dp:495,  rv:null,nt:"Verify - may have moved out Jun 2021"},
+  {id:"t8", pid:"stanmore",  rm:"Room 2",nm:"Ashish",       dy:28,rn:600,dp:null, rv:null,nt:""},
+  {id:"t9", pid:"stanmore",  rm:"Room 3",nm:"Rory",         dy:28,rn:525,dp:430,  rv:null,nt:"3 months notice"},
+  {id:"t10",pid:"stanmore",  rm:"Room 4",nm:"Rupen",        dy:20,rn:500,dp:450,  rv:null,nt:"6 months notice"},
+  {id:"t11",pid:"stanmore",  rm:"Room 5",nm:"Ash (tenant)", dy:5, rn:450,dp:295,  rv:null,nt:""},
+  {id:"t12",pid:"randolph",  rm:"Whole", nm:"Adam & Emily", dy:2, rn:850,dp:595,  rv:null,nt:""},
+  {id:"t13",pid:"henley",    rm:"Whole", nm:"Beth",         dy:4, rn:925,dp:null, rv:null,nt:"Rent increased from 900"},
+  {id:"t14",pid:"musgrave",  rm:"Whole", nm:"Rhys & Amelia",dy:8, rn:875,dp:null, rv:null,nt:""},
+  {id:"t15",pid:"snowden",   rm:"Whole", nm:"Declan",       dy:4, rn:795,dp:null, rv:null,nt:""},
+  {id:"t16",pid:"churchhill",rm:"Whole", nm:"Sophie",       dy:13,rn:975,dp:null, rv:null,nt:""},
+  {id:"t17",pid:"airedale",  rm:"Whole", nm:"Chelsea",      dy:10,rn:795,dp:null, rv:null,nt:""},
+];
+
+const SEED_JOBS = [
+  {pid:"randolph",   desc:"Cut tree",                    cost:0, cont:"", cat:"", id:"j1775576974811", date:"2026-04-07", status:"open"},
+  {pid:"churchhill", desc:"Rubbish removal",             cost:0, cont:"", cat:"", id:"j1775581716840", date:"2026-04-07", status:"open"},
+  {pid:"henley",     desc:"Check roof",                  cost:0, cont:"", cat:"", id:"j1775581738500", date:"2026-04-07", status:"open"},
+  {pid:"churchhill", desc:"Sort gutters with neighbor",  cost:0, cont:"", cat:"", id:"j1775581759503", date:"2026-04-07", status:"open"},
+  {pid:"stanmore",   desc:"Order and fit new blind",     cost:0, cont:"", cat:"", id:"j1775636165494", date:"2026-04-08", status:"open"},
+];
+
+const SEED_RP = {
+  "t1-2026-3":true, "t3-2026-3":true, "t5-2026-3":true,
+  "t11-2026-3":true, "t12-2026-3":true, "t13-2026-3":true,
+  "t15-2026-3":true,
+};
+
+const SEED_OUTGOINGS = {
+  "henley-2026-04": [{id:"o1775582075861", label:"Electrics", amount:75}],
+};
+
+const seedComp = () => PROPS.flatMap(p =>
+  CTYPES.filter(c => !c.h || p.ty === "HMO").map(c => ({
+    id: p.id + "-" + c.k, pid: p.id, type: c.k, last: "", next: "", notes: ""
+  }))
+);
+
+const SEED = { tenants: SEED_T, rp: SEED_RP, jobs: SEED_JOBS, comp: seedComp(), contractors: [], deals: [], notes: {}, outgoings: SEED_OUTGOINGS, generalNotes: "", fixedOutgoings: {}, propPurchase: {}, roomNotes: {} };
+
+const now = new Date();
+const CYR = now.getFullYear();
+const CMO = now.getMonth();
+const gbp  = n => n == null ? "--" : "\u00a3" + Math.abs(Math.round(n)).toLocaleString();
+const du   = s => s ? Math.round((new Date(s) - now) / 86400000) : null;
+const sx   = d => d >= 11 && d <= 13 ? "th" : ["th","st","nd","rd"][d % 10 <= 3 ? d % 10 : 0];
+const mKey = (y, m) => y + "-" + String(m + 1).padStart(2, "0");
+const QUOTE = QUOTES[Math.floor((now - new Date(CYR, 0, 0)) / 86400000) % QUOTES.length];
+
+// ── STYLES ────────────────────────────────────────────────────────────────────
+const S = {
+  dark:"#1e293b", mid:"#475569", gray:"#94a3b8", light:"#f1f5f9",
+  green:"#16a34a", red:"#dc2626", amber:"#d97706", blue:"#2563eb",
+  gbg:"#dcfce7", gtx:"#15803d", rbg:"#fee2e2", rtx:"#b91c1c",
+  abg:"#fef3c7", atx:"#b45309", bbg:"#dbeafe", btx:"#1d4ed8",
+};
+
+const card   = { background:"#fff", borderRadius:15, border:"1px solid #e2e8f0", marginBottom:10, overflow:"hidden" };
+const cardPad = { padding:14 };
+
+function Badge({ children, color="gray" }) {
+  const map = { green:{background:S.gbg,color:S.gtx}, red:{background:S.rbg,color:S.rtx}, amber:{background:S.abg,color:S.atx}, blue:{background:S.bbg,color:S.btx}, gray:{background:S.light,color:S.mid} };
+  return <span style={{ display:"inline-flex", alignItems:"center", padding:"3px 8px", borderRadius:99, fontSize:11, fontWeight:600, ...(map[color]||map.gray) }}>{children}</span>;
+}
+
+function Btn({ onClick, children, style={} }) {
+  return <button onClick={onClick} style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:8, padding:13, borderRadius:13, fontSize:14, fontWeight:600, border:"none", cursor:"pointer", width:"100%", marginBottom:10, background:S.dark, color:"#fff", fontFamily:"system-ui", ...style }}>{children}</button>;
+}
+
+function Inp({ style={}, ...p }) {
+  return <input {...p} style={{ width:"100%", border:"1px solid #e2e8f0", borderRadius:10, padding:"10px 12px", fontSize:14, fontFamily:"system-ui", background:"#fff", color:S.dark, outline:"none", marginBottom:8, display:"block", ...style }} />;
+}
+
+function Sel({ children, style={}, ...p }) {
+  return <select {...p} style={{ width:"100%", border:"1px solid #e2e8f0", borderRadius:10, padding:"10px 12px", fontSize:14, fontFamily:"system-ui", background:"#fff", color:S.dark, outline:"none", marginBottom:8, display:"block", ...style }}>{children}</select>;
+}
+
+// ── LOGIN ─────────────────────────────────────────────────────────────────────
+function LoginScreen({ onLogin }) {
+  const [pw, setPw] = useState("");
+  const [err, setErr] = useState(false);
+  const attempt = () => {
+    if (pw === PASS) {
+      localStorage.setItem(AUTH_KEY, String(Date.now()));
+      onLogin();
+    } else { setErr(true); setPw(""); }
+  };
+  return (
+    <div style={{ minHeight:"100vh", background:S.dark, display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", padding:32 }}>
+      <div style={{ fontSize:52 }}>🏠</div>
+      <div style={{ color:"#fff", fontSize:22, fontWeight:700, margin:"16px 0 4px" }}>Portfolio Manager</div>
+      <div style={{ color:S.gray, fontSize:13, marginBottom:28 }}>Enter your password to continue</div>
+      <input type="password" value={pw} placeholder="Password"
+        onChange={e => { setPw(e.target.value); setErr(false); }}
+        onKeyDown={e => e.key === "Enter" && attempt()}
+        style={{ width:"100%", maxWidth:300, padding:"14px 16px", borderRadius:12, border:"1.5px solid #334155", background:"#0f172a", color:"#fff", fontSize:16, marginBottom:12, outline:"none", fontFamily:"system-ui" }}
+      />
+      <button onClick={attempt} style={{ width:"100%", maxWidth:300, padding:14, borderRadius:12, background:"#3b82f6", color:"#fff", fontSize:15, fontWeight:600, border:"none", cursor:"pointer", fontFamily:"system-ui" }}>
+        Log In
+      </button>
+      {err && <div style={{ color:"#f87171", fontSize:13, marginTop:10 }}>Incorrect password. Try again.</div>}
+    </div>
+  );
+}
+
+// ── APP ───────────────────────────────────────────────────────────────────────
+function App() {
+  const [loggedIn, setLoggedIn] = useState(() => {
+    try {
+      const t = localStorage.getItem(AUTH_KEY);
+      return t && (Date.now() - parseInt(t)) < ONE_DAY;
+    } catch { return false; }
+  });
+  const [data, setData]     = useState(null);
+  const [tab, setTab]       = useState("dash");
+  const [more, setMore]     = useState(null);
+  const [expMap, setExpMap] = useState({});
+  const [wide, setWide]     = useState(window.innerWidth >= 600);
+
+  useEffect(() => {
+    const handler = () => setWide(window.innerWidth >= 600);
+    window.addEventListener("resize", handler);
+    window.addEventListener("orientationchange", () => setTimeout(handler, 300));
+    screen.orientation && screen.orientation.addEventListener("change", () => setTimeout(handler, 300));
+    return () => window.removeEventListener("resize", handler);
+  }, []);
+
+  useEffect(() => {
+        db.collection("ashapp").doc("data").get().then(doc=>{
+      let d=doc.exists?doc.data():JSON.parse(JSON.stringify(SEED));
+      if(!d.comp)d.comp=seedComp();
+      if(!d.contractors)d.contractors=[];
+      if(!d.deals)d.deals=[];
+      if(!d.notes)d.notes={};
+      if(!d.outgoings)d.outgoings={};
+      if(!d.generalNotes)d.generalNotes="";
+      if(!d.fixedOutgoings)d.fixedOutgoings={};
+      if(!d.propPurchase)d.propPurchase={};
+      if(!d.roomNotes)d.roomNotes={};
+      if(d.savings===undefined)d.savings=0;
+      if(!d.tenants.find(t=>t.id==="t17"))d.tenants.push({id:"t17",pid:"airedale",rm:"Whole",nm:"Chelsea",dy:10,rn:795,dp:null,rv:null,nt:""});
+      setData(d);
+    }).catch(()=>setData(JSON.parse(JSON.stringify(SEED))));
+  }, []);
+
+  const setSavings=v=>upd(()=>({savings:v}));
+  const stRef = useRef(null);
+  useEffect(() => {
+    if (!data) return;
+    if (stRef.current) clearTimeout(stRef.current);
+    stRef.current = setTimeout(() => {
+      db.collection("ashapp").doc("data").set(JSON.parse(JSON.stringify(data))).catch(()=>{});
+    }, 1500);
+  }, [data]);
+
+  const upd = fn => setData(p => ({ ...p, ...fn(p) }));
+
+  if (!loggedIn) return <LoginScreen onLogin={() => setLoggedIn(true)} />;
+  if (!data) return <div style={{display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",height:"100vh",background:S.dark}}><div style={{fontSize:40}}>&#127968;</div><div style={{color:"#fff",fontWeight:700,marginTop:12}}>Loading...</div></div>;
+
+  const { tenants, rp, jobs, comp, contractors, deals, notes, outgoings, generalNotes, fixedOutgoings, propPurchase, roomNotes, savings } = data;
+  // Check if outgoings entered this month for any property
+  const outgoingsMissing = PROPS.some(p => {
+    const k = p.id + "-" + mKey(CYR, CMO);
+    return !(outgoings[k] && outgoings[k].length > 0);
+  });
+
+  const paidNow   = tenants.filter(t => rp[t.id + "-" + CYR + "-" + CMO]).length;
+  const openJobs  = jobs.filter(j => j.status === "open").length;
+  const alerts    = getAlerts(comp);
+
+  const urgent    = alerts.filter(a => a.t === "r").length;
+  const greet     = now.getHours() < 12 ? "morning" : now.getHours() < 17 ? "afternoon" : "evening";
+
+  const toggleRent      = (tid, y, m) => { const k = tid+"-"+y+"-"+m; upd(d => ({ rp: { ...d.rp, [k]: !d.rp[k] } })); };
+  const addJob          = j   => upd(d => ({ jobs: [...d.jobs, { ...j, id:"j"+Date.now(), date:now.toISOString().split("T")[0], status:"open" }] }));
+  const updateJob       = (id, patch) => upd(d => ({ jobs: d.jobs.map(j => j.id === id ? { ...j, ...patch } : j) }));
+  const deleteJob       = id  => upd(d => ({ jobs: d.jobs.filter(j => j.id !== id) }));
+  const updateComp      = (id, patch) => upd(d => ({ comp: d.comp.map(c => c.id === id ? { ...c, ...patch } : c) }));
+  const updateTenant    = (id, patch) => upd(d => ({ tenants: d.tenants.map(t => t.id === id ? { ...t, ...patch } : t) }));
+  const addTenant       = t   => upd(d => ({ tenants: [...d.tenants, { ...t, id:"t"+Date.now() }] }));
+  const addContractor   = c   => upd(d => ({ contractors: [...d.contractors, { ...c, id:"c"+Date.now() }] }));
+  const deleteContractor= id  => upd(d => ({ contractors: d.contractors.filter(c => c.id !== id) }));
+  const addDeal         = deal=> upd(d => ({ deals: [...d.deals, { ...deal, id:"d"+Date.now(), date:now.toISOString().split("T")[0] }] }));
+  const updateDeal      = (id, patch) => upd(d => ({ deals: d.deals.map(x => x.id === id ? { ...x, ...patch } : x) }));
+  const deleteDeal      = id  => upd(d => ({ deals: d.deals.filter(x => x.id !== id) }));
+  const setNote         = (pid, note) => upd(d => ({ notes: { ...d.notes, [pid]: note } }));
+  const setGeneralNotes = (v) => upd(() => ({ generalNotes: v }));
+  const setFixedOutgoing = (pid, label, amount) => upd(d => ({ fixedOutgoings: { ...d.fixedOutgoings, [pid]: [...(d.fixedOutgoings[pid]||[]).filter(f=>f.label!==label), { label, amount }] } }));
+  const removeFixedOutgoing = (pid, label) => upd(d => ({ fixedOutgoings: { ...d.fixedOutgoings, [pid]: (d.fixedOutgoings[pid]||[]).filter(f=>f.label!==label) } }));
+  const setPropPurchase = (pid, data) => upd(d => ({ propPurchase: { ...d.propPurchase, [pid]: data } }));
+  const setRoomNote = (key, note) => upd(d => ({ roomNotes: { ...d.roomNotes, [key]: note } }));
+  const addOutgoing     = (pid, yr, mo, item) => {
+    const k = pid + "-" + mKey(yr, mo);
+    upd(d => ({ outgoings: { ...d.outgoings, [k]: [...(d.outgoings[k]||[]), { id:"o"+Date.now(), ...item }] } }));
+  };
+  const deleteOutgoing  = (pid, yr, mo, id) => {
+    const k = pid + "-" + mKey(yr, mo);
+    upd(d => ({ outgoings: { ...d.outgoings, [k]: (d.outgoings[k]||[]).filter(x => x.id !== id) } }));
+  };
+  const toggleExp       = pid => setExpMap(e => ({ ...e, [pid]: !e[pid] }));
+
+  const bag = { tenants, rp, jobs, comp, contractors, deals, notes, outgoings, generalNotes, fixedOutgoings, propPurchase, roomNotes, expMap, toggleRent, addJob, updateJob, deleteJob, updateComp, updateTenant, addTenant, addContractor, deleteContractor, addDeal, updateDeal, deleteDeal, setNote, toggleExp, addOutgoing, deleteOutgoing, setGeneralNotes, setFixedOutgoing, removeFixedOutgoing, setPropPurchase , setRoomNote, savings, setSavings, wide };
+  const moreLabels = { outgoings:"Outgoings", compliance:"Compliance", tenants:"Tenants", ailetters:"AI Letter Writer", aistrategy:"AI Strategy", dealcheck:"Deal Analyser", financials:"Financials", tax:"Tax Summary", timeline:"Timeline", rentplanner:"Rent Planner", notes:"Notes", refinance:"Refinance Planner", mtginterest:"Mortgage Interest", growth:"Portfolio Growth", contractors:"Contractors", deals:"Deal Pipeline", voids:"Void Tracker" };
+
+  const maxW = wide ? 1100 : 480;
+
+  return (
+    <div style={{ fontFamily:"system-ui,-apple-system,sans-serif", background:"#f1f5f9", minHeight:"100vh", maxWidth:maxW, margin:"0 auto", overflowX:"hidden" }}>
+      <div style={{ background:S.dark, color:"#fff", padding:"40px 16px 12px", position:"sticky", top:0, zIndex:50 }}>
+        {tab === "more" && more ? (
+          <div style={{ display:"flex", alignItems:"center", gap:10 }}>
+            <button onClick={() => setMore(null)} style={{ background:"none", border:"none", color:"#fff", fontSize:22, cursor:"pointer" }}>&#8592;</button>
+            <span style={{ fontSize:16, fontWeight:600 }}>{moreLabels[more]||more}</span>
+          </div>
+        ) : (
+          <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-end" }}>
+            <div>
+              <div style={{ fontSize:11, color:S.gray, marginBottom:2 }}>Good {greet}, Ash</div>
+              <div style={{ fontSize:18, fontWeight:700 }}>Portfolio Manager</div>
+              <div style={{ fontSize:11, color:"#94a3b8", fontStyle:"italic", marginTop:4 }}>{QUOTE.a?QUOTE.t+"—"+QUOTE.a:QUOTE.t}</div>
+            </div>
+            <div style={{ display:"flex", alignItems:"center", gap:8 }}>
+              <span style={{ fontSize:11, color:"#4ade80" }}>&#9679; Saved</span>
+              {urgent > 0 && <span style={{ background:"#ef4444", color:"#fff", fontSize:11, fontWeight:700, padding:"3px 8px", borderRadius:99 }}>{urgent} urgent</span>}
+            </div>
+          </div>
+        )}
+      </div>
+
+      <div style={{ padding: wide ? "16px 16px 16px" : "14px 14px 100px" }}>
+        {wide ? (
+          <WideLayout tab={tab} setTab={setTab} more={more} setMore={setMore} bag={bag} alerts={alerts} paidNow={paidNow} urgent={urgent} />
+        ) : (
+          <>
+            {tab === "dash"  && <DashPage alerts={alerts} paidNow={paidNow} {...bag} />}
+            {tab === "rent"  && <RentPage {...bag} />}
+            {tab === "jobs"  && <JobsPage {...bag} />}
+            {tab === "mtgs"  && <MtgsPage />}
+            {tab === "more"  && !more && <MoreMenu {...bag} setMore={setMore} data={data} />}
+            {tab === "more"  && more === "outgoings"   && <OutgoingsPage {...bag} />}
+            {tab === "more"  && more === "compliance"  && <CompPage {...bag} />}
+            {tab === "more"  && more === "tenants"     && <TenantsPage {...bag} />} />} />}
+            {tab === "more"  && more === "ailetters"   && <AILettersPage {...bag} />}
+            {tab === "more"  && more === "aistrategy"  && <AIStrategyPage {...bag} />}
+            {tab === "more"  && more === "dealcheck"   && <DealCheckPage {...bag} />}
+            {tab === "more"  && more === "financials"  && <FinPage {...bag} />}
+            {tab === "more"  && more === "tax"         && <TaxPage {...bag} />}
+            {tab === "more"  && more === "timeline"    && <TimelinePage {...bag} />}
+            {tab === "more"  && more === "rentplanner" && <RentPlannerPage {...bag} />} />}
+            {tab === "more"  && more === "notes"       && <NotesPage {...bag} />}
+            {tab === "more"  && more === "refinance"   && <RefinancePage />}
+            {tab === "more"  && more === "mtginterest" && <MtgInterestPage {...bag} />}
+            {tab === "more"  && more === "growth"      && <GrowthPage {...bag} />}
+            {tab === "more"  && more === "contractors" && <ContractorsPage {...bag} />}
+            {tab === "more"  && more === "deals"       && <DealsPage {...bag} />}
+            {tab === "more"  && more === "voids"       && <VoidsPage {...bag} />}
+          </>
+        )}
+      </div>
+
+      {!wide && (
+        <nav style={{ position:"fixed", bottom:0, left:"50%", transform:"translateX(-50%)", width:"100%", maxWidth:480, background:"#fff", borderTop:"1px solid #e2e8f0", display:"flex", zIndex:50 }}>
+          {[
+            {id:"dash",icon:"🏠",label:"Home",   badge:0},
+            {id:"rent",icon:"✓", label:"Rent",   badge:tenants.length - paidNow},
+            {id:"jobs",icon:"🔧",label:"Jobs",   badge:openJobs},
+            {id:"mtgs",icon:"💳",label:"Mortgages",badge:urgent},
+            {id:"more",icon:"⋯", label:"More",  badge:0},
+          ].map(b => (
+            <button key={b.id} onClick={() => { setTab(b.id); if (b.id !== "more") setMore(null); }}
+              style={{ flex:1, display:"flex", flexDirection:"column", alignItems:"center", padding:"8px 4px 10px", background:"none", border:"none", cursor:"pointer", color:tab===b.id?S.dark:S.gray, fontSize:10, fontWeight:600, gap:2, position:"relative", fontFamily:"system-ui" }}>
+              {b.badge > 0 && <span style={{ position:"absolute", top:5, right:"22%", background:"#ef4444", color:"#fff", fontSize:9, fontWeight:700, padding:"1px 4px", borderRadius:99 }}>{b.badge}</span>}
+              <span style={{ fontSize:18, lineHeight:1 }}>{b.icon}</span>
+              <span>{b.label}</span>
+              {tab === b.id && <span style={{ position:"absolute", bottom:0, left:"20%", right:"20%", height:2, background:S.dark, borderRadius:2 }} />}
+            </button>
+          ))}
+        </nav>
+      )}
+    </div>
+  );
+}
+
+// ── WIDE LAYOUT ───────────────────────────────────────────────────────────────
+function WideLayout({ tab, setTab, more, setMore, bag, alerts, paidNow, urgent }) {
+  const navItems = [
+    {id:"dash",icon:"🏠",label:"Home"},
+    {id:"rent",icon:"✓", label:"Rent"},
+    {id:"jobs",icon:"🔧",label:"Jobs"},
+    {id:"mtgs",icon:"💳",label:"Mortgages"},
+    {id:"more",icon:"⋯", label:"More"},
+  ];
+  const moreItems = ["outgoings","compliance","tenants","ailetters","aistrategy","dealcheck","financials","tax","timeline","rentplanner","notes","refinance","mtginterest","growth","contractors","deals","voids"];
+  const moreLabels = { outgoings:"Outgoings", compliance:"Compliance", tenants:"Tenants", ailetters:"AI Letter Writer", aistrategy:"AI Strategy", dealcheck:"Deal Analyser", financials:"Financials", tax:"Tax Summary", timeline:"Timeline", rentplanner:"Rent Planner", notes:"Notes", refinance:"Refinance Planner", mtginterest:"Mortgage Interest", growth:"Portfolio Growth", contractors:"Contractors", deals:"Deal Pipeline", voids:"Void Tracker" };
+
+  return (
+    <div style={{ display:"grid", gridTemplateColumns:"200px 1fr", gap:16 }}>
+      <div>
+        <div style={{ background:"#fff", borderRadius:15, border:"1px solid #e2e8f0", overflow:"hidden", marginBottom:10 }}>
+          {navItems.map(b => (
+            <button key={b.id} onClick={() => { setTab(b.id); if (b.id !== "more") setMore(null); }}
+              style={{ display:"flex", alignItems:"center", gap:10, width:"100%", padding:"12px 14px", background:tab===b.id&&!more?"#f1f5f9":"#fff", border:"none", borderBottom:"1px solid #f8fafc", cursor:"pointer", fontFamily:"system-ui", fontWeight:tab===b.id?700:400, color:S.dark, fontSize:14 }}>
+              <span style={{ fontSize:18 }}>{b.icon}</span>{b.label}
+            </button>
+          ))}
+        </div>
+        {tab === "more" && (
+          <div style={{ background:"#fff", borderRadius:15, border:"1px solid #e2e8f0", overflow:"hidden" }}>
+            {moreItems.map(id => (
+              <button key={id} onClick={() => setMore(id)}
+                style={{ display:"flex", alignItems:"center", width:"100%", padding:"11px 14px", background:more===id?"#f1f5f9":"#fff", border:"none", borderBottom:"1px solid #f8fafc", cursor:"pointer", fontFamily:"system-ui", fontWeight:more===id?700:400, color:S.dark, fontSize:13 }}>
+                {moreLabels[id]}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+      <div>
+        {tab === "dash"  && <DashPage alerts={alerts} paidNow={paidNow} {...bag} />}
+        {tab === "rent"  && <RentPage {...bag} />}
+        {tab === "jobs"  && <JobsPage {...bag} />}
+        {tab === "mtgs"  && <MtgsPage />}
+        {tab === "more"  && !more && <MoreMenu {...bag} setMore={setMore} data={bag} />}
+        {tab === "more"  && more === "outgoings"   && <OutgoingsPage {...bag} />}
+        {tab === "more"  && more === "compliance"  && <CompPage {...bag} />}
+        {tab === "more"  && more === "tenants"     && <TenantsPage {...bag} />} />} />}
+        {tab === "more"  && more === "ailetters"   && <AILettersPage {...bag} />}
+            {tab === "more"  && more === "aistrategy"  && <AIStrategyPage {...bag} />}
+        {tab === "more"  && more === "dealcheck"   && <DealCheckPage {...bag} />}
+        {tab === "more"  && more === "financials"  && <FinPage {...bag} />}
+        {tab === "more"  && more === "tax"         && <TaxPage {...bag} />}
+        {tab === "more"  && more === "timeline"    && <TimelinePage {...bag} />}
+        {tab === "more"  && more === "rentplanner" && <RentPlannerPage {...bag} />} />}
+        {tab === "more"  && more === "notes"       && <NotesPage {...bag} />}
+        {tab === "more"  && more === "refinance"   && <RefinancePage />}
+        {tab === "more"  && more === "mtginterest" && <MtgInterestPage {...bag} />}
+        {tab === "more"  && more === "growth"      && <GrowthPage {...bag} />}
+        {tab === "more"  && more === "contractors" && <ContractorsPage {...bag} />}
+        {tab === "more"  && more === "deals"       && <DealsPage {...bag} />}
+        {tab === "more"  && more === "voids"       && <VoidsPage {...bag} />}
+      </div>
+    </div>
+  );
+}
+
+// ── ALERTS ────────────────────────────────────────────────────────────────────
+function getAlerts(comp) {
+  const a = [];
+  MTGS.forEach(m => {
+    const d = du(m.e);
+    if (d === null)  a.push({ t:"a", msg: m.l + ": expiry unknown" });
+    else if (d <= 0) a.push({ t:"r", msg: m.l + ": mortgage EXPIRED" });
+    else if (d <= 180) a.push({ t:"r", msg: m.l + ": expires in " + d + " days — contact broker" });
+    else if (d <= 365) a.push({ t:"a", msg: m.l + ": expires in " + d + " days" });
+  });
+  PROPS.filter(p => p.vc).forEach(p => a.push({ t:"a", msg: p.n + ": vacant — not yet let" }));
+  comp.forEach(c => {
+    const d = du(c.next);
+    if (c.next && d <= 60) {
+      const ct = CTYPES.find(x => x.k === c.type);
+      const pp = PROPS.find(p => p.id === c.pid);
+      a.push({ t:"r", msg: (pp ? pp.n : "") + ": " + (ct ? ct.l : "") + " " + (d < 0 ? "OVERDUE" : d + "d left") });
+    }
+  });
+  return a;
+}
+
+// ── DASHBOARD ─────────────────────────────────────────────────────────────────
+function GoalTracker({tenants, savings, setSavings}) {
+  const [ed, setEd] = useState(false);
+  const [sv, setSv] = useState(String(savings || 0));
+  const inc = tenants.reduce(function(s, t) { return s + t.rn; }, 0);
+  const ipct = Math.min(100, Math.round(inc / 24500 * 100));
+  const pot = savings || 0;
+  const ppct = Math.min(100, Math.round(pot / 40000 * 100));
+  const net = Math.max(0, inc - MTGS.reduce(function(s, m) { return s + m.m; }, 0));
+  const mths = net > 0 ? Math.ceil(Math.max(0, 40000 - pot) / net) : "?";
+  const doSave = function() { if (setSavings) setSavings(parseFloat(sv) || 0); setEd(false); };
+  return (
+    <div style={{background:"linear-gradient(135deg,#1e293b,#0f172a)", borderRadius:16, padding:16, marginBottom:10, color:"#fff"}}>
+      <div style={{display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:10}}>
+        <div>
+          <div style={{fontSize:10, color:"#64748b", fontWeight:600, marginBottom:3}}>MISSION: 50 UNITS BY FEB 2036</div>
+          <div style={{fontSize:22, fontWeight:700}}>9 <span style={{color:"#64748b", fontSize:13}}>of 50</span></div>
+          <div style={{fontSize:10, color:"#4ade80"}}>Sale pending</div>
+        </div>
+        <div style={{textAlign:"right"}}>
+          <div style={{fontSize:10, color:"#64748b"}}>Rent income</div>
+          <div style={{fontSize:17, fontWeight:700, color:"#4ade80"}}>{gbp(inc)}</div>
+          <div style={{fontSize:10, color:"#64748b"}}>target {gbp(24500)}</div>
+        </div>
+      </div>
+      <div style={{marginBottom:7}}>
+        <div style={{display:"flex", justifyContent:"space-between", fontSize:10, color:"#64748b", marginBottom:2}}>
+          <span>Units 9/50</span><span>18%</span>
+        </div>
+        <div style={{height:4, background:"#334155", borderRadius:99, overflow:"hidden"}}>
+          <div style={{height:"100%", background:"#3b82f6", width:"18%"}} />
+        </div>
+      </div>
+      <div style={{marginBottom:10}}>
+        <div style={{display:"flex", justifyContent:"space-between", fontSize:10, color:"#64748b", marginBottom:2}}>
+          <span>Income {ipct}%</span><span>{ipct}%</span>
+        </div>
+        <div style={{height:4, background:"#334155", borderRadius:99, overflow:"hidden"}}>
+          <div style={{height:"100%", background:"#22c55e", width:ipct+"%"}} />
+        </div>
+      </div>
+      <div style={{background:"rgba(255,255,255,0.07)", borderRadius:10, padding:10}}>
+        <div style={{display:"flex", justifyContent:"space-between", fontSize:10, color:"#94a3b8", marginBottom:5}}>
+          <span style={{fontWeight:600}}>Deposit pot</span>
+          <span>~{mths} months</span>
+        </div>
+        {ed ? (
+          <div style={{display:"flex", gap:6, marginBottom:6}}>
+            <input autoFocus type="number" value={sv}
+              onChange={function(e){setSv(e.target.value);}}
+              onKeyDown={function(e){if(e.key==="Enter")doSave();}}
+              style={{flex:1, background:"#0f172a", border:"1px solid #334155", borderRadius:7, padding:"5px 8px", color:"#fff", fontSize:13, fontFamily:"system-ui", outline:"none"}} />
+            <button onClick={doSave} style={{background:"#22c55e", color:"#fff", border:"none", borderRadius:7, padding:"5px 12px", fontWeight:700, cursor:"pointer", fontFamily:"system-ui"}}>Save</button>
+            <button onClick={function(){setEd(false);}} style={{background:"#334155", color:"#94a3b8", border:"none", borderRadius:7, padding:"5px 8px", cursor:"pointer", fontFamily:"system-ui"}}>x</button>
+          </div>
+        ) : (
+          <div onClick={function(){setEd(true);}} style={{cursor:"pointer", marginBottom:5}}>
+            <span style={{fontSize:16, fontWeight:700}}>{gbp(pot)}</span>
+            <span style={{fontSize:10, color:"#64748b"}}> of {gbp(40000)} - tap to update</span>
+          </div>
+        )}
+        <div style={{height:5, background:"#334155", borderRadius:99, overflow:"hidden"}}>
+          <div style={{height:"100%", background:"linear-gradient(90deg,#f59e0b,#22c55e)", width:ppct+"%"}} />
+        </div>
+      </div>
+    </div>
+  );
+}
+function DashPage({ alerts, paidNow, tenants, rp, jobs, comp, outgoings, wide }) {
+  const [selYr,setSelYr]=useState(CYR);
+  const [selMo,setSelMo]=useState(CMO);
+  const [propView,setPropView]=useState(null);
+  const isCur=selYr===CYR&&selMo===CMO;
+  const ms=mKey(selYr,selMo);
+  const tr=tenants.reduce((s,t)=>s+t.rn,0);
+  const pr=tenants.filter(t=>rp[t.id+"-"+selYr+"-"+selMo]).reduce((s,t)=>s+t.rn,0);
+  const tm=PROPS.reduce((s,p)=>s+p.mm,0);
+  const jc=jobs.filter(j=>j.status==="done"&&j.date&&j.date.startsWith(ms)).reduce((s,j)=>s+(j.cost||0),0);
+  const oc=PROPS.reduce((s,p)=>s+(outgoings[p.id+"-"+ms]||[]).reduce((x,o)=>x+(o.amount||0),0),0);
+  const totalOut=tm+jc+oc;
+  const ncf=pr-totalOut;
+  const tv  = PROPS.reduce((s, p) => s + p.v, 0);
+  const td  = PROPS.reduce((s, p) => s + p.mtg, 0);
+  const eq  = tv - td;
+  const oj  = jobs.filter(j => j.status === "open").length;
+  const pct = tr > 0 ? Math.round(pr / tr * 100) : 0;
+
+  // Build smart action list
+  const actions = [];
+
+  // Unpaid rent due today or before
+  tenants.forEach(t => {
+    const paid = !!rp[t.id+"-"+CYR+"-"+CMO];
+    if (!paid) {
+      const dueThisMonth = t.dy <= now.getDate();
+      if (dueThisMonth) actions.push({ priority:"r", icon:"💷", msg: t.nm+" at "+PROPS.find(p=>p.id===t.pid)?.n?.split(" ")[0]+" — rent due, not paid", category:"Rent" });
+    }
+  });
+
+  tenants.forEach(t=>{if(t.moveOut){const dO=Math.round((new Date(t.moveOut)-now)/86400000);if(dO>=0&&dO<=60){const pp=PROPS.find(x=>x.id===t.pid);actions.push({priority:dO<=14?"r":"a",icon:"&#128230;",msg:t.nm+" at "+(pp?pp.n.split(" ")[0]:"")+" moving out in "+dO+" days",category:"Void Risk"});}}});
+  // Open jobs older than 7 days
+  jobs.filter(j=>j.status==="open").forEach(j => {
+    const age = j.date ? Math.round((now-new Date(j.date))/86400000) : 0;
+    if (age >= 7) {
+      const p = PROPS.find(x=>x.id===j.pid);
+      actions.push({ priority:"a", icon:"🔧", msg: j.desc+(p?" at "+p.n.split(" ")[0]:"")+" — open "+age+" days", category:"Jobs" });
+    }
+  });
+
+  // Compliance expiring within 60 days
+  comp.forEach(c => {
+    const d = du(c.next);
+    if (c.next && d <= 60) {
+      const ct = CTYPES.find(x=>x.k===c.type), pp = PROPS.find(p=>p.id===c.pid);
+      actions.push({ priority:"r", icon:"🛡", msg:(pp?pp.n.split(" ")[0]:"")+" "+( ct?ct.l:"")+" "+(d<0?"OVERDUE":d+"d left"), category:"Compliance" });
+    }
+  });
+
+  // Mortgages expiring within 180 days
+  MTGS.forEach(m => {
+    const d = du(m.e);
+    if (d!=null && d<=180 && d>=0) actions.push({ priority:"r", icon:"💳", msg:m.l+": mortgage expires in "+d+" days — contact broker", category:"Mortgages" });
+    if (d!=null && d<0) actions.push({ priority:"r", icon:"💳", msg:m.l+": mortgage EXPIRED — urgent", category:"Mortgages" });
+  });
+
+  // Outgoings not entered
+  const outMissing = PROPS.filter(p => !(outgoings[p.id+"-"+ms]||[]).length);
+  if (outMissing.length > 0) actions.push({ priority:"a", icon:"💸", msg:"Outgoings not entered for "+outMissing.length+" propert"+(outMissing.length===1?"y":"ies")+" this month", category:"Outgoings" });
+
+  // Sort: red first then amber
+  actions.sort((a,b) => a.priority==="r"&&b.priority!=="r"?-1:1);
+
+  const propList = (
+    <div style={card}>
+      <div style={{ padding:"11px 14px", borderBottom:"1px solid #f1f5f9", fontSize:13, fontWeight:600 }}>Properties</div>
+      {PROPS.map(p => {
+        const pr2  = tenants.filter(t => t.pid === p.id).reduce((s, t) => s + t.rn, 0);
+        const ncf2 = pr2 - p.mm;
+        return (
+          <div key={p.id} onClick={()=>setPropView(p.id)} style={{padding:"11px 14px",display:"flex",justifyContent:"space-between",alignItems:"center",borderBottom:"1px solid #f8fafc",cursor:"pointer"}}>
+            <div style={{display:"flex",alignItems:"flex-start",gap:10}}>
+              <div style={{width:10,height:10,borderRadius:"50%",background:p.color||"#94a3b8",marginTop:3,flexShrink:0}} />
+              <div><div style={{fontSize:13,fontWeight:600}}>{p.n}</div><div style={{fontSize:11,color:S.gray}}>{p.town} &middot; {p.ty}</div></div>
+            </div>
+            <div style={{textAlign:"right"}}>
+              <div style={{fontSize:13,fontWeight:700,color:p.vc?S.amber:ncf2>0?S.green:S.red}}>{p.vc?"Vacant":gbp(ncf2)+"/mo"}</div>
+              <div style={{fontSize:11,color:S.gray}}>{p.vc?"Not let":gbp(pr2)+" rent"} &#8250;</div>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+
+  const stats = (
+    <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10, marginBottom:10 }}>
+      {[
+        {l:"Net Cash Flow",   v:(ncf>=0?"":"-")+gbp(Math.abs(ncf)), s:"This month",             g:ncf>0},
+        {l:"Total Equity",    v:gbp(eq),  s:Math.round(eq/tv*100)+"% of value",                  g:true},
+        {l:"Net Worth",       v:gbp(eq+161564), s:"portfolio + home equity",                     g:true},
+        {l:"Open Jobs",       v:oj,       s:"Maintenance items",                                 g:false},
+      ].map((k, i) => (
+        <div key={i} style={{ background:"#fff", borderRadius:14, border:"1px solid #e2e8f0", padding:12 }}>
+          <div style={{ fontSize:11, color:S.gray, marginBottom:3 }}>{k.l}</div>
+          <div style={{ fontSize:19, fontWeight:700, color:k.g?S.green:S.dark }}>{k.v}</div>
+          <div style={{ fontSize:11, color:S.gray, marginTop:2 }}>{k.s}</div>
+        </div>
+      ))}
+    </div>
+  );
+
+  if (propView) {
+    const pv=PROPS.find(x=>x.id===propView),pvt=tenants.filter(t=>t.pid===propView);
+    const pvR=pvt.filter(t=>rp[t.id+"-"+CYR+"-"+CMO]).reduce((s,t)=>s+t.rn,0);
+    const pvMs=mKey(CYR,CMO);
+    const pvJ=jobs.filter(j=>j.status==="done"&&j.pid===propView&&j.date&&j.date.startsWith(pvMs)).reduce((s,j)=>s+(j.cost||0),0);
+    const pvO=(outgoings[propView+"-"+pvMs]||[]).reduce((s,o)=>s+(o.amount||0),0);
+    const pvN=pvR-(pv?pv.mm:0)-pvJ-pvO;
+    const pvJobs=jobs.filter(j=>j.pid===propView&&j.status==="open");
+    const pvComp=comp.filter(c=>c.pid===propView);
+    return (
+      <div>
+        <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:14}}>
+          <button onClick={()=>setPropView(null)} style={{width:36,height:36,borderRadius:"50%",border:"1px solid #e2e8f0",background:"#fff",cursor:"pointer",fontSize:18}}>&#8249;</button>
+          <div style={{display:"flex",alignItems:"center",gap:8}}>
+            <div style={{width:12,height:12,borderRadius:"50%",background:pv&&pv.color?pv.color:"#94a3b8"}} />
+            <div><div style={{fontSize:15,fontWeight:700}}>{pv&&pv.n}</div><div style={{fontSize:11,color:S.gray}}>{pv&&pv.town} &middot; {pv&&pv.ty}</div></div>
+          </div>
+        </div>
+        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:10}}>
+          <div style={{background:"#f0fdf4",borderRadius:12,padding:14}}><div style={{fontSize:11,color:S.gtx,fontWeight:600}}>Rent collected</div><div style={{fontSize:20,fontWeight:700,color:S.green}}>{gbp(pvR)}</div></div>
+          <div style={{background:pvN>=0?"#f0fdf4":"#fff5f5",borderRadius:12,padding:14}}><div style={{fontSize:11,color:pvN>=0?S.gtx:S.rtx,fontWeight:600}}>Net profit</div><div style={{fontSize:20,fontWeight:700,color:pvN>=0?S.green:S.red}}>{pvN>=0?"+":"-"}{gbp(Math.abs(pvN))}</div></div>
+        </div>
+        <div style={card}><div style={{padding:"11px 14px",background:"#f8fafc",borderBottom:"1px solid #f1f5f9",fontSize:13,fontWeight:600}}>Tenants</div>
+          {pvt.map((t,i)=><div key={t.id} style={{padding:"10px 14px",borderBottom:i<pvt.length-1?"1px solid #f8fafc":"none",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+            <div><div style={{fontSize:13,fontWeight:600}}>{pv&&pv.ty==="HMO"?t.rm+" · ":""}{t.nm}</div><div style={{fontSize:11,color:S.gray}}>{gbp(t.rn)}/mo</div>{t.moveOut&&<div style={{fontSize:11,color:S.red,fontWeight:600}}>Moving out: {new Date(t.moveOut).toLocaleDateString("en-GB")}</div>}</div>
+            <div style={{width:32,height:32,borderRadius:"50%",background:rp[t.id+"-"+CYR+"-"+CMO]?"#22c55e":"#e2e8f0",display:"flex",alignItems:"center",justifyContent:"center",color:rp[t.id+"-"+CYR+"-"+CMO]?"#fff":S.gray}}>{rp[t.id+"-"+CYR+"-"+CMO]?"&#10003;":"&#9675;"}</div>
+          </div>)}
+        </div>
+        {pvJobs.length>0&&<div style={{...card,marginTop:8}}><div style={{padding:"11px 14px",background:"#f8fafc",borderBottom:"1px solid #f1f5f9",fontSize:13,fontWeight:600}}>Open Jobs ({pvJobs.length})</div>{pvJobs.map((j,i)=><div key={j.id} style={{padding:"10px 14px",borderBottom:i<pvJobs.length-1?"1px solid #f8fafc":"none",fontSize:13}}>{j.desc}</div>)}</div>}
+        <div style={{...card,marginTop:8}}><div style={{padding:"11px 14px",background:"#f8fafc",borderBottom:"1px solid #f1f5f9",fontSize:13,fontWeight:600}}>Compliance</div>
+          {pvComp.map((c,i)=>{const ct=CTYPES.find(x=>x.k===c.type);const d2=c.next?Math.round((new Date(c.next)-now)/86400000):null;const col=!c.next?"amber":d2<=60?"red":d2<=180?"amber":"green";return(<div key={c.id} style={{padding:"10px 14px",borderBottom:i<pvComp.length-1?"1px solid #f8fafc":"none",display:"flex",justifyContent:"space-between",alignItems:"center"}}><div><div style={{fontSize:13}}>{ct?ct.l:c.type}</div><div style={{fontSize:11,color:S.gray}}>{c.next?new Date(c.next).toLocaleDateString("en-GB"):"Not set"}</div></div><Badge color={col}>{!c.next?"Unknown":d2<=0?"OVERDUE":d2+"d"}</Badge></div>);})}
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      {/* Smart action list */}
+      {actions.length > 0 && (
+        <div style={{ ...card, marginBottom:10 }}>
+          <div style={{ padding:"11px 14px", background:S.dark, borderRadius:"15px 15px 0 0", display:"flex", justifyContent:"space-between", alignItems:"center" }}>
+            <span style={{ fontSize:13, fontWeight:600, color:"#fff" }}>Action needed</span>
+            <span style={{ background:"#ef4444", color:"#fff", fontSize:11, fontWeight:700, padding:"2px 8px", borderRadius:99 }}>{actions.filter(a=>a.priority==="r").length} urgent</span>
+          </div>
+          {actions.map((a, i) => (
+            <div key={i} style={{ padding:"10px 14px", display:"flex", alignItems:"flex-start", gap:10, borderBottom:i<actions.length-1?"1px solid #f8fafc":"none", background:a.priority==="r"?"#fffafa":"#fffbeb" }}>
+              <span style={{ fontSize:16, flexShrink:0 }}>{a.icon}</span>
+              <div style={{ flex:1 }}>
+                <div style={{ fontSize:12, fontWeight:600, color:a.priority==="r"?S.red:S.amber }}>{a.category}</div>
+                <div style={{ fontSize:12, color:S.dark, lineHeight:1.4 }}>{a.msg}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+      <GoalTracker tenants={tenants} savings={savings} setSavings={setSavings} />
+      {actions.length === 0 && (
+        <div style={{ ...card, ...cardPad, background:"#f0fdf4", borderColor:"#bbf7d0", marginBottom:10, display:"flex", alignItems:"center", gap:10 }}>
+          <span style={{ fontSize:20 }}>✅</span>
+          <div>
+            <div style={{ fontSize:13, fontWeight:600, color:S.green }}>All clear</div>
+            <div style={{ fontSize:11, color:"#15803d" }}>Nothing urgent needs your attention today</div>
+          </div>
+        </div>
+      )}
+
+      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:10}}>
+        <button onClick={()=>{const d=new Date(selYr,selMo-1,1);setSelYr(d.getFullYear());setSelMo(d.getMonth());}} style={{width:36,height:36,borderRadius:"50%",border:"1px solid #e2e8f0",background:"#fff",cursor:"pointer",fontSize:18}}>&#8249;</button>
+        <span style={{fontSize:15,fontWeight:700}}>{MFULL[selMo]} {selYr}</span>
+        <button onClick={()=>{const d=new Date(selYr,selMo+1,1);if(d<=new Date(CYR,CMO,1)){setSelYr(d.getFullYear());setSelMo(d.getMonth());}}} disabled={isCur} style={{width:36,height:36,borderRadius:"50%",border:"1px solid #e2e8f0",background:isCur?"#f8fafc":"#fff",cursor:isCur?"default":"pointer",fontSize:18,color:isCur?S.gray:"inherit"}}>&#8250;</button>
+      </div>
+      <div style={{...card,...cardPad}}>
+        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:10}}>
+          <div style={{background:"#f0fdf4",borderRadius:12,padding:12}}>
+            <div style={{fontSize:11,color:S.gtx,fontWeight:600}}>Income</div>
+            <div style={{fontSize:20,fontWeight:700,color:S.green}}>{gbp(pr)}</div>
+            <div style={{fontSize:11,color:S.gray}}>{tenants.filter(t=>rp[t.id+"-"+selYr+"-"+selMo]).length} of {tenants.length} paid</div>
+          </div>
+          <div style={{background:"#fff5f5",borderRadius:12,padding:12}}>
+            <div style={{fontSize:11,color:S.rtx,fontWeight:600}}>Outgoings</div>
+            <div style={{fontSize:20,fontWeight:700,color:S.red}}>{gbp(totalOut)}</div>
+            <div style={{fontSize:11,color:S.gray}}>mortgages + bills + jobs</div>
+          </div>
+        </div>
+        <div style={{borderTop:"1px solid #f1f5f9",paddingTop:10}}>
+          {[["Mortgages",gbp(tm)],["Bills",gbp(oc)],["Job costs",gbp(jc)]].map(([l,v])=>(
+            <div key={l} style={{display:"flex",justifyContent:"space-between",marginBottom:5}}>
+              <span style={{fontSize:12,color:S.gray}}>{l}</span><span style={{fontSize:12,fontWeight:600}}>{v}</span>
+            </div>
+          ))}
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",background:ncf>=0?"#f0fdf4":"#fff5f5",borderRadius:10,padding:"10px 12px",marginTop:6}}>
+            <span style={{fontSize:13,fontWeight:700,color:ncf>=0?S.green:S.red}}>Net this month</span>
+            <span style={{fontSize:16,fontWeight:700,color:ncf>=0?S.green:S.red}}>{ncf>=0?"+":"-"}{gbp(Math.abs(ncf))}</span>
+          </div>
+        </div>
+        {isCur&&tr-pr>0&&<div style={{marginTop:8,display:"flex",justifyContent:"space-between",background:"#fffbeb",borderRadius:10,padding:"8px 12px"}}><span style={{fontSize:12,color:S.atx,fontWeight:600}}>Still to collect</span><span style={{fontSize:13,fontWeight:700,color:S.amber}}>{gbp(tr-pr)}</span></div>}
+      </div>
+      {wide ? (
+        <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:16 }}>
+          <div>{stats}</div>
+          <div>{propList}</div>
+        </div>
+      ) : (
+        <>{stats}{propList}</>
+      )}
+
+    </div>
+  );
+}
+
+// ── RENT ──────────────────────────────────────────────────────────────────────
+function RentPage({ tenants, rp, toggleRent, expMap, toggleExp, addTenant }) {
+  const [selYr, setSelYr] = useState(CYR);
+  const [selMo, setSelMo] = useState(CMO);
+  const [addingTo, setAddingTo] = useState(null);
+  const [form, setForm] = useState({ name:"", dy:"", rn:"" });
+
+  const months = [];
+  for (let i = 11; i >= 0; i--) {
+    const d = new Date(CYR, CMO - i, 1);
+    months.push({ y: d.getFullYear(), m: d.getMonth() });
+  }
+
+  const doAdd = pid => {
+    if (!form.name || !form.rn) return;
+    const p = PROPS.find(x => x.id === pid);
+    const rooms = tenants.filter(t => t.pid === pid);
+    addTenant({ pid, rm: p && p.ty === "HMO" ? "Room " + (rooms.length + 1) : "Whole", nm: form.name, dy: parseInt(form.dy) || 1, rn: parseFloat(form.rn) || 0, dp: null, rv: null, nt: "" });
+    setAddingTo(null);
+    setForm({ name:"", dy:"", rn:"" });
+  };
+
+  const totalRent   = tenants.reduce((s, t) => s + t.rn, 0);
+  const paidRent    = tenants.filter(t => rp[t.id + "-" + selYr + "-" + selMo]).reduce((s, t) => s + t.rn, 0);
+  const paidCount   = tenants.filter(t => rp[t.id + "-" + selYr + "-" + selMo]).length;
+  const stillDue    = totalRent - paidRent;
+  const rentPct     = totalRent > 0 ? Math.round(paidRent / totalRent * 100) : 0;
+
+  return (
+    <div>
+      <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:10, flexWrap:"wrap" }}>
+        <button onClick={() => { const d = new Date(selYr, selMo - 1, 1); setSelYr(d.getFullYear()); setSelMo(d.getMonth()); }} style={{ padding:"6px 12px", borderRadius:9, border:"1px solid #e2e8f0", background:"#fff", cursor:"pointer", fontSize:14 }}>‹</button>
+        <span style={{ fontSize:14, fontWeight:600 }}>{MFULL[selMo]} {selYr}</span>
+        <button onClick={() => { const d = new Date(selYr, selMo + 1, 1); if (d <= new Date(CYR, CMO, 1)) { setSelYr(d.getFullYear()); setSelMo(d.getMonth()); } }} style={{ padding:"6px 12px", borderRadius:9, border:"1px solid #e2e8f0", background:"#fff", cursor:"pointer", fontSize:14 }}>›</button>
+        {(selYr !== CYR || selMo !== CMO) && <span style={{ fontSize:11, color:S.amber, fontWeight:600 }}>Editing past month</span>}
+      </div>
+
+      <div style={{ ...card, ...cardPad, marginBottom:10 }}>
+        <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:8 }}>
+          <div>
+            <span style={{ fontSize:22, fontWeight:700 }}>{gbp(paidRent)}</span>
+            <span style={{ color:S.gray, fontSize:13 }}> / {gbp(totalRent)}</span>
+            <div style={{ fontSize:11, color:S.gray, marginTop:3 }}>{paidCount} of {tenants.length} paid</div>
+          </div>
+          <Badge color={stillDue === 0 ? "green" : "amber"}>{stillDue === 0 ? "All paid" : paidCount + " paid"}</Badge>
+        </div>
+        <div style={{ height:7, background:S.light, borderRadius:99, overflow:"hidden", marginBottom:stillDue>0?8:0 }}>
+          <div style={{ height:"100%", background:"#22c55e", borderRadius:99, width:rentPct+"%" }} />
+        </div>
+        {stillDue > 0 && (
+          <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", background:"#fff5f5", borderRadius:10, padding:"8px 12px" }}>
+            <span style={{ fontSize:12, color:S.red, fontWeight:600 }}>Still to come in</span>
+            <span style={{ fontSize:14, fontWeight:700, color:S.red }}>{gbp(stillDue)}</span>
+          </div>
+        )}
+      </div>
+
+      {PROPS.map(p => {
+        const pt   = tenants.filter(t => t.pid === p.id);
+        const paid = pt.filter(t => rp[t.id + "-" + selYr + "-" + selMo]);
+        const all  = pt.length > 0 && paid.length === pt.length;
+
+        if (p.vc && !pt.length) return (
+          <div key={p.id} style={{ ...card, ...cardPad, background:"#fffbeb", borderColor:"#fde68a" }}>
+            <div style={{ fontSize:13, fontWeight:600, color:"#92400e" }}>{p.n}</div>
+            <div style={{ fontSize:11, color:S.amber }}>Vacant</div>
+          </div>
+        );
+
+        if (p.ty === "BTL") {
+          const t = pt[0]; if (!t) return null;
+          const ip = !!rp[t.id + "-" + selYr + "-" + selMo];
+          return (
+            <div key={p.id} style={{ ...card, ...cardPad, ...(ip ? { background:"#f0fdf4", borderColor:"#bbf7d0" } : {}) }}>
+              <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center" }}>
+                <div>
+                  <div style={{ fontSize:13, fontWeight:600 }}>{p.n}</div>
+                  <div style={{ fontSize:11, color:S.gray }}>{t.nm} · due {t.dy}{sx(t.dy)}</div>
+                  <div style={{ fontSize:11, color:S.gray }}>{gbp(t.rn)}/mo</div>
+                </div>
+                <button onClick={() => toggleRent(t.id, selYr, selMo)} style={{ width:50, height:50, borderRadius:"50%", border:"none", cursor:"pointer", background:ip?"#22c55e":"#e2e8f0", color:ip?"#fff":S.gray, fontSize:20, display:"flex", alignItems:"center", justifyContent:"center" }}>
+                  {ip ? "✓" : "○"}
+                </button>
+              </div>
+            </div>
+          );
+        }
+
+        const open = expMap[p.id];
+        return (
+          <div key={p.id} style={{ ...card, ...(all ? { borderColor:"#bbf7d0" } : {}) }}>
+            <button onClick={() => toggleExp(p.id)} style={{ display:"flex", justifyContent:"space-between", alignItems:"center", padding:"13px 14px", cursor:"pointer", background:all?"#f0fdf4":"#fff", width:"100%", border:"none", textAlign:"left", fontFamily:"system-ui" }}>
+              <div>
+                <div style={{ fontSize:13, fontWeight:600 }}>{p.n} <span style={{ fontSize:11, color:S.gray, fontWeight:400 }}>HMO</span></div>
+                <div style={{ fontSize:11, color:S.gray }}>{paid.length}/{pt.length} paid · {gbp(pt.reduce((s, t) => s + t.rn, 0))}/mo</div>
+              </div>
+              <div style={{ display:"flex", alignItems:"center", gap:8 }}>
+                <Badge color={all?"green":paid.length>0?"amber":"gray"}>{all?"All paid":(pt.length-paid.length)+" unpaid"}</Badge>
+                <span style={{ color:"#cbd5e1", fontSize:16, display:"inline-block", transform:open?"rotate(90deg)":"none", transition:"transform .2s" }}>›</span>
+              </div>
+            </button>
+            {open && (
+              <div style={{ borderTop:"1px solid #f1f5f9" }}>
+                {pt.map(t => {
+                  const ip = !!rp[t.id + "-" + selYr + "-" + selMo];
+                  return (
+                    <div key={t.id} style={{ padding:"11px 14px", display:"flex", justifyContent:"space-between", alignItems:"center", borderBottom:"1px solid #f8fafc", background:ip?"#f0fdf4":"#fff" }}>
+                      <div>
+                        <div style={{ fontSize:13 }}>{t.rm} · <span style={{ fontWeight:600 }}>{t.nm}</span></div>
+                        <div style={{ fontSize:11, color:S.gray }}>{gbp(t.rn)}/mo · due {t.dy}{sx(t.dy)}</div>
+                      </div>
+                      <button onClick={() => toggleRent(t.id, selYr, selMo)} style={{ width:40, height:40, borderRadius:"50%", border:"none", cursor:"pointer", background:ip?"#22c55e":"#e2e8f0", color:ip?"#fff":S.gray, fontSize:16, display:"flex", alignItems:"center", justifyContent:"center" }}>
+                        {ip ? "✓" : "○"}
+                      </button>
+                    </div>
+                  );
+                })}
+                <div style={{ padding:"10px 14px" }}>
+                  {addingTo === p.id ? (
+                    <div>
+                      <Inp placeholder="Name *" value={form.name} onChange={e => setForm(f => ({ ...f, name:e.target.value }))} />
+                      <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:8 }}>
+                        <Inp placeholder="Pay day" type="number" value={form.dy} onChange={e => setForm(f => ({ ...f, dy:e.target.value }))} style={{ marginBottom:0 }} />
+                        <Inp placeholder="Rent/mo" type="number" value={form.rn} onChange={e => setForm(f => ({ ...f, rn:e.target.value }))} style={{ marginBottom:0 }} />
+                      </div>
+                      <div style={{ display:"flex", gap:8, marginTop:8 }}>
+                        <Btn onClick={() => doAdd(p.id)} style={{ flex:1, padding:10, marginBottom:0 }}>Add Tenant</Btn>
+                        <button onClick={() => setAddingTo(null)} style={{ padding:"10px 14px", borderRadius:10, background:S.light, border:"none", cursor:"pointer", fontFamily:"system-ui", fontWeight:600 }}>Cancel</button>
+                      </div>
+                    </div>
+                  ) : (
+                    <button onClick={() => setAddingTo(p.id)} style={{ fontSize:12, color:S.mid, fontWeight:600, background:"none", border:"none", cursor:"pointer", display:"flex", alignItems:"center", gap:4, padding:"4px 0", fontFamily:"system-ui" }}>+ Add room</button>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+// ── JOBS ──────────────────────────────────────────────────────────────────────
+function JobsPage({ jobs, addJob, updateJob, deleteJob, wide }) {
+  const [show, setShow]   = useState(false);
+  const [edit, setEdit]   = useState(null);
+  const [f, setF]         = useState({ pid:"", desc:"", cost:"", cont:"", cat:"" });
+  const [editF, setEditF] = useState({});
+
+  const submit = () => {
+    if (!f.desc) return;
+    addJob({ pid:f.pid, desc:f.desc, cost:0, cont:f.cont, cat:f.cat });
+    setF({ pid:"", desc:"", cost:"", cont:"", cat:"" });
+    setShow(false);
+  };
+
+  const saveEdit = id => {
+    const c2=parseFloat(editF.cost)||0,cj=jobs.find(j=>j.id===id);
+    updateJob(id,{desc:editF.desc,cont:editF.cont,cat:editF.cat,cost:c2,status:c2>0?"done":(cj?cj.status:"open")});
+    setEdit(null);
+  };
+
+  const oj = jobs.filter(j => j.status === "open");
+  const dj = jobs.filter(j => j.status === "done");
+
+  const JCard = ({ j }) => {
+    const p = PROPS.find(x => x.id === j.pid);
+    const isEdit = edit === j.id;
+    return (
+      <div style={{ ...card, ...cardPad, ...(j.status === "done" ? { opacity:.8 } : {}) }}>
+        {isEdit ? (
+          <div>
+            <div style={{ fontSize:12, fontWeight:600, color:S.gray, marginBottom:8 }}>Edit Job</div>
+            <Inp value={editF.desc} onChange={e => setEditF(x => ({ ...x, desc:e.target.value }))} placeholder="Description" />
+            <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:8 }}>
+              <Inp placeholder="Cost (£)" type="number" value={editF.cost} onChange={e => setEditF(x => ({ ...x, cost:e.target.value }))} style={{ marginBottom:0 }} />
+              <Inp placeholder="Contractor" value={editF.cont} onChange={e => setEditF(x => ({ ...x, cont:e.target.value }))} style={{ marginBottom:0 }} />
+            </div>
+            <Sel value={editF.cat} onChange={e => setEditF(x => ({ ...x, cat:e.target.value }))} style={{ marginTop:8 }}>
+              <option value="">Category...</option>
+              {JCATS.map(c => <option key={c}>{c}</option>)}
+            </Sel>
+            <div style={{ display:"flex", gap:8 }}>
+              <Btn onClick={() => saveEdit(j.id)} style={{ flex:1, padding:10, marginBottom:0 }}>Save</Btn>
+              <button onClick={() => setEdit(null)} style={{ padding:"10px 14px", borderRadius:10, background:S.light, border:"none", cursor:"pointer", fontFamily:"system-ui", fontWeight:600 }}>Cancel</button>
+            </div>
+          </div>
+        ) : (
+          <div style={{ display:"flex", alignItems:"flex-start", gap:8 }}>
+            <div style={{ flex:1 }}>
+              <div style={{ fontSize:13, fontWeight:600, color:j.status==="done"?S.gray:S.dark, textDecoration:j.status==="done"?"line-through":"none" }}>{j.desc}</div>
+              {p && <div style={{ fontSize:11, color:S.gray }}>{p.n}</div>}
+              <div style={{ display:"flex", flexWrap:"wrap", gap:6, marginTop:6 }}>
+                {j.cat  && <Badge color="gray">{j.cat}</Badge>}
+                {j.cost > 0 && <span style={{ fontSize:12, fontWeight:600 }}>{gbp(j.cost)}</span>}
+                {!j.cost && j.status === "open" && <span style={{ fontSize:11, color:S.amber }}>No cost yet — edit to add</span>}
+                {j.cont && <span style={{ fontSize:11, color:S.gray }}>{j.cont}</span>}
+                <span style={{ fontSize:11, color:"#cbd5e1" }}>{j.date}</span>
+              </div>
+            </div>
+            <div style={{ display:"flex", gap:6, flexShrink:0 }}>
+              <button onClick={() => { setEdit(j.id); setEditF({ desc:j.desc, cost:j.cost||"", cont:j.cont||"", cat:j.cat||"" }); }} style={{ width:36, height:36, borderRadius:"50%", border:"none", cursor:"pointer", background:S.light, fontSize:14 }}>✏️</button>
+              <button onClick={() => updateJob(j.id, { status:j.status==="done"?"open":"done" })} style={{ width:36, height:36, borderRadius:"50%", border:"none", cursor:"pointer", background:j.status==="done"?"#bbf7d0":"#dcfce7", fontSize:16 }}>✓</button>
+              <button onClick={() => deleteJob(j.id)} style={{ width:36, height:36, borderRadius:"50%", border:"none", cursor:"pointer", background:S.rbg, fontSize:14 }}>✕</button>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  const grid = wide ? { display:"grid", gridTemplateColumns:"1fr 1fr", gap:16 } : {};
+
+  return (
+    <div>
+      <Btn onClick={() => setShow(true)}>+ Log Maintenance Job</Btn>
+      {show && (
+        <div style={{ ...card, ...cardPad }}>
+          <div style={{ display:"flex", justifyContent:"space-between", marginBottom:10 }}>
+            <span style={{ fontWeight:600 }}>New Job</span>
+            <button onClick={() => setShow(false)} style={{ background:"none", border:"none", fontSize:18, cursor:"pointer" }}>✕</button>
+          </div>
+          <Sel value={f.pid} onChange={e => setF(x => ({ ...x, pid:e.target.value }))}>
+            <option value="">Select property...</option>
+            {PROPS.map(p => <option key={p.id} value={p.id}>{p.n}</option>)}
+          </Sel>
+          <Inp placeholder="Description *" value={f.desc} onChange={e => setF(x => ({ ...x, desc:e.target.value }))} />
+          <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:8 }}>
+            <Inp placeholder="Contractor" value={f.cont} onChange={e => setF(x => ({ ...x, cont:e.target.value }))} style={{ marginBottom:0 }} />
+            <Sel value={f.cat} onChange={e => setF(x => ({ ...x, cat:e.target.value }))} style={{ marginBottom:0 }}>
+              <option value="">Category...</option>
+              {JCATS.map(c => <option key={c}>{c}</option>)}
+            </Sel>
+          </div>
+          <div style={{ fontSize:11, color:S.gray, margin:"6px 0 10px" }}>💡 Log the job now — add the cost afterwards when you know it</div>
+          <div style={{ display:"flex", gap:8 }}>
+            <Btn onClick={submit} style={{ flex:1, padding:10, marginBottom:0 }}>Save Job</Btn>
+            <button onClick={() => setShow(false)} style={{ padding:"10px 14px", borderRadius:10, background:S.light, border:"none", cursor:"pointer", fontFamily:"system-ui", fontWeight:600 }}>Cancel</button>
+          </div>
+        </div>
+      )}
+      <div style={grid}>
+        <div>
+          {oj.length > 0 && <><div style={{ fontSize:11, fontWeight:700, color:S.gray, textTransform:"uppercase", letterSpacing:".5px", marginBottom:8 }}>Open ({oj.length})</div>{oj.map(j => <JCard key={j.id} j={j} />)}</>}
+          {!jobs.length && !show && <div style={{ textAlign:"center", padding:"50px 0", color:S.gray }}><div style={{ fontSize:36, marginBottom:10 }}>🔧</div><div>No jobs logged yet</div></div>}
+        </div>
+        <div>
+          {dj.length > 0 && <><div style={{ fontSize:11, fontWeight:700, color:S.gray, textTransform:"uppercase", letterSpacing:".5px", marginBottom:8 }}>Completed ({dj.length})</div>{dj.map(j => <JCard key={j.id} j={j} />)}</>}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── MORTGAGES ─────────────────────────────────────────────────────────────────
+function MtgsPage() {
+  const sorted = [...MTGS].sort((a, b) => (du(a.e) || 9999) - (du(b.e) || 9999));
+  const mSt = e => {
+    const d = du(e);
+    if (d === null)  return { color:"amber", label:"Unknown" };
+    if (d <= 0)      return { color:"red",   label:"EXPIRED" };
+    if (d <= 180)    return { color:"red",   label:d+"d" };
+    if (d <= 365)    return { color:"amber", label:d+"d" };
+    return                 { color:"green",  label:"OK" };
+  };
+  return (
+    <div>
+      <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10, marginBottom:10 }}>
+        <div style={{ background:"#fff", borderRadius:14, border:"1px solid #e2e8f0", padding:12 }}>
+          <div style={{ fontSize:11, color:S.gray, marginBottom:3 }}>Total Debt</div>
+          <div style={{ fontSize:19, fontWeight:700 }}>{gbp(MTGS.reduce((s, m) => s + m.b, 0))}</div>
+        </div>
+        <div style={{ background:"#fff", borderRadius:14, border:"1px solid #e2e8f0", padding:12 }}>
+          <div style={{ fontSize:11, color:S.gray, marginBottom:3 }}>Monthly</div>
+          <div style={{ fontSize:19, fontWeight:700 }}>{gbp(MTGS.reduce((s, m) => s + m.m, 0))}</div>
+        </div>
+      </div>
+      {sorted.map((m, i) => {
+        const { color, label } = mSt(m.e);
+        const d = du(m.e);
+        const bg = d != null && d <= 180 ? "#fff5f5" : d != null && d <= 365 ? "#fffbeb" : "#fff";
+        return (
+          <div key={i} style={{ ...card, ...cardPad, background:bg }}>
+            <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:10 }}>
+              <div style={{ flex:1, paddingRight:8 }}>
+                <div style={{ fontSize:13, fontWeight:600 }}>{m.l}</div>
+                <div style={{ fontSize:11, color:S.gray }}>{m.ldr}{m.ac ? " · " + m.ac : ""}</div>
+              </div>
+              <Badge color={color}>{label}</Badge>
+            </div>
+            <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr 1fr", gap:7 }}>
+              {[["Balance",gbp(m.b)],["Rate",m.r!=null?m.r+"%":"Unknown"],["/month",gbp(m.m)]].map(([l2,v]) => (
+                <div key={l2} style={{ background:"#f8fafc", borderRadius:9, padding:9 }}>
+                  <div style={{ fontSize:11, color:S.gray }}>{l2}</div>
+                  <div style={{ fontSize:12, fontWeight:700, color:l2==="Rate"&&m.r>5.5?S.red:S.dark }}>{v}</div>
+                </div>
+              ))}
+            </div>
+            {m.e && <div style={{ fontSize:11, color:S.gray, marginTop:8 }}>Expires: {new Date(m.e).toLocaleDateString("en-GB", { day:"numeric", month:"long", year:"numeric" })}{d&&d>0?" ("+d+" days)":""}</div>}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+// ── MORE MENU ─────────────────────────────────────────────────────────────────
+function MoreMenu({ tenants, contractors, deals, setMore, data }) {
+  const vc = PROPS.filter(p => p.vc && tenants.filter(t => t.pid === p.id).length === 0).length;
+
+  const exportBackup = () => {
+    const blob = new Blob([JSON.stringify({ ...data, exportedAt: new Date().toISOString() }, null, 2)], { type:"application/json" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "portfolio-backup-" + new Date().toISOString().split("T")[0] + ".json";
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  };
+
+  return (
+    <div>
+      {[
+        {id:"outgoings",   icon:"💸", label:"Outgoings",        sub:"Bills & expenses per property"},
+        {id:"compliance",  icon:"🛡", label:"Compliance",        sub:"Gas, EICR, EPC, HMO licence"},
+        {id:"tenants",     icon:"👥", label:"Tenants",           sub:tenants.length+" tenants · 8 properties"},
+        {id:,    icon:"🚪", label:"HMO Rooms",         sub:"Room-by-room management"},
+        {id:"financials",  icon:"📊", label:"Financials",        sub:"Monthly & per-property breakdown"},
+        {id:"tax",         icon:"🧾", label:"Tax Summary",       sub:"Annual P&L for self assessment"},
+        {id:,    icon:"📆", label:"Export to Calendar", sub:"Add all events to Google Calendar"},
+        {id:"ailetters",   icon:"✉️", label:"AI Letter Writer",   sub:"Draft personalised letters & messages"},
+        {id:"dealcheck",   icon:"🔍", label:"Deal Analyser",      sub:"Check if a new property stacks up"},
+        {id:"rentplanner", icon:"🔖", label:"Rent Planner",      sub:"Plan rent increases systematically"},
+        {id:,    icon:"⚖️", label:"BTL vs HMO",        sub:"Strategy comparison & recommendation"},
+        {id:"notes",       icon:"📝", label:"Notes",             sub:"General notepad & property notes"},
+        {id:"refinance",   icon:"🔄", label:"Refinance Planner", sub:"Upcoming mortgage expiries & rates"},
+        {id:"mtginterest", icon:"💳", label:"Mortgage Interest", sub:"Interest paid vs equity growth"},
+        {id:"growth",      icon:"📈", label:"Portfolio Growth",  sub:"Equity & value over time"},
+        {id:"contractors", icon:"📞", label:"Contractors",       sub:contractors.length+" contacts saved"},
+        {id:"deals",       icon:"🎯", label:"Deal Pipeline",     sub:deals.length+" deals tracked"},
+        {id:"voids",       icon:"🏢", label:"Void Tracker",      sub:vc>0?vc+" vacant":"All let"},
+      ].map(item => (
+        <button key={item.id} onClick={() => setMore(item.id)} style={{ background:"#fff", border:"1px solid #e2e8f0", borderRadius:13, padding:"13px 14px", display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:8, cursor:"pointer", width:"100%", textAlign:"left", fontFamily:"system-ui" }}>
+          <div style={{ display:"flex", alignItems:"center", flex:1 }}>
+            <div style={{ width:38, height:38, background:S.light, borderRadius:10, display:"flex", alignItems:"center", justifyContent:"center", fontSize:17, marginRight:11, flexShrink:0 }}>{item.icon}</div>
+            <div>
+              <div style={{ fontSize:14, fontWeight:600 }}>{item.label}</div>
+              <div style={{ fontSize:11, color:S.gray, marginTop:2 }}>{item.sub}</div>
+            </div>
+          </div>
+          <span style={{ color:"#cbd5e1", fontSize:18 }}>›</span>
+        </button>
+      ))}
+      <div style={{ marginTop:8, padding:14, background:"#fff", border:"1px solid #e2e8f0", borderRadius:13 }}>
+        <div style={{ fontSize:13, fontWeight:600, marginBottom:4 }}>💾 Backup your data</div>
+        <div style={{ fontSize:11, color:S.gray, marginBottom:10 }}>Download a backup file and save it to Google Drive. Restore it any time if something goes wrong.</div>
+        <button onClick={exportBackup} style={{ width:"100%", padding:"10px", borderRadius:10, background:S.dark, color:"#fff", border:"none", cursor:"pointer", fontFamily:"system-ui", fontWeight:600, fontSize:13 }}>Download Backup</button>
+      </div>
+    </div>
+  );
+}
+
+// ── COMPLIANCE ────────────────────────────────────────────────────────────────
+function CompPage({ comp, updateComp, wide }) {
+  const urg = comp.filter(c => { const d = du(c.next); return c.next && d <= 60; }).length;
+  const unk = comp.filter(c => !c.next).length;
+  const cSt = item => {
+    if (!item.next) return { color:"amber", label:"Unknown" };
+    const d = du(item.next);
+    if (d < 0)    return { color:"red",   label:"OVERDUE" };
+    if (d <= 60)  return { color:"red",   label:d+"d left" };
+    if (d <= 180) return { color:"amber", label:d+"d left" };
+    return              { color:"green",  label:"OK" };
+  };
+  const grid = wide ? { display:"grid", gridTemplateColumns:"1fr 1fr", gap:16 } : {};
+  return (
+    <div>
+      <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10, marginBottom:10 }}>
+        <div style={{ background:urg>0?S.rbg:"#f0fdf4", borderRadius:14, border:"1px solid #e2e8f0", padding:12 }}>
+          <div style={{ fontSize:11, color:S.gray, marginBottom:3 }}>Due / Overdue</div>
+          <div style={{ fontSize:24, fontWeight:700, color:urg>0?S.red:S.green }}>{urg}</div>
+        </div>
+        <div style={{ background:unk>0?S.abg:"#f0fdf4", borderRadius:14, border:"1px solid #e2e8f0", padding:12 }}>
+          <div style={{ fontSize:11, color:S.gray, marginBottom:3 }}>Unknown</div>
+          <div style={{ fontSize:24, fontWeight:700, color:unk>0?S.amber:S.green }}>{unk}</div>
+        </div>
+      </div>
+      <div style={grid}>
+        {PROPS.map(p => {
+          const items = comp.filter(c => c.pid === p.id);
+          if (!items.length) return null;
+          return (
+            <div key={p.id} style={card}>
+              <div style={{ padding:"11px 14px", background:"#f8fafc", borderBottom:"1px solid #f1f5f9" }}>
+                <div style={{ fontSize:13, fontWeight:600 }}>{p.n}</div>
+                <div style={{ fontSize:11, color:S.gray }}>{p.town} · {p.ty}</div>
+              </div>
+              {items.map((item, i) => {
+                const { color, label } = cSt(item);
+                const ct = CTYPES.find(x => x.k === item.type);
+                return (
+                  <div key={item.id} style={{ padding:"11px 14px", borderBottom:i<items.length-1?"1px solid #f8fafc":"none" }}>
+                    <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:7 }}>
+                      <div>
+                        <div style={{ fontSize:13, fontWeight:600 }}>{ct ? ct.l : item.type}</div>
+                        <div style={{ fontSize:11, color:S.gray }}>{ct ? ct.n : ""} · {item.next ? "Due: "+new Date(item.next).toLocaleDateString("en-GB") : "Add dates below"}</div>
+                      </div>
+                      <Badge color={color}>{label}</Badge>
+                    </div>
+                    <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:7, marginBottom:7 }}>
+                      <div>
+                        <div style={{ fontSize:11, color:S.gray, marginBottom:3 }}>Last cert</div>
+                        <input type="date" value={item.last||""} onChange={e => updateComp(item.id, { last:e.target.value })} style={{ width:"100%", border:"1px solid #e2e8f0", borderRadius:9, padding:"6px 8px", fontSize:12, fontFamily:"system-ui" }} />
+                      </div>
+                      <div>
+                        <div style={{ fontSize:11, color:S.gray, marginBottom:3 }}>Next due</div>
+                        <input type="date" value={item.next||""} onChange={e => updateComp(item.id, { next:e.target.value })} style={{ width:"100%", border:"1px solid #e2e8f0", borderRadius:9, padding:"6px 8px", fontSize:12, fontFamily:"system-ui" }} />
+                      </div>
+                    </div>
+                    <input placeholder="Notes..." value={item.notes||""} onChange={e => updateComp(item.id, { notes:e.target.value })} style={{ width:"100%", border:"1px solid #e2e8f0", borderRadius:9, padding:"6px 8px", fontSize:12, fontFamily:"system-ui" }} />
+                  </div>
+                );
+              })}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// ── TENANTS ───────────────────────────────────────────────────────────────────
+function TenantsPage({ tenants, updateTenant, notes, setNote, wide }) {
+  const [editing, setEditing] = useState(null);
+  const [ef, setEf] = useState({});
+  const grid = wide ? { display:"grid", gridTemplateColumns:"1fr 1fr", gap:16 } : {};
+
+  const startEdit = t => { setEditing(t.id); setEf({ nm:t.nm, rn:String(t.rn), dy:String(t.dy), dp:t.dp!=null?String(t.dp):"", nt:t.nt||"", mo:t.moveOut||"" }); };
+  const saveEdit  = id => { updateTenant(id, { nm:ef.nm, rn:parseFloat(ef.rn)||0, dy:parseInt(ef.dy)||1, dp:ef.dp!==""?parseFloat(ef.dp):null, nt:ef.nt, moveOut:ef.mo||null }); setEditing(null); };
+
+  return (
+    <div style={grid}>
+      {PROPS.map(p => {
+        const pt   = tenants.filter(t => t.pid === p.id);
+        const note = notes[p.id] || "";
+        return (
+          <div key={p.id} style={card}>
+            <div style={{ padding:"11px 14px", background:"#f8fafc", borderBottom:"1px solid #f1f5f9", display:"flex", justifyContent:"space-between" }}>
+              <div>
+                <div style={{ fontSize:13, fontWeight:600 }}>{p.n}</div>
+                <div style={{ fontSize:11, color:S.gray }}>{p.town} · {p.ty}</div>
+              </div>
+              <div style={{ textAlign:"right" }}>
+                <div style={{ fontSize:13, fontWeight:700 }}>{gbp(pt.reduce((s,t)=>s+t.rn,0))}/mo</div>
+                <div style={{ fontSize:11, color:S.gray }}>{pt.length} tenant{pt.length!==1?"s":""}</div>
+              </div>
+            </div>
+            {!pt.length && <div style={{ padding:"11px 14px", fontSize:12, color:S.amber }}>Vacant</div>}
+            {pt.map((t, i) => {
+              const isEd = editing === t.id;
+              return (
+                <div key={t.id} style={{ padding:"12px 14px", borderBottom:i<pt.length-1?"1px solid #f8fafc":"none" }}>
+                  {isEd ? (
+                    <div>
+                      <div style={{ fontSize:11, fontWeight:600, color:S.gray, marginBottom:8 }}>Editing — {t.nm}</div>
+                      <Inp placeholder="Name" value={ef.nm} onChange={e=>setEf(f=>({...f,nm:e.target.value}))} />
+                      <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:8 }}>
+                        <div>
+                          <div style={{ fontSize:11, color:S.gray, marginBottom:3 }}>Rent (£/mo)</div>
+                          <Inp type="number" value={ef.rn} onChange={e=>setEf(f=>({...f,rn:e.target.value}))} style={{marginBottom:0}} />
+                        </div>
+                        <div>
+                          <div style={{ fontSize:11, color:S.gray, marginBottom:3 }}>Pay day</div>
+                          <Inp type="number" value={ef.dy} onChange={e=>setEf(f=>({...f,dy:e.target.value}))} style={{marginBottom:0}} />
+                        </div>
+                      </div>
+                      <div style={{ marginTop:8 }}>
+                        <div style={{ fontSize:11, color:S.gray, marginBottom:3 }}>Deposit (£)</div>
+                        <Inp type="number" value={ef.dp} onChange={e=>setEf(f=>({...f,dp:e.target.value}))} style={{marginBottom:0}} />
+                      </div>
+                      <div style={{ marginTop:8 }}>
+                        <div style={{ fontSize:11, color:S.gray, marginBottom:3 }}>Notes</div>
+                        <Inp value={ef.nt} onChange={e=>setEf(f=>({...f,nt:e.target.value}))} style={{marginBottom:0}} />
+                      </div>
+                      <div style={{marginTop:8}}><div style={{fontSize:11,color:S.gray,marginBottom:3}}>Move-out date</div><input type="date" value={ef.mo||""} onChange={e=>setEf(f=>({...f,mo:e.target.value}))} style={{width:"100%",border:"1px solid #e2e8f0",borderRadius:10,padding:"10px 12px",fontSize:14,fontFamily:"system-ui",outline:"none",marginBottom:8}} /></div>
+                      <div style={{ display:"flex", gap:8, marginTop:12 }}>
+                        <Btn onClick={() => saveEdit(t.id)} style={{ flex:1, padding:10, marginBottom:0 }}>Save Changes</Btn>
+                        <button onClick={() => setEditing(null)} style={{ padding:"10px 14px", borderRadius:10, background:S.light, border:"none", cursor:"pointer", fontFamily:"system-ui", fontWeight:600 }}>Cancel</button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start" }}>
+                      <div style={{ flex:1 }}>
+                        <div style={{ fontSize:13, fontWeight:600, marginBottom:2 }}>{p.ty==="HMO"?t.rm+" · ":""}{t.nm}</div>
+                        <div style={{ fontSize:11, color:S.gray }}>Pays on {t.dy}{sx(t.dy)} · {gbp(t.rn)}/mo</div>
+                        {t.dp != null && <div style={{ fontSize:11, color:S.gray }}>Deposit: {gbp(t.dp)}</div>}
+                        {t.nt && <div style={{ fontSize:11, color:S.amber, marginTop:3 }}>{t.nt}</div>}
+                        {t.moveOut && <div style={{ fontSize:11, color:S.red, fontWeight:600 }}>Moving out: {new Date(t.moveOut).toLocaleDateString("en-GB")}</div>}
+                      </div>
+                      <div style={{ display:"flex", flexDirection:"column", alignItems:"flex-end", gap:4, marginLeft:8, flexShrink:0 }}>
+                        <div style={{ fontSize:13, fontWeight:700 }}>{gbp(t.rn*12)}/yr</div>
+                        <button onClick={() => startEdit(t)} style={{ fontSize:11, background:S.light, border:"none", borderRadius:8, padding:"4px 12px", cursor:"pointer", fontWeight:600, fontFamily:"system-ui", color:S.dark }}>✏️ Edit</button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+            <div style={{ padding:"10px 14px", borderTop:"1px solid #f8fafc" }}>
+              <div style={{ fontSize:11, color:S.gray, marginBottom:4 }}>Property notes</div>
+              <textarea placeholder="Access codes, parking, ongoing issues..." value={note} onChange={e => setNote(p.id, e.target.value)} style={{ width:"100%", border:"1px solid #e2e8f0", borderRadius:9, padding:8, fontSize:12, fontFamily:"system-ui", resize:"none", height:54 }} />
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+// ── FINANCIALS ────────────────────────────────────────────────────────────────
+function FinPage({ tenants, jobs, rp, outgoings, wide }) {
+  const [view, setView]       = useState("summary");
+  const [selProp, setSelProp] = useState(PROPS[0].id);
+  const [selYr, setSelYr]     = useState(CYR);
+
+  const tr  = tenants.reduce((s, t) => s + t.rn, 0);
+  const tm  = PROPS.reduce((s, p) => s + p.mm, 0);
+  const ms  = mKey(CYR, CMO);
+  const jc  = jobs.filter(j => j.status==="done" && j.date && j.date.startsWith(ms)).reduce((s, j) => s + (j.cost||0), 0);
+  // total outgoings this month across all properties
+  const oc  = PROPS.reduce((s, p) => {
+    const k = p.id + "-" + ms;
+    return s + (outgoings[k]||[]).reduce((x, o) => x + (o.amount||0), 0);
+  }, 0);
+  const ncf = tr - tm - jc - oc;
+  const tv  = PROPS.reduce((s, p) => s + p.v, 0);
+  const td  = PROPS.reduce((s, p) => s + p.mtg, 0);
+  const eq  = tv - td;
+  const gy  = ((tr*12)/tv*100).toFixed(1);
+
+  const propMonths = pid => {
+    const p  = PROPS.find(x => x.id === pid);
+    const pt = tenants.filter(t => t.pid === pid);
+    const months = [];
+    let ytdRent = 0, ytdCosts = 0, ytdMtg = 0, ytdOut = 0;
+    for (let m = 0; m < 12; m++) {
+      const y  = selYr;
+      const mk = mKey(y, m);
+      const rent  = pt.filter(t => rp[t.id+"-"+y+"-"+m]).reduce((s, t) => s + t.rn, 0);
+      const costs = jobs.filter(j => j.status==="done" && j.pid===pid && j.date && j.date.startsWith(mk)).reduce((s, j) => s + (j.cost||0), 0);
+      const outs  = (outgoings[pid+"-"+mk]||[]).reduce((s, o) => s + (o.amount||0), 0);
+      const mtg   = p ? p.mm : 0;
+      const net   = rent - mtg - costs - outs;
+      ytdRent += rent; ytdCosts += costs; ytdMtg += mtg; ytdOut += outs;
+      months.push({ m, y, rent, costs, mtg, outs, net, mk });
+    }
+    return { months, ytdRent, ytdCosts, ytdMtg, ytdOut, ytdNet: ytdRent - ytdMtg - ytdCosts - ytdOut };
+  };
+
+  const { months, ytdRent, ytdCosts, ytdMtg, ytdOut, ytdNet } = propMonths(selProp);
+
+  return (
+    <div>
+      <div style={{ display:"flex", gap:8, marginBottom:14, flexWrap:"wrap" }}>
+        {[["summary","Summary"],["charts","Charts"],["per-property","Per Property"]].map(([v,l]) => (
+          <button key={v} onClick={() => setView(v)} style={{ padding:"8px 14px", borderRadius:10, border:"1px solid #e2e8f0", background:view===v?S.dark:"#fff", color:view===v?"#fff":S.dark, fontWeight:600, fontSize:13, cursor:"pointer", fontFamily:"system-ui" }}>
+            {l}
+          </button>
+        ))}
+      </div>
+
+      {view === "charts" && <FinCharts tenants={tenants} jobs={jobs} rp={rp} outgoings={outgoings} />}
+
+      {view === "summary" && (
+        <div>
+          <div style={{ display:"grid", gridTemplateColumns:wide?"repeat(4,1fr)":"1fr 1fr", gap:10, marginBottom:12 }}>
+            {[
+              {l:"Portfolio Value",   v:gbp(tv),  s:"8 properties",                    g:false},
+              {l:"Total Equity",      v:gbp(eq),  s:Math.round(eq/tv*100)+"% of value",g:true},
+              {l:"Total Debt",        v:gbp(td),  s:Math.round(td/tv*100)+"% LTV",     g:false},
+              {l:"Gross Yield",       v:gy+"%",   s:"Annual rent / value",             g:true},
+              {l:"Monthly Rent",      v:gbp(tr),  s:"Gross income",                    g:true},
+              {l:"Monthly Mortgages", v:gbp(tm),  s:"All properties",                  g:false},
+              {l:"Monthly Outgoings", v:gbp(oc),  s:"Bills & expenses",                g:false},
+              {l:"This Month Net",    v:(ncf>=0?"":"-")+gbp(Math.abs(ncf)), s:"After all costs", g:ncf>0},
+              {l:"Annual Income",     v:gbp(tr*12),s:"Gross",                          g:true},
+            ].map((k, i) => (
+              <div key={i} style={{ background:"#fff", borderRadius:14, border:"1px solid #e2e8f0", padding:12 }}>
+                <div style={{ fontSize:11, color:S.gray, marginBottom:3 }}>{k.l}</div>
+                <div style={{ fontSize:18, fontWeight:700, color:k.g?S.green:S.dark }}>{k.v}</div>
+                <div style={{ fontSize:11, color:S.gray, marginTop:2 }}>{k.s}</div>
+              </div>
+            ))}
+          </div>
+          <Btn onClick={() => {
+            const lines = [
+              "PORTFOLIO FINANCIAL REPORT",
+              "Generated: " + now.toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"}),
+              "",
+              "── PORTFOLIO SUMMARY ──",
+              "Portfolio Value:     " + gbp(tv),
+              "Total Equity:        " + gbp(eq) + " (" + Math.round(eq/tv*100) + "%)",
+              "Total Debt:          " + gbp(td),
+              "Gross Yield:         " + gy + "%",
+              "",
+              "── THIS MONTH ──",
+              "Monthly Rent:        " + gbp(tr),
+              "Monthly Mortgages:   " + gbp(tm),
+              "Monthly Outgoings:   " + gbp(oc),
+              "Net Cash Flow:       " + (ncf>=0?"":"-") + gbp(Math.abs(ncf)),
+              "",
+              "── PER PROPERTY ──",
+              ...PROPS.map(p => {
+                const r = tenants.filter(t=>t.pid===p.id).reduce((s,t)=>s+t.rn,0);
+                return p.n + ": " + gbp(r) + "/mo rent — " + gbp(p.mm) + "/mo mortgage — net " + gbp(r-p.mm) + "/mo";
+              }),
+            ].join("\n");
+            const blob = new Blob([lines],{type:"text/plain"});
+            const a = document.createElement("a");
+            a.href = URL.createObjectURL(blob);
+            a.download = "portfolio-report-" + now.toISOString().split("T")[0] + ".txt";
+            document.body.appendChild(a); a.click(); document.body.removeChild(a);
+          }}>📄 Download Portfolio Report</Btn>
+        </div>
+      )}
+
+      {view === "per-property" && (
+        <div>
+          <div style={{ display:"flex", gap:8, marginBottom:12, flexWrap:"wrap", alignItems:"center" }}>
+            <Sel value={selProp} onChange={e => setSelProp(e.target.value)} style={{ marginBottom:0, width:"auto", flex:1 }}>
+              {PROPS.map(p => <option key={p.id} value={p.id}>{p.n}</option>)}
+            </Sel>
+            <Sel value={selYr} onChange={e => setSelYr(parseInt(e.target.value))} style={{ marginBottom:0, width:"auto" }}>
+              {[CYR-1, CYR].map(y => <option key={y} value={y}>{y}</option>)}
+            </Sel>
+          </div>
+
+          <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10, marginBottom:12 }}>
+            {[
+              {l:"YTD Rent",      v:gbp(ytdRent), g:true},
+              {l:"YTD Mortgage",  v:gbp(ytdMtg),  g:false},
+              {l:"YTD Costs",     v:gbp(ytdCosts),g:false},
+              {l:"YTD Outgoings", v:gbp(ytdOut),  g:false},
+              {l:"YTD Net",       v:(ytdNet>=0?"":"-")+gbp(Math.abs(ytdNet)), g:ytdNet>0},
+            ].map((k, i) => (
+              <div key={i} style={{ background:"#fff", borderRadius:14, border:"1px solid #e2e8f0", padding:12 }}>
+                <div style={{ fontSize:11, color:S.gray, marginBottom:3 }}>{k.l}</div>
+                <div style={{ fontSize:18, fontWeight:700, color:k.g?S.green:S.dark }}>{k.v}</div>
+              </div>
+            ))}
+          </div>
+
+          <div style={card}>
+            <div style={{ padding:"11px 14px", background:"#f8fafc", borderBottom:"1px solid #f1f5f9", overflowX:"auto" }}>
+              <div style={{ display:"grid", gridTemplateColumns:"60px 1fr 1fr 1fr 1fr 1fr", gap:4, fontSize:11, fontWeight:600, color:S.gray, minWidth:340 }}>
+                <span>Month</span><span style={{ textAlign:"right" }}>Rent</span><span style={{ textAlign:"right" }}>Mortgage</span><span style={{ textAlign:"right" }}>Jobs</span><span style={{ textAlign:"right" }}>Bills</span><span style={{ textAlign:"right" }}>Net</span>
+              </div>
+            </div>
+            {months.map(row => (
+              <div key={row.m} style={{ padding:"9px 14px", borderBottom:"1px solid #f8fafc", overflowX:"auto" }}>
+                <div style={{ display:"grid", gridTemplateColumns:"60px 1fr 1fr 1fr 1fr 1fr", gap:4, fontSize:12, minWidth:340 }}>
+                  <span style={{ color:S.gray, fontWeight:600 }}>{MSHORT[row.m]}</span>
+                  <span style={{ textAlign:"right", color:S.green }}>{row.rent > 0 ? gbp(row.rent) : "--"}</span>
+                  <span style={{ textAlign:"right", color:S.red }}>{gbp(row.mtg)}</span>
+                  <span style={{ textAlign:"right", color:row.costs>0?S.red:S.gray }}>{row.costs > 0 ? gbp(row.costs) : "--"}</span>
+                  <span style={{ textAlign:"right", color:row.outs>0?S.red:S.gray }}>{row.outs > 0 ? gbp(row.outs) : "--"}</span>
+                  <span style={{ textAlign:"right", fontWeight:700, color:row.rent>0?(row.net>0?S.green:row.net<0?S.red:S.gray):S.gray }}>{row.rent>0?(row.net>=0?"":"-")+gbp(Math.abs(row.net)):"--"}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── FIN CHARTS ────────────────────────────────────────────────────────────────
+function FinCharts({ tenants, jobs, rp, outgoings }) {
+  const barH = 180;
+
+  // Chart 1: Rent vs Mortgage per property (current month)
+  const propData = PROPS.map(p => {
+    const rent = tenants.filter(t => t.pid === p.id && rp[t.id+"-"+CYR+"-"+CMO]).reduce((s,t)=>s+t.rn,0);
+    const fullRent = tenants.filter(t => t.pid === p.id).reduce((s,t)=>s+t.rn,0);
+    return { name: p.short||p.n.split(" ")[0], rent, fullRent, mtg: p.mm };
+  });
+  const maxProp = Math.max(...propData.map(d => Math.max(d.fullRent, d.mtg)), 1);
+
+  // Chart 2: Net profit trend last 6 months
+  const netTrend = [];
+  for (let i = 5; i >= 0; i--) {
+    const d = new Date(CYR, CMO - i, 1);
+    const y = d.getFullYear(), m = d.getMonth();
+    const mk = mKey(y, m);
+    const rent  = tenants.filter(t => rp[t.id+"-"+y+"-"+m]).reduce((s,t)=>s+t.rn,0);
+    const mtg   = PROPS.reduce((s,p)=>s+p.mm,0);
+    const costs = jobs.filter(j=>j.status==="done"&&j.date&&j.date.startsWith(mk)).reduce((s,j)=>s+(j.cost||0),0);
+    const outs  = PROPS.reduce((s,p)=>{const k=p.id+"-"+mk;return s+(outgoings[k]||[]).reduce((x,o)=>x+(o.amount||0),0);},0);
+    netTrend.push({ label: MSHORT[m], net: rent - mtg - costs - outs });
+  }
+  const maxNet = Math.max(...netTrend.map(d => Math.abs(d.net)), 1);
+
+  // Chart 3: Outgoings by category this month
+  const outCats = {};
+  PROPS.forEach(p => {
+    const k = p.id + "-" + mKey(CYR, CMO);
+    (outgoings[k]||[]).forEach(o => {
+      outCats[o.label] = (outCats[o.label]||0) + (o.amount||0);
+    });
+  });
+  const outEntries = Object.entries(outCats).sort((a,b)=>b[1]-a[1]);
+  const maxOut = Math.max(...outEntries.map(e=>e[1]), 1);
+
+  const barColors = ["#3b82f6","#22c55e","#f59e0b","#ef4444","#8b5cf6","#14b8a6","#f97316","#ec4899"];
+
+  return (
+    <div>
+      {/* Chart 1: Rent vs Mortgage per property */}
+      <div style={{ ...card, ...cardPad }}>
+        <div style={{ fontSize:13, fontWeight:600, marginBottom:4 }}>Rent vs Mortgage — {MSHORT[CMO]}</div>
+        <div style={{ display:"flex", gap:12, marginBottom:10 }}>
+          <div style={{ display:"flex", alignItems:"center", gap:4 }}><div style={{ width:10, height:10, borderRadius:2, background:"#22c55e" }}/><span style={{ fontSize:11, color:S.gray }}>Rent collected</span></div>
+          <div style={{ display:"flex", alignItems:"center", gap:4 }}><div style={{ width:10, height:10, borderRadius:2, background:"#ef4444" }}/><span style={{ fontSize:11, color:S.gray }}>Mortgage</span></div>
+        </div>
+        <div style={{ display:"flex", alignItems:"flex-end", gap:4, height:barH, overflowX:"auto" }}>
+          {propData.map((d, i) => (
+            <div key={i} style={{ display:"flex", flexDirection:"column", alignItems:"center", gap:2, minWidth:36, flex:1 }}>
+              <div style={{ display:"flex", alignItems:"flex-end", gap:2, height:barH-20 }}>
+                <div style={{ width:14, background:"#22c55e", borderRadius:"3px 3px 0 0", height: Math.max(2, (d.rent/maxProp)*(barH-20)) + "px" }} title={gbp(d.rent)} />
+                <div style={{ width:14, background:"#ef4444", borderRadius:"3px 3px 0 0", height: Math.max(2, (d.mtg/maxProp)*(barH-20)) + "px" }} title={gbp(d.mtg)} />
+              </div>
+              <div style={{ fontSize:9, color:S.gray, textAlign:"center", lineHeight:1.2 }}>{d.name}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Chart 2: Net profit trend */}
+      <div style={{ ...card, ...cardPad }}>
+        <div style={{ fontSize:13, fontWeight:600, marginBottom:12 }}>Net Profit — Last 6 Months</div>
+        <div style={{ display:"flex", alignItems:"flex-end", gap:6, height:barH }}>
+          {netTrend.map((d, i) => {
+            const h = Math.max(3, (Math.abs(d.net)/maxNet)*(barH-24));
+            const isPos = d.net >= 0;
+            return (
+              <div key={i} style={{ flex:1, display:"flex", flexDirection:"column", alignItems:"center", gap:2 }}>
+                <div style={{ fontSize:9, color:isPos?S.green:S.red, fontWeight:600 }}>{d.net===0?"":isPos?"+"+gbp(d.net):"-"+gbp(Math.abs(d.net))}</div>
+                <div style={{ width:"100%", background:isPos?"#22c55e":"#ef4444", borderRadius:"3px 3px 0 0", height:h+"px" }} />
+                <div style={{ fontSize:10, color:S.gray }}>{d.label}</div>
+              </div>
+            );
+          })}
+        </div>
+        <div style={{ fontSize:11, color:S.gray, marginTop:8 }}>Net = rent collected minus mortgages, job costs and bills</div>
+      </div>
+
+      {/* Chart 3: Outgoings by category */}
+      <div style={{ ...card, ...cardPad }}>
+        <div style={{ fontSize:13, fontWeight:600, marginBottom:4 }}>Outgoings by Category — {MSHORT[CMO]}</div>
+        {outEntries.length === 0 ? (
+          <div style={{ fontSize:12, color:S.gray, padding:"16px 0" }}>No outgoings entered for this month yet</div>
+        ) : (
+          <div>
+            {outEntries.map(([label, amt], i) => (
+              <div key={label} style={{ marginBottom:8 }}>
+                <div style={{ display:"flex", justifyContent:"space-between", marginBottom:3 }}>
+                  <span style={{ fontSize:12 }}>{label}</span>
+                  <span style={{ fontSize:12, fontWeight:600, color:S.red }}>{gbp(amt)}</span>
+                </div>
+                <div style={{ height:6, background:S.light, borderRadius:99, overflow:"hidden" }}>
+                  <div style={{ height:"100%", background:barColors[i%barColors.length], borderRadius:99, width:Math.round(amt/maxOut*100)+"%" }} />
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ── OUTGOINGS ─────────────────────────────────────────────────────────────────
+function OutgoingsPage({ outgoings, addOutgoing, deleteOutgoing, fixedOutgoings, setFixedOutgoing, removeFixedOutgoing, wide }) {
+  const [selYr, setSelYr]         = useState(CYR);
+  const [selMo, setSelMo]         = useState(CMO);
+  const [addingTo, setAddingTo]   = useState(null);
+  const [form, setForm]           = useState({ label:"", amount:"", fixed:false });
+  const [editingItem, setEditingItem] = useState(null);
+  const [editForm, setEditForm]   = useState({ label:"", amount:"" });
+
+  const getPrevOutgoings = pid => {
+    const prevMo = selMo === 0 ? 11 : selMo - 1;
+    const prevYr = selMo === 0 ? selYr - 1 : selYr;
+    const k = pid + "-" + mKey(prevYr, prevMo);
+    return outgoings[k] || [];
+  };
+
+  const thisMonthItems = pid => outgoings[pid + "-" + mKey(selYr, selMo)] || [];
+  const fixedItems     = pid => fixedOutgoings?.[pid] || [];
+
+  const submit = pid => {
+    if (!form.label || !form.amount) return;
+    const amount = parseFloat(form.amount) || 0;
+    addOutgoing(pid, selYr, selMo, { label: form.label, amount });
+    if (form.fixed) setFixedOutgoing(pid, form.label, amount);
+    setForm({ label:"", amount:"", fixed:false });
+    setAddingTo(null);
+  };
+
+  const repeatItem = (pid, item) => addOutgoing(pid, selYr, selMo, { label: item.label, amount: item.amount });
+
+  // Auto-suggest fixed items not yet added this month
+  const getAutoSuggest = pid => {
+    const current = thisMonthItems(pid).map(o => o.label);
+    return fixedItems(pid).filter(f => !current.includes(f.label));
+  };
+
+  const grid = wide ? { display:"grid", gridTemplateColumns:"1fr 1fr", gap:16 } : {};
+
+  return (
+    <div>
+      <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:14, flexWrap:"wrap" }}>
+        <button onClick={() => { const d = new Date(selYr, selMo-1, 1); setSelYr(d.getFullYear()); setSelMo(d.getMonth()); }} style={{ padding:"6px 12px", borderRadius:9, border:"1px solid #e2e8f0", background:"#fff", cursor:"pointer", fontSize:14 }}>‹</button>
+        <span style={{ fontSize:14, fontWeight:600 }}>{MFULL[selMo]} {selYr}</span>
+        <button onClick={() => { const d = new Date(selYr, selMo+1, 1); if(d <= new Date(CYR, CMO, 1)){ setSelYr(d.getFullYear()); setSelMo(d.getMonth()); }}} style={{ padding:"6px 12px", borderRadius:9, border:"1px solid #e2e8f0", background:"#fff", cursor:"pointer", fontSize:14 }}>›</button>
+      </div>
+
+      <div style={{ background:S.abg, borderRadius:11, padding:"10px 14px", marginBottom:14, fontSize:12, color:S.atx }}>
+        💡 Tick "Mark as fixed" when adding a regular bill — it will automatically appear as a green suggestion every month. Amounts can still be edited each time.
+      </div>
+
+      <div style={grid}>
+        {PROPS.map(p => {
+          const isHMO    = p.ty === "HMO";
+          const items    = thisMonthItems(p.id);
+          const prev     = getPrevOutgoings(p.id);
+          const autoSug  = getAutoSuggest(p.id);
+          const total    = items.reduce((s, o) => s + (o.amount||0), 0);
+          const unrepeat = prev.filter(po => !items.find(i => i.label === po.label) && !autoSug.find(a => a.label === po.label));
+
+          return (
+            <div key={p.id} style={card}>
+              <div style={{ padding:"11px 14px", background:"#f8fafc", borderBottom:"1px solid #f1f5f9", display:"flex", justifyContent:"space-between", alignItems:"center" }}>
+                <div>
+                  <div style={{ fontSize:13, fontWeight:600 }}>{p.n}</div>
+                  <div style={{ fontSize:11, color:S.gray }}>{p.town} · {p.ty}</div>
+                </div>
+                <div style={{ textAlign:"right" }}>
+                  <div style={{ fontSize:13, fontWeight:700, color:total>0?S.red:S.gray }}>{total>0?gbp(total):"--"}</div>
+                  <div style={{ fontSize:11, color:S.gray }}>this month</div>
+                </div>
+              </div>
+
+              {/* Auto-suggest fixed bills not yet added */}
+              {autoSug.length > 0 && (
+                <div style={{ padding:"10px 14px", borderBottom:"1px solid #f8fafc", background:"#f0fdf4" }}>
+                  <div style={{ fontSize:11, color:S.gtx, fontWeight:600, marginBottom:6 }}>📌 Fixed bills — tap to add:</div>
+                  <div style={{ display:"flex", flexWrap:"wrap", gap:6 }}>
+                    {autoSug.map((f2, i) => (
+                      <button key={i} onClick={() => repeatItem(p.id, f2)} style={{ background:"#fff", border:"1px solid #bbf7d0", borderRadius:8, padding:"4px 10px", fontSize:12, cursor:"pointer", fontFamily:"system-ui", color:S.gtx, fontWeight:600 }}>
+                        + {f2.label} ({gbp(f2.amount)})
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Previous month suggestions */}
+              {unrepeat.length > 0 && (
+                <div style={{ padding:"10px 14px", borderBottom:"1px solid #f8fafc", background:"#fffbeb" }}>
+                  <div style={{ fontSize:11, color:S.atx, fontWeight:600, marginBottom:6 }}>From last month — tap to add:</div>
+                  <div style={{ display:"flex", flexWrap:"wrap", gap:6 }}>
+                    {unrepeat.map((po, i) => (
+                      <button key={i} onClick={() => repeatItem(p.id, po)} style={{ background:"#fff", border:"1px solid #fde68a", borderRadius:8, padding:"4px 10px", fontSize:12, cursor:"pointer", fontFamily:"system-ui", color:S.atx, fontWeight:600 }}>
+                        + {po.label} ({gbp(po.amount)})
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Current month items */}
+              {items.map((o) => (
+                <div key={o.id} style={{ padding:"9px 14px", borderBottom:"1px solid #f8fafc" }}>
+                  {editingItem === o.id ? (
+                    <div>
+                      <Inp value={editForm.label} onChange={e=>setEditForm(f=>({...f,label:e.target.value}))} placeholder="Label" style={{marginBottom:6}} />
+                      <Inp type="number" value={editForm.amount} onChange={e=>setEditForm(f=>({...f,amount:e.target.value}))} placeholder="Amount (£)" style={{marginBottom:6}} />
+                      <div style={{display:"flex",gap:8}}>
+                        <Btn onClick={()=>{
+                          deleteOutgoing(p.id, selYr, selMo, o.id);
+                          addOutgoing(p.id, selYr, selMo, { label:editForm.label, amount:parseFloat(editForm.amount)||0 });
+                          setEditingItem(null);
+                        }} style={{flex:1,padding:10,marginBottom:0}}>Save</Btn>
+                        <button onClick={()=>setEditingItem(null)} style={{padding:"10px 14px",borderRadius:10,background:S.light,border:"none",cursor:"pointer",fontFamily:"system-ui",fontWeight:600}}>Cancel</button>
+                      </div>
+                    </div>
+                  ):(
+                    <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+                      <div>
+                        <span style={{fontSize:13}}>{o.label}</span>
+                        {fixedItems(p.id).find(f2=>f2.label===o.label) && <span style={{fontSize:10,color:S.gtx,fontWeight:600,marginLeft:6}}>📌 fixed</span>}
+                      </div>
+                      <div style={{display:"flex",alignItems:"center",gap:8}}>
+                        <span style={{fontSize:13,fontWeight:600,color:S.red}}>{gbp(o.amount)}</span>
+                        <button onClick={()=>{setEditingItem(o.id);setEditForm({label:o.label,amount:String(o.amount)});}} style={{width:28,height:28,borderRadius:"50%",border:"none",cursor:"pointer",background:S.light,fontSize:12}}>✏️</button>
+                        <button onClick={()=>deleteOutgoing(p.id,selYr,selMo,o.id)} style={{width:28,height:28,borderRadius:"50%",border:"none",cursor:"pointer",background:S.rbg,fontSize:12}}>✕</button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))}
+
+              {/* Add new */}
+              <div style={{ padding:"10px 14px" }}>
+                {addingTo === p.id ? (
+                  <div>
+                    <Inp placeholder={isHMO ? "e.g. Energy, Water, Council Tax..." : "e.g. Insurance..."} value={form.label} onChange={e => setForm(f => ({ ...f, label:e.target.value }))} />
+                    <Inp placeholder="Amount (£)" type="number" value={form.amount} onChange={e => setForm(f => ({ ...f, amount:e.target.value }))} />
+                    <label style={{ display:"flex", alignItems:"center", gap:8, fontSize:12, color:S.dark, marginBottom:10, cursor:"pointer" }}>
+                      <input type="checkbox" checked={form.fixed} onChange={e=>setForm(f=>({...f,fixed:e.target.checked}))} />
+                      Mark as fixed bill (auto-suggest every month)
+                    </label>
+                    <div style={{ display:"flex", gap:8 }}>
+                      <Btn onClick={() => submit(p.id)} style={{ flex:1, padding:10, marginBottom:0 }}>Add</Btn>
+                      <button onClick={() => { setAddingTo(null); setForm({ label:"", amount:"", fixed:false }); }} style={{ padding:"10px 14px", borderRadius:10, background:S.light, border:"none", cursor:"pointer", fontFamily:"system-ui", fontWeight:600 }}>Cancel</button>
+                    </div>
+                  </div>
+                ) : (
+                  <button onClick={() => setAddingTo(p.id)} style={{ fontSize:12, color:S.mid, fontWeight:600, background:"none", border:"none", cursor:"pointer", display:"flex", alignItems:"center", gap:4, padding:"4px 0", fontFamily:"system-ui" }}>+ Add outgoing</button>
+                )}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// ── CONTRACTORS ───────────────────────────────────────────────────────────────
+function ContractorsPage({ contractors, addContractor, deleteContractor, wide }) {
+  const [show, setShow] = useState(false);
+  const [f, setF]       = useState({ name:"", trade:"", phone:"", notes:"" });
+  const submit = () => {
+    if (!f.name || !f.phone) return;
+    addContractor(f);
+    setF({ name:"", trade:"", phone:"", notes:"" });
+    setShow(false);
+  };
+  const TC = { "Plumber":"blue","Gas Engineer":"red","Electrician":"amber","Handyman":"gray" };
+  const grid = wide ? { display:"grid", gridTemplateColumns:"1fr 1fr", gap:16 } : {};
+  return (
+    <div>
+      <Btn onClick={() => setShow(true)}>+ Add Contractor</Btn>
+      {show && (
+        <div style={{ ...card, ...cardPad }}>
+          <div style={{ display:"flex", justifyContent:"space-between", marginBottom:10 }}>
+            <span style={{ fontWeight:600 }}>New Contractor</span>
+            <button onClick={() => setShow(false)} style={{ background:"none", border:"none", fontSize:18, cursor:"pointer" }}>✕</button>
+          </div>
+          <Inp placeholder="Name *" value={f.name} onChange={e => setF(x => ({ ...x, name:e.target.value }))} />
+          <Sel value={f.trade} onChange={e => setF(x => ({ ...x, trade:e.target.value }))}>
+            <option value="">Trade...</option>
+            {TRADES.map(t => <option key={t}>{t}</option>)}
+          </Sel>
+          <Inp placeholder="Phone *" value={f.phone} onChange={e => setF(x => ({ ...x, phone:e.target.value }))} />
+          <Inp placeholder="Notes" value={f.notes} onChange={e => setF(x => ({ ...x, notes:e.target.value }))} />
+          <div style={{ display:"flex", gap:8 }}>
+            <Btn onClick={submit} style={{ flex:1, padding:10, marginBottom:0 }}>Save</Btn>
+            <button onClick={() => setShow(false)} style={{ padding:"10px 14px", borderRadius:10, background:S.light, border:"none", cursor:"pointer", fontFamily:"system-ui", fontWeight:600 }}>Cancel</button>
+          </div>
+        </div>
+      )}
+      {!contractors.length && !show && <div style={{ textAlign:"center", padding:"50px 0", color:S.gray }}><div style={{ fontSize:36, marginBottom:10 }}>📞</div><div>No contractors saved yet</div></div>}
+      <div style={grid}>
+        {contractors.map(c => (
+          <div key={c.id} style={{ ...card, ...cardPad }}>
+            <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start" }}>
+              <div style={{ flex:1 }}>
+                <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:4 }}>
+                  <span style={{ fontSize:13, fontWeight:600 }}>{c.name}</span>
+                  {c.trade && <Badge color={TC[c.trade]||"gray"}>{c.trade}</Badge>}
+                </div>
+                <a href={"tel:"+c.phone} style={{ color:S.blue, fontWeight:600, fontSize:13 }}>{c.phone}</a>
+                {c.notes && <div style={{ fontSize:11, color:S.gray, marginTop:4 }}>{c.notes}</div>}
+              </div>
+              <button onClick={() => deleteContractor(c.id)} style={{ width:32, height:32, borderRadius:"50%", border:"none", cursor:"pointer", background:S.rbg, fontSize:13, marginLeft:8 }}>✕</button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ── DEALS ─────────────────────────────────────────────────────────────────────
+function DealsPage({ deals, addDeal, updateDeal, deleteDeal, wide }) {
+  const [show, setShow] = useState(false);
+  const [f, setF]       = useState({ addr:"", type:"BTL", status:"Researching", notes:"" });
+  const submit = () => {
+    if (!f.addr) return;
+    addDeal(f);
+    setF({ addr:"", type:"BTL", status:"Researching", notes:"" });
+    setShow(false);
+  };
+  const DC = { Researching:"gray", Viewing:"blue", "Offer Made":"amber", "Under Offer":"amber", Completed:"green", Dead:"red" };
+  const active = deals.filter(d => d.status !== "Dead" && d.status !== "Completed");
+  const arch   = deals.filter(d => d.status === "Dead" || d.status === "Completed");
+  const grid   = wide && active.length > 1 ? { display:"grid", gridTemplateColumns:"1fr 1fr", gap:16 } : {};
+  return (
+    <div>
+      <Btn onClick={() => setShow(true)}>+ Add Deal</Btn>
+      {show && (
+        <div style={{ ...card, ...cardPad }}>
+          <div style={{ display:"flex", justifyContent:"space-between", marginBottom:10 }}>
+            <span style={{ fontWeight:600 }}>New Deal</span>
+            <button onClick={() => setShow(false)} style={{ background:"none", border:"none", fontSize:18, cursor:"pointer" }}>✕</button>
+          </div>
+          <Inp placeholder="Address *" value={f.addr} onChange={e => setF(x => ({ ...x, addr:e.target.value }))} />
+          <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:8 }}>
+            <Sel value={f.type} onChange={e => setF(x => ({ ...x, type:e.target.value }))} style={{ marginBottom:0 }}><option>BTL</option><option>HMO</option></Sel>
+            <Sel value={f.status} onChange={e => setF(x => ({ ...x, status:e.target.value }))} style={{ marginBottom:0 }}>{DEALST.map(s => <option key={s}>{s}</option>)}</Sel>
+          </div>
+          <textarea placeholder="Notes..." value={f.notes} onChange={e => setF(x => ({ ...x, notes:e.target.value }))} style={{ width:"100%", border:"1px solid #e2e8f0", borderRadius:10, padding:"10px 12px", fontSize:14, fontFamily:"system-ui", resize:"none", height:60, marginTop:8, outline:"none" }} />
+          <div style={{ display:"flex", gap:8, marginTop:8 }}>
+            <Btn onClick={submit} style={{ flex:1, padding:10, marginBottom:0 }}>Add to Pipeline</Btn>
+            <button onClick={() => setShow(false)} style={{ padding:"10px 14px", borderRadius:10, background:S.light, border:"none", cursor:"pointer", fontFamily:"system-ui", fontWeight:600 }}>Cancel</button>
+          </div>
+        </div>
+      )}
+      {!deals.length && !show && <div style={{ textAlign:"center", padding:"50px 0", color:S.gray }}><div style={{ fontSize:36, marginBottom:10 }}>🎯</div><div>No deals tracked yet</div></div>}
+      <div style={grid}>
+        {active.map(d => (
+          <div key={d.id} style={{ ...card, ...cardPad }}>
+            <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:8 }}>
+              <div style={{ flex:1 }}>
+                <div style={{ fontSize:13, fontWeight:600 }}>{d.addr}</div>
+                <div style={{ fontSize:11, color:S.gray }}>{d.type}</div>
+              </div>
+              <div style={{ display:"flex", alignItems:"center", gap:8 }}>
+                <Badge color={DC[d.status]||"gray"}>{d.status}</Badge>
+                <button onClick={() => deleteDeal(d.id)} style={{ width:28, height:28, borderRadius:"50%", border:"none", cursor:"pointer", background:S.rbg, fontSize:12 }}>✕</button>
+              </div>
+            </div>
+            {d.notes && <div style={{ fontSize:11, color:S.gray, marginBottom:8 }}>{d.notes}</div>}
+            <div style={{ display:"flex", gap:6, flexWrap:"wrap" }}>
+              {DEALST.filter(s => s !== d.status && s !== "Dead").map(s => (
+                <button key={s} onClick={() => updateDeal(d.id, { status:s })} style={{ background:S.light, color:S.mid, padding:"4px 10px", borderRadius:8, border:"none", cursor:"pointer", fontSize:12, fontWeight:600, fontFamily:"system-ui" }}>{s}</button>
+              ))}
+              <button onClick={() => updateDeal(d.id, { status:"Dead" })} style={{ background:S.rbg, color:S.rtx, padding:"4px 10px", borderRadius:8, border:"none", cursor:"pointer", fontSize:12, fontWeight:600, fontFamily:"system-ui" }}>Dead</button>
+            </div>
+          </div>
+        ))}
+      </div>
+      {arch.length > 0 && (
+        <>
+          <div style={{ fontSize:11, fontWeight:700, color:S.gray, textTransform:"uppercase", letterSpacing:".5px", margin:"8px 0" }}>Archive ({arch.length})</div>
+          {arch.map(d => (
+            <div key={d.id} style={{ ...card, ...cardPad, opacity:.6 }}>
+              <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center" }}>
+                <div><div style={{ fontSize:13, fontWeight:600 }}>{d.addr}</div><div style={{ fontSize:11, color:S.gray }}>{d.type}</div></div>
+                <div style={{ display:"flex", alignItems:"center", gap:8 }}>
+                  <Badge color={DC[d.status]||"gray"}>{d.status}</Badge>
+                  <button onClick={() => deleteDeal(d.id)} style={{ width:28, height:28, borderRadius:"50%", border:"none", cursor:"pointer", background:S.rbg, fontSize:12 }}>✕</button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </>
+      )}
+    </div>
+  );
+}
+
+// ── REFINANCE PLANNER ─────────────────────────────────────────────────────────
+function RefinancePage() {
+  const [testRate, setTestRate] = useState(5.0);
+  const sorted = [...MTGS].filter(m => m.e).sort((a,b) => new Date(a.e)-new Date(b.e));
+
+  // BTL mortgages are interest-only: monthly payment = balance × rate / 12
+  const ioPayment = (balance, rate) => Math.round(balance * (rate/100) / 12);
+
+  return (
+    <div>
+      <div style={{ ...card, ...cardPad, marginBottom:10 }}>
+        <div style={{ fontSize:13, fontWeight:600, marginBottom:4 }}>Test a rate scenario</div>
+        <div style={{ fontSize:11, color:S.gray, marginBottom:10 }}>Drag to see what your interest-only payments would be at a new rate</div>
+        <div style={{ display:"flex", alignItems:"center", gap:12, marginBottom:8 }}>
+          <input type="range" min="2" max="9" step="0.1" value={testRate} onChange={e=>setTestRate(parseFloat(e.target.value))} style={{ flex:1 }} />
+          <span style={{ fontSize:18, fontWeight:700, minWidth:50, color:S.dark }}>{testRate.toFixed(1)}%</span>
+        </div>
+        <div style={{ fontSize:11, color:S.gray }}>Total at {testRate.toFixed(1)}%: <span style={{ fontWeight:700, color:S.dark }}>{gbp(MTGS.filter(m=>m.l!=="70 Coal Hill Lane (Home)").reduce((s,m)=>s+ioPayment(m.b,testRate),0))}/mo</span> vs current <span style={{ fontWeight:700 }}>{gbp(MTGS.filter(m=>m.l!=="70 Coal Hill Lane (Home)").reduce((s,m)=>s+m.m,0))}/mo</span></div>
+      </div>
+
+      {sorted.map((m, i) => {
+        const d = du(m.e);
+        const urgency = d!=null&&d<=0?"red":d!=null&&d<=180?"red":d!=null&&d<=365?"amber":"green";
+        const newPayment = ioPayment(m.b, testRate);
+        const diff = newPayment - m.m;
+        const isHome = m.l === "70 Coal Hill Lane (Home)";
+        return (
+          <div key={i} style={{ ...card, ...cardPad, ...(isHome?{opacity:.7}:{}) }}>
+            <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:10 }}>
+              <div>
+                <div style={{ fontSize:13, fontWeight:600 }}>{m.l}</div>
+                <div style={{ fontSize:11, color:S.gray }}>{m.ldr} · Current rate: {m.r!=null?m.r+"%":"Unknown"}</div>
+                {isHome && <div style={{ fontSize:11, color:S.amber }}>Residential — repayment mortgage</div>}
+              </div>
+              <Badge color={urgency}>{d!=null&&d<=0?"EXPIRED":d!=null?d+"d":"Unknown"}</Badge>
+            </div>
+            <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr 1fr", gap:8 }}>
+              <div style={{ background:S.light, borderRadius:9, padding:10 }}>
+                <div style={{ fontSize:11, color:S.gray }}>Balance</div>
+                <div style={{ fontSize:13, fontWeight:700 }}>{gbp(m.b)}</div>
+              </div>
+              <div style={{ background:S.light, borderRadius:9, padding:10 }}>
+                <div style={{ fontSize:11, color:S.gray }}>Current</div>
+                <div style={{ fontSize:13, fontWeight:700 }}>{gbp(m.m)}/mo</div>
+              </div>
+              <div style={{ background:diff>50?"#fff5f5":diff<-50?"#f0fdf4":S.light, borderRadius:9, padding:10 }}>
+                <div style={{ fontSize:11, color:S.gray }}>At {testRate.toFixed(1)}%</div>
+                <div style={{ fontSize:13, fontWeight:700, color:diff>50?S.red:diff<-50?S.green:S.dark }}>{gbp(newPayment)}/mo</div>
+              </div>
+            </div>
+            <div style={{ fontSize:11, color:diff>50?S.red:diff<-50?S.green:S.gray, marginTop:8, fontWeight:600 }}>
+              {Math.abs(diff) < 5 ? "Roughly same as current rate" : diff > 0 ? "▲ "+gbp(diff)+"/mo more than current" : "▼ "+gbp(Math.abs(diff))+"/mo less than current"}
+            </div>
+            {m.e && <div style={{ fontSize:11, color:S.gray, marginTop:4 }}>Expires: {new Date(m.e).toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"})}{d&&d>0?" ("+d+" days)":""}</div>}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function GrowthProjector({tv}) {
+  const [gr, setGr] = useState(5);
+  const years = [1, 3, 5, 10];
+  return (
+    <div style={{background:"#fff", borderRadius:14, border:"1px solid #e2e8f0", padding:14, marginBottom:12}}>
+      <div style={{fontSize:13, fontWeight:600, marginBottom:8}}>Portfolio Growth Projector</div>
+      <div style={{display:"flex", alignItems:"center", gap:10, marginBottom:10}}>
+        <input type="range" min="1" max="10" step="0.5" value={gr}
+          onChange={function(e){setGr(parseFloat(e.target.value));}}
+          style={{flex:1}} />
+        <span style={{fontSize:16, fontWeight:700, color:"#16a34a", minWidth:38}}>{gr}%</span>
+      </div>
+      <div style={{display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:8}}>
+        {years.map(function(yr) {
+          var p = Math.round(tv * Math.pow(1 + gr/100, yr));
+          return (
+            <div key={yr} style={{background:"#f0fdf4", borderRadius:10, padding:10, textAlign:"center"}}>
+              <div style={{fontSize:10, color:"#94a3b8"}}>{yr}yr</div>
+              <div style={{fontSize:13, fontWeight:700, color:"#16a34a"}}>{gbp(p)}</div>
+              <div style={{fontSize:10, color:"#15803d"}}>+{gbp(p-tv)}</div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+// ── PORTFOLIO GROWTH ──────────────────────────────────────────────────────────
+function GrowthPage({ tenants, propPurchase, setPropPurchase }) {
+  const SK_VALS = "ash-prop-vals";
+  const [vals, setVals] = useState(() => {
+    try { return JSON.parse(localStorage.getItem(SK_VALS)) || {}; } catch { return {}; }
+  });
+  const [editing, setEditing] = useState(null);
+  const [editTab, setEditTab] = useState("values"); // "values" or "purchase"
+  const [ef, setEf] = useState({ v:"", mtg:"" });
+  const [pf, setPf] = useState({ price:"", costs:"", reno:"" });
+
+  const getV   = p => vals[p.id+"_v"]   ?? p.v;
+  const getMtg = p => vals[p.id+"_mtg"] ?? p.mtg;
+
+  const saveVals = (pid, newV, newMtg) => {
+    const updated = { ...vals, [pid+"_v"]: parseFloat(newV)||0, [pid+"_mtg"]: parseFloat(newMtg)||0 };
+    setVals(updated);
+    try { localStorage.setItem(SK_VALS, JSON.stringify(updated)); } catch {}
+    setEditing(null);
+  };
+
+  const tv  = PROPS.reduce((s,p) => s + getV(p), 0);
+  const td  = PROPS.reduce((s,p) => s + getMtg(p), 0);
+  const eq  = tv - td;
+  const tr  = tenants.reduce((s,t) => s+t.rn, 0);
+  const ltv = Math.round(td/tv*100);
+  const gy  = ((tr*12)/tv*100).toFixed(1);
+
+  return (
+    <div>
+      <div style={{ background:S.abg, borderRadius:11, padding:"10px 14px", marginBottom:12, fontSize:12, color:S.atx }}>
+        💡 Tap ✏️ on any property to update its current value or remaining mortgage balance. This lets you track your equity growth over time.
+      </div>
+
+      <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10, marginBottom:12 }}>
+        {[
+          {l:"Total Value",   v:gbp(tv), s:"All properties",                    g:false},
+          {l:"Total Equity",  v:gbp(eq), s:Math.round(eq/tv*100)+"% of portfolio", g:true},
+          {l:"Total Debt",    v:gbp(td), s:ltv+"% LTV overall",                 g:false},
+          {l:"Gross Yield",   v:gy+"%",  s:"Annual rent vs value",              g:true},
+          {l:"Annual Rent",   v:gbp(tr*12), s:"Gross before costs",             g:true},
+          {l:"Avg LTV",       v:ltv+"%", s:"Across portfolio",                  g:ltv<60},
+        ].map((k,i) => (
+          <div key={i} style={{ background:"#fff", borderRadius:14, border:"1px solid #e2e8f0", padding:12 }}>
+            <div style={{ fontSize:11, color:S.gray, marginBottom:3 }}>{k.l}</div>
+            <div style={{ fontSize:18, fontWeight:700, color:k.g?S.green:S.dark }}>{k.v}</div>
+            <div style={{ fontSize:11, color:S.gray, marginTop:2 }}>{k.s}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* Equity vs Debt chart */}
+      <div style={{ ...card, ...cardPad, marginBottom:12 }}>
+        <div style={{ fontSize:13, fontWeight:600, marginBottom:4 }}>Equity vs Debt — per property</div>
+        <div style={{ display:"flex", gap:12, marginBottom:10 }}>
+          <div style={{ display:"flex", alignItems:"center", gap:4 }}><div style={{ width:10, height:10, borderRadius:2, background:"#22c55e" }}/><span style={{ fontSize:11, color:S.gray }}>Equity</span></div>
+          <div style={{ display:"flex", alignItems:"center", gap:4 }}><div style={{ width:10, height:10, borderRadius:2, background:"#ef4444" }}/><span style={{ fontSize:11, color:S.gray }}>Mortgage</span></div>
+        </div>
+        <div style={{ display:"flex", alignItems:"flex-end", gap:3, height:140 }}>
+          {PROPS.map((p,i) => {
+            const v2   = getV(p), mtg2 = getMtg(p), eq2 = v2 - mtg2;
+            const eqH  = Math.max(2, Math.round((eq2/tv)*120));
+            const mtgH = Math.max(2, Math.round((mtg2/tv)*120));
+            return (
+              <div key={p.id} style={{ flex:1, display:"flex", flexDirection:"column", alignItems:"center", gap:2 }}>
+                <div style={{ display:"flex", alignItems:"flex-end", gap:1, height:120 }}>
+                  <div style={{ width:"44%", background:"#22c55e", borderRadius:"3px 3px 0 0", height:eqH+"px" }} title={gbp(eq2)} />
+                  <div style={{ width:"44%", background:"#ef4444", borderRadius:"3px 3px 0 0", height:mtgH+"px" }} title={gbp(mtg2)} />
+                </div>
+                <div style={{ fontSize:9, color:S.gray, textAlign:"center" }}>{p.n.split(" ")[0]}</div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {PROPS.map(p => {
+        const v       = getV(p);
+        const mtg     = getMtg(p);
+        const propEq  = v - mtg;
+        const propLtv = Math.round(mtg/v*100);
+        const rent    = tenants.filter(t=>t.pid===p.id).reduce((s,t)=>s+t.rn,0);
+        const propYield = rent>0?((rent*12)/v*100).toFixed(1):"--";
+        const isEd    = editing === p.id;
+        const pp      = propPurchase?.[p.id] || {};
+        const totalIn = (parseFloat(pp.price)||0) + (parseFloat(pp.costs)||0) + (parseFloat(pp.reno)||0);
+        const capGain = totalIn > 0 ? v - totalIn : null;
+        const roi     = totalIn > 0 ? ((capGain / totalIn) * 100).toFixed(1) : null;
+
+        return (
+          <div key={p.id} style={card}>
+            <div style={{ padding:"11px 14px", background:"#f8fafc", borderBottom:"1px solid #f1f5f9", display:"flex", justifyContent:"space-between", alignItems:"center" }}>
+              <div>
+                <div style={{ fontSize:13, fontWeight:600 }}>{p.n}</div>
+                <div style={{ fontSize:11, color:S.gray }}>{p.town} · {p.ty}</div>
+              </div>
+              <button onClick={() => {
+                setEditing(isEd?null:p.id);
+                setEf({ v:String(v), mtg:String(mtg) });
+                setPf({ price:pp.price||"", costs:pp.costs||"", reno:pp.reno||"" });
+                setEditTab("values");
+              }} style={{ background:S.light, border:"none", borderRadius:8, padding:"4px 10px", fontSize:12, cursor:"pointer", fontWeight:600, fontFamily:"system-ui" }}>
+                {isEd ? "Cancel" : "✏️ Edit"}
+              </button>
+            </div>
+
+            {isEd ? (
+              <div style={{ padding:14 }}>
+                <div style={{ display:"flex", gap:8, marginBottom:12 }}>
+                  {["values","roi"].map(t2 => (
+                    <button key={t2} onClick={()=>setEditTab(t2)} style={{ padding:"6px 12px", borderRadius:8, border:"1px solid #e2e8f0", background:editTab===t2?S.dark:"#fff", color:editTab===t2?"#fff":S.dark, fontSize:12, fontWeight:600, cursor:"pointer", fontFamily:"system-ui" }}>
+                      {t2==="values"?"Current Values":"Purchase & ROI"}
+                    </button>
+                  ))}
+                </div>
+                {editTab==="values" ? (
+                  <div>
+                    <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:8 }}>
+                      <div><div style={{ fontSize:11, color:S.gray, marginBottom:3 }}>Current Value (£)</div><Inp type="number" value={ef.v} onChange={e=>setEf(f=>({...f,v:e.target.value}))} style={{marginBottom:0}} /></div>
+                      <div><div style={{ fontSize:11, color:S.gray, marginBottom:3 }}>Mortgage Balance (£)</div><Inp type="number" value={ef.mtg} onChange={e=>setEf(f=>({...f,mtg:e.target.value}))} style={{marginBottom:0}} /></div>
+                    </div>
+                    <Btn onClick={() => saveVals(p.id, ef.v, ef.mtg)} style={{ marginTop:10, marginBottom:0 }}>Save Values</Btn>
+                  </div>
+                ) : (
+                  <div>
+                    <div style={{ fontSize:11, color:S.gray, marginBottom:8 }}>Enter your original purchase figures to calculate true ROI</div>
+                    <div><div style={{ fontSize:11, color:S.gray, marginBottom:3 }}>Purchase Price (£)</div><Inp type="number" value={pf.price} onChange={e=>setPf(f=>({...f,price:e.target.value}))} /></div>
+                    <div><div style={{ fontSize:11, color:S.gray, marginBottom:3 }}>Buying Costs — stamp duty, legal fees (£)</div><Inp type="number" value={pf.costs} onChange={e=>setPf(f=>({...f,costs:e.target.value}))} /></div>
+                    <div><div style={{ fontSize:11, color:S.gray, marginBottom:3 }}>Renovation / Works (£)</div><Inp type="number" value={pf.reno} onChange={e=>setPf(f=>({...f,reno:e.target.value}))} /></div>
+                    <Btn onClick={() => { setPropPurchase(p.id, pf); setEditing(null); }} style={{ marginBottom:0 }}>Save ROI Data</Btn>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div>
+                <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr 1fr 1fr", gap:0 }}>
+                  {[["Value",gbp(v)],["Equity",gbp(propEq)],["LTV",propLtv+"%"],["Yield",propYield+"%"]].map(([l,val],i) => (
+                    <div key={l} style={{ padding:"10px 12px", borderRight:i<3?"1px solid #f8fafc":"none" }}>
+                      <div style={{ fontSize:10, color:S.gray }}>{l}</div>
+                      <div style={{ fontSize:13, fontWeight:700, color:l==="Equity"?S.green:l==="LTV"?(propLtv>75?S.red:propLtv>60?S.amber:S.green):l==="Yield"?S.green:S.dark }}>{val}</div>
+                    </div>
+                  ))}
+                </div>
+                {roi !== null && (
+                  <div style={{ padding:"10px 14px", borderTop:"1px solid #f8fafc", display:"grid", gridTemplateColumns:"1fr 1fr 1fr", gap:0 }}>
+                    <div style={{ paddingRight:12, borderRight:"1px solid #f8fafc" }}>
+                      <div style={{ fontSize:10, color:S.gray }}>Total invested</div>
+                      <div style={{ fontSize:12, fontWeight:700 }}>{gbp(totalIn)}</div>
+                    </div>
+                    <div style={{ padding:"0 12px", borderRight:"1px solid #f8fafc" }}>
+                      <div style={{ fontSize:10, color:S.gray }}>Capital gain</div>
+                      <div style={{ fontSize:12, fontWeight:700, color:capGain>0?S.green:S.red }}>{capGain>=0?"+":""}{gbp(capGain)}</div>
+                    </div>
+                    <div style={{ paddingLeft:12 }}>
+                      <div style={{ fontSize:10, color:S.gray }}>ROI</div>
+                      <div style={{ fontSize:12, fontWeight:700, color:parseFloat(roi)>0?S.green:S.red }}>{roi}%</div>
+                    </div>
+                  </div>
+                )}
+                {roi === null && (
+                  <div style={{ padding:"8px 14px", borderTop:"1px solid #f8fafc" }}>
+                    <button onClick={() => { setEditing(p.id); setEditTab("roi"); setPf({ price:"", costs:"", reno:"" }); setEf({ v:String(v), mtg:String(mtg) }); }} style={{ fontSize:11, color:S.blue, fontWeight:600, background:"none", border:"none", cursor:"pointer", fontFamily:"system-ui" }}>+ Add purchase price to see ROI</button>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+// ── TAX SUMMARY ───────────────────────────────────────────────────────────────
+function TaxPage({ tenants, jobs, rp, outgoings, wide }) {
+  const currentTaxYr = now.getMonth() >= 3 ? CYR : CYR - 1;
+  const [selTaxYr, setSelTaxYr] = useState(currentTaxYr);
+  const [copied, setCopied] = useState(false);
+
+  // Months in this tax year: Apr (3) to Mar (2) next year
+  const txMonths = [];
+  for (let i = 0; i < 12; i++) {
+    const m = (3 + i) % 12;
+    const y = i < 9 ? selTaxYr : selTaxYr + 1;
+    txMonths.push({ y, m, mk: mKey(y, m) });
+  }
+
+  const totalRent = txMonths.reduce((s, { y, m }) =>
+    s + tenants.filter(t => rp[t.id+"-"+y+"-"+m]).reduce((x, t) => x + t.rn, 0), 0);
+
+  const totalMaintenance = txMonths.reduce((s, { mk }) =>
+    s + jobs.filter(j => j.status==="done" && j.date && j.date.startsWith(mk)).reduce((x, j) => x + (j.cost||0), 0), 0);
+
+  const totalBills = txMonths.reduce((s, { mk }) =>
+    s + PROPS.reduce((x, p) => x + (outgoings[p.id+"-"+mk]||[]).reduce((z, o) => z + (o.amount||0), 0), 0), 0);
+
+  // Estimated mortgage interest (approximate — actual from lender statements)
+  const estMtgInterest = MTGS.filter(m => m.l !== "70 Coal Hill Lane (Home)").reduce((s, m) => s + m.b * (m.r||5) / 100, 0);
+  const mtgInterestCredit = estMtgInterest * 0.20; // 20% tax credit under Section 24
+
+  const totalExpenses = totalMaintenance + totalBills;
+  const netProfit = totalRent - totalExpenses;
+  // Basic rate tax estimate (20% on profit, minus mortgage interest credit)
+  const taxEstimate = Math.max(0, netProfit * 0.20 - mtgInterestCredit);
+
+  const copyText = () => {
+    const txt = [
+      `Property P&L — Tax Year ${selTaxYr}/${selTaxYr+1}`,
+      ``,
+      `Total Rental Income:    ${gbp(totalRent)}`,
+      `Maintenance Costs:      ${gbp(totalMaintenance)}`,
+      `Bills & Outgoings:      ${gbp(totalBills)}`,
+      `Total Expenses:         ${gbp(totalExpenses)}`,
+      `Net Profit:             ${gbp(netProfit)}`,
+      ``,
+      `Est. Mortgage Interest: ${gbp(estMtgInterest)} (approx — verify with lender)`,
+      `20% Tax Credit:         ${gbp(mtgInterestCredit)}`,
+      `Est. Tax (basic rate):  ${gbp(taxEstimate)}`,
+      ``,
+      `Note: This is an estimate only. Confirm figures with your accountant.`,
+    ].join("\n");
+    navigator.clipboard.writeText(txt).catch(() => {});
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2500);
+  };
+
+  return (
+    <div>
+      <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:14 }}>
+        <span style={{ fontSize:13, fontWeight:600 }}>Tax year</span>
+        <Sel value={selTaxYr} onChange={e => setSelTaxYr(parseInt(e.target.value))} style={{ marginBottom:0, width:"auto" }}>
+          {[currentTaxYr-1, currentTaxYr].map(y => <option key={y} value={y}>{y}/{y+1}</option>)}
+        </Sel>
+      </div>
+
+      <div style={{ background:S.abg, borderRadius:11, padding:"10px 14px", marginBottom:14, fontSize:12, color:S.atx, lineHeight:1.6 }}>
+        ⚠️ This is an <strong>estimate only</strong> based on data in the app. Always verify with your accountant before submitting your self assessment.
+      </div>
+
+      <div style={{ display:"grid", gridTemplateColumns:wide?"1fr 1fr 1fr":"1fr 1fr", gap:10, marginBottom:12 }}>
+        {[
+          {l:"Rental Income",     v:gbp(totalRent),          s:"Gross rent collected",        g:true},
+          {l:"Maintenance",       v:gbp(totalMaintenance),   s:"Jobs & repairs",              g:false},
+          {l:"Bills & Outgoings", v:gbp(totalBills),         s:"Energy, insurance etc",       g:false},
+          {l:"Total Expenses",    v:gbp(totalExpenses),      s:"All allowable costs",         g:false},
+          {l:"Net Profit",        v:gbp(netProfit),          s:"Before tax",                  g:netProfit>0},
+          {l:"Est. Tax (20%)",    v:gbp(taxEstimate),        s:"After mortgage interest credit",g:false},
+        ].map((k,i) => (
+          <div key={i} style={{ background:"#fff", borderRadius:14, border:"1px solid #e2e8f0", padding:12 }}>
+            <div style={{ fontSize:11, color:S.gray, marginBottom:3 }}>{k.l}</div>
+            <div style={{ fontSize:18, fontWeight:700, color:k.g?S.green:S.dark }}>{k.v}</div>
+            <div style={{ fontSize:11, color:S.gray, marginTop:2 }}>{k.s}</div>
+          </div>
+        ))}
+      </div>
+
+      <div style={{ ...card, ...cardPad, marginBottom:10 }}>
+        <div style={{ fontSize:13, fontWeight:600, marginBottom:4 }}>Section 24 — Mortgage Interest</div>
+        <div style={{ fontSize:12, color:S.gray, lineHeight:1.6, marginBottom:8 }}>
+          As a personal landlord you can no longer deduct mortgage interest as an expense. Instead you get a 20% tax credit on the interest. Est. annual interest across your portfolio: <span style={{ fontWeight:700, color:S.dark }}>{gbp(estMtgInterest)}</span> giving a credit of <span style={{ fontWeight:700, color:S.green }}>{gbp(mtgInterestCredit)}</span>.
+        </div>
+        <div style={{ fontSize:11, color:S.amber, fontWeight:600 }}>⚠ Verify exact interest figures with each lender — this uses an estimate based on current balances and rates.</div>
+      </div>
+
+      <Btn onClick={copyText} style={{ background: copied ? S.green : S.dark }}>
+        {copied ? "✓ Copied to clipboard!" : "📋 Copy P&L Summary for Accountant"}
+      </Btn>
+
+      <div style={{ ...card }}>
+        <div style={{ padding:"11px 14px", background:"#f8fafc", borderBottom:"1px solid #f1f5f9", fontSize:13, fontWeight:600 }}>Monthly Breakdown</div>
+        {txMonths.map(({ y, m, mk }) => {
+          const rent  = tenants.filter(t => rp[t.id+"-"+y+"-"+m]).reduce((s, t) => s + t.rn, 0);
+          const costs = jobs.filter(j => j.status==="done" && j.date && j.date.startsWith(mk)).reduce((s, j) => s + (j.cost||0), 0);
+          const bills = PROPS.reduce((s, p) => s + (outgoings[p.id+"-"+mk]||[]).reduce((z, o) => z + (o.amount||0), 0), 0);
+          const net   = rent - costs - bills;
+          return (
+            <div key={mk} style={{ padding:"9px 14px", borderBottom:"1px solid #f8fafc", display:"grid", gridTemplateColumns:"55px 1fr 1fr 1fr 1fr", gap:4, fontSize:12 }}>
+              <span style={{ color:S.gray, fontWeight:600 }}>{MSHORT[m]} {y !== CYR ? "'"+String(y).slice(2) : ""}</span>
+              <span style={{ textAlign:"right", color:rent>0?S.green:S.gray }}>{rent>0?gbp(rent):"--"}</span>
+              <span style={{ textAlign:"right", color:costs>0?S.red:S.gray }}>{costs>0?gbp(costs):"--"}</span>
+              <span style={{ textAlign:"right", color:bills>0?S.red:S.gray }}>{bills>0?gbp(bills):"--"}</span>
+              <span style={{ textAlign:"right", fontWeight:700, color:rent>0?(net>0?S.green:S.red):S.gray }}>{rent>0?gbp(Math.abs(net)):"--"}</span>
+            </div>
+          );
+        })}
+        <div style={{ padding:"9px 14px", background:"#f8fafc", display:"grid", gridTemplateColumns:"55px 1fr 1fr 1fr 1fr", gap:4, fontSize:11, fontWeight:600, color:S.gray }}>
+          <span></span><span style={{ textAlign:"right" }}>Rent</span><span style={{ textAlign:"right" }}>Jobs</span><span style={{ textAlign:"right" }}>Bills</span><span style={{ textAlign:"right" }}>Net</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── NOTES ─────────────────────────────────────────────────────────────────────
+function NotesPage({ generalNotes, setGeneralNotes, notes, setNote, wide }) {
+  const grid = wide ? { display:"grid", gridTemplateColumns:"1fr 1fr", gap:16 } : {};
+  return (
+    <div>
+      <div style={{ ...card, ...cardPad, marginBottom:14 }}>
+        <div style={{ fontSize:13, fontWeight:600, marginBottom:8 }}>📝 General Notes</div>
+        <div style={{ fontSize:11, color:S.gray, marginBottom:8 }}>Jot down anything — ideas, reminders, things to follow up on.</div>
+        <textarea
+          value={generalNotes || ""}
+          onChange={e => setGeneralNotes(e.target.value)}
+          placeholder="Start typing..."
+          style={{ width:"100%", border:"1px solid #e2e8f0", borderRadius:10, padding:"12px", fontSize:14, fontFamily:"system-ui", resize:"none", height:180, outline:"none", lineHeight:1.6 }}
+        />
+      </div>
+
+      <div style={{ fontSize:13, fontWeight:600, marginBottom:10, color:S.dark }}>Property Notes</div>
+      <div style={grid}>
+        {PROPS.map(p => (
+          <div key={p.id} style={card}>
+            <div style={{ padding:"11px 14px", background:"#f8fafc", borderBottom:"1px solid #f1f5f9" }}>
+              <div style={{ fontSize:13, fontWeight:600 }}>{p.n}</div>
+              <div style={{ fontSize:11, color:S.gray }}>{p.town} · {p.ty}</div>
+            </div>
+            <div style={{ padding:"10px 14px" }}>
+              <textarea
+                value={notes[p.id] || ""}
+                onChange={e => setNote(p.id, e.target.value)}
+                placeholder="Access codes, boiler location, parking, ongoing issues..."
+                style={{ width:"100%", border:"1px solid #e2e8f0", borderRadius:9, padding:"8px 10px", fontSize:13, fontFamily:"system-ui", resize:"none", height:80, outline:"none", lineHeight:1.5 }}
+              />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ── TIMELINE ──────────────────────────────────────────────────────────────────
+function TimelinePage({ tenants, comp, wide }) {
+  const [days, setDays] = useState(30);
+  const cutoff = new Date(now.getFullYear(), now.getMonth(), now.getDate() + days);
+  const events = [];
+
+  // Rent due dates this month
+  tenants.forEach(t => {
+    const p = PROPS.find(x => x.id === t.pid);
+    const due = new Date(CYR, CMO, t.dy);
+    if (due >= now && due <= cutoff) {
+      events.push({ date:due, icon:"💷", label:t.nm+" — rent due", sub:p?p.n:"", color:S.green, priority:1 });
+    }
+  });
+
+  // Compliance expiries
+  comp.forEach(c => {
+    const d = du(c.next);
+    if (c.next && d >= 0 && d <= days) {
+      const ct = CTYPES.find(x=>x.k===c.type), pp = PROPS.find(p=>p.id===c.pid);
+      events.push({ date:new Date(c.next), icon:"🛡", label:(ct?ct.l:"Compliance")+" expiry", sub:pp?pp.n:"", color:d<=14?S.red:S.amber, priority:d<=14?0:2 });
+    }
+  });
+
+  // Mortgage expiries
+  MTGS.forEach(m => {
+    const d = du(m.e);
+    if (m.e && d >= 0 && d <= days) {
+      events.push({ date:new Date(m.e), icon:"💳", label:"Mortgage expires — "+m.ldr, sub:m.l, color:d<=30?S.red:S.amber, priority:d<=30?0:2 });
+    }
+  });
+
+  events.sort((a,b) => a.date - b.date);
+
+  const formatDate = d => d.toLocaleDateString("en-GB",{weekday:"short",day:"numeric",month:"short"});
+  const t0=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+  const daysUntilEv=d=>Math.round((new Date(d.getFullYear(),d.getMonth(),d.getDate())-t0)/86400000);
+
+  return (
+    <div>
+      <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:14 }}>
+        <span style={{ fontSize:13, fontWeight:600 }}>Show next</span>
+        {[30,60,90].map(d => (
+          <button key={d} onClick={()=>setDays(d)} style={{ padding:"6px 14px", borderRadius:9, border:"1px solid #e2e8f0", background:days===d?S.dark:"#fff", color:days===d?"#fff":S.dark, fontWeight:600, fontSize:13, cursor:"pointer", fontFamily:"system-ui" }}>
+            {d}d
+          </button>
+        ))}
+      </div>
+
+      {events.length === 0 && (
+        <div style={{ textAlign:"center", padding:"50px 0", color:S.gray }}>
+          <div style={{ fontSize:36, marginBottom:10 }}>📅</div>
+          <div>Nothing coming up in the next {days} days</div>
+        </div>
+      )}
+
+      {events.map((ev, i) => {
+        const dUntil = daysUntilEv(ev.date);
+        return (
+          <div key={i} style={{ ...card, ...cardPad, borderLeft:"3px solid "+ev.color }}>
+            <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start" }}>
+              <div style={{ display:"flex", gap:10, alignItems:"flex-start" }}>
+                <span style={{ fontSize:20, flexShrink:0 }}>{ev.icon}</span>
+                <div>
+                  <div style={{ fontSize:13, fontWeight:600 }}>{ev.label}</div>
+                  <div style={{ fontSize:11, color:S.gray }}>{ev.sub}</div>
+                </div>
+              </div>
+              <div style={{ textAlign:"right", flexShrink:0, marginLeft:8 }}>
+                <div style={{ fontSize:13, fontWeight:700, color:ev.color }}>{dUntil === 0 ? "Today" : dUntil === 1 ? "Tomorrow" : "in "+dUntil+"d"}</div>
+                <div style={{ fontSize:11, color:S.gray }}>{formatDate(ev.date)}</div>
+              </div>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+// ── RENT PLANNER ──────────────────────────────────────────────────────────────
+function RentPlannerPage({ tenants, updateTenant, wide }) {
+  const [rate, setRate] = useState(5);
+  const [sv, setSv] = useState(5);
+  const [confirmed, setConfirmed] = useState(null);
+  const total    = tenants.reduce((s,t)=>s+t.rn,0);
+  const newTotal = Math.round(total * (1 + rate/100));
+  const grid = wide ? { display:"grid", gridTemplateColumns:"1fr 1fr", gap:16 } : {};
+
+  const applyRent = (t, newRent) => {
+    updateTenant(t.id, { rn: newRent });
+    setConfirmed(t.id);
+    setTimeout(() => setConfirmed(null), 2000);
+  };
+  return (
+    <div>
+      <div style={{ ...card, ...cardPad, marginBottom:12 }}>
+        <div style={{ fontSize:13, fontWeight:600, marginBottom:4 }}>Increase rate</div>
+        <div style={{ display:"flex", alignItems:"center", gap:12, marginBottom:8 }}>
+          <input type="range" min="1" max="20" step="0.5" value={sv} onChange={e=>setSv(parseFloat(e.target.value))} onMouseUp={e=>setRate(parseFloat(e.target.value))} onTouchEnd={e=>setRate(parseFloat(e.target.value))} style={{ flex:1 }} />
+          <span style={{ fontSize:18, fontWeight:700, minWidth:50 }}>{sv}%</span>
+        </div>
+        <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10 }}>
+          <div style={{ background:S.light, borderRadius:10, padding:10 }}>
+            <div style={{ fontSize:11, color:S.gray }}>Current total rent</div>
+            <div style={{ fontSize:16, fontWeight:700 }}>{gbp(total)}/mo</div>
+          </div>
+          <div style={{ background:"#f0fdf4", borderRadius:10, padding:10 }}>
+            <div style={{ fontSize:11, color:S.gray }}>After {rate}% increase</div>
+            <div style={{ fontSize:16, fontWeight:700, color:S.green }}>{gbp(newTotal)}/mo</div>
+          </div>
+        </div>
+        <div style={{ fontSize:11, color:S.green, fontWeight:600, marginTop:8 }}>
+          +{gbp(newTotal - total)}/mo · +{gbp((newTotal-total)*12)}/yr across all tenants
+        </div>
+      </div>
+
+      <div style={grid}>
+        {PROPS.map(p => {
+          const pt = tenants.filter(t=>t.pid===p.id);
+          if (!pt.length) return null;
+          const propTotal = pt.reduce((s,t)=>s+t.rn,0);
+          const propNew   = Math.round(propTotal * (1+rate/100));
+          return (
+            <div key={p.id} style={card}>
+              <div style={{ padding:"11px 14px", background:"#f8fafc", borderBottom:"1px solid #f1f5f9", display:"flex", justifyContent:"space-between" }}>
+                <div>
+                  <div style={{ fontSize:13, fontWeight:600 }}>{p.n}</div>
+                  <div style={{ fontSize:11, color:S.gray }}>{p.town}</div>
+                </div>
+                <div style={{ textAlign:"right" }}>
+                  <div style={{ fontSize:11, color:S.gray }}>{gbp(propTotal)} → <span style={{ color:S.green, fontWeight:700 }}>{gbp(propNew)}</span></div>
+                  <div style={{ fontSize:11, color:S.green }}>+{gbp(propNew-propTotal)}/mo</div>
+                </div>
+              </div>
+              {pt.map((t,i) => {
+                const newRent = Math.round(t.rn * (1+rate/100));
+                return (
+                  <div key={t.id} style={{ padding:"10px 14px", borderBottom:i<pt.length-1?"1px solid #f8fafc":"none", display:"flex", justifyContent:"space-between", alignItems:"center" }}>
+                    <div>
+                      <div style={{ fontSize:13, fontWeight:600 }}>{p.ty==="HMO"?t.rm+" · ":""}{t.nm}</div>
+                      <div style={{ fontSize:11, color:S.gray }}>{gbp(t.rn)}/mo → <span style={{ color:S.green, fontWeight:600 }}>{gbp(newRent)}/mo</span></div>
+                    </div>
+                    <button onClick={() => applyRent(t, newRent)}
+                      style={{ background: confirmed===t.id ? S.green : S.dark, color:"#fff", border:"none", borderRadius:8, padding:"6px 12px", fontSize:12, fontWeight:600, cursor:"pointer", fontFamily:"system-ui", transition:"background .3s" }}>
+                      {confirmed===t.id ? "✓ Done" : "Apply"}
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// ── MORTGAGE INTEREST TRACKER ─────────────────────────────────────────────────
+function MtgInterestPage({ wide }) {
+  const SK_VALS = "ash-prop-vals";
+  const [vals] = useState(() => {
+    try { return JSON.parse(localStorage.getItem(SK_VALS)) || {}; } catch { return {}; }
+  });
+
+  const getV = p => vals[p.id+"_v"] ?? p.v;
+
+  const annualInterest = MTGS.map(m => ({
+    label: m.l,
+    ldr: m.ldr,
+    balance: m.b,
+    rate: m.r,
+    annual: m.r != null ? Math.round(m.b * m.r / 100) : null,
+    monthly: m.m,
+  }));
+
+  const totalAnnualInterest = annualInterest.filter(m=>m.annual!=null).reduce((s,m)=>s+m.annual,0);
+  const totalBalance        = MTGS.reduce((s,m)=>s+m.b,0);
+  const portfolioValue      = PROPS.reduce((s,p)=>s+getV(p),0);
+  const totalEquity         = portfolioValue - totalBalance;
+
+  // Estimate equity built per year via appreciation (conservative 3%)
+  const annualAppreciation  = Math.round(portfolioValue * 0.03);
+
+  return (
+    <div>
+      <div style={{ background:S.abg, borderRadius:11, padding:"10px 14px", marginBottom:12, fontSize:12, color:S.atx, lineHeight:1.6 }}>
+        Since your BTL mortgages are interest-only, you're not reducing the debt through payments — only through house price growth. This shows what you're paying in interest vs what you're gaining in equity each year.
+      </div>
+
+      <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10, marginBottom:12 }}>
+        {[
+          {l:"Annual interest cost", v:gbp(totalAnnualInterest), s:"Across all mortgages",     g:false},
+          {l:"Est. annual appreciation", v:gbp(annualAppreciation), s:"At 3% — your equity gain",g:true},
+          {l:"Net equity position",  v:gbp(annualAppreciation-totalAnnualInterest), s:"Appreciation minus interest", g:annualAppreciation>totalAnnualInterest},
+          {l:"Total interest/month", v:gbp(Math.round(totalAnnualInterest/12)), s:"What you pay in interest",   g:false},
+        ].map((k,i)=>(
+          <div key={i} style={{ background:"#fff", borderRadius:14, border:"1px solid #e2e8f0", padding:12 }}>
+            <div style={{ fontSize:11, color:S.gray, marginBottom:3 }}>{k.l}</div>
+            <div style={{ fontSize:18, fontWeight:700, color:k.g?S.green:S.dark }}>{k.v}</div>
+            <div style={{ fontSize:11, color:S.gray, marginTop:2 }}>{k.s}</div>
+          </div>
+        ))}
+      </div>
+
+      <div style={card}>
+        <div style={{ padding:"11px 14px", background:"#f8fafc", borderBottom:"1px solid #f1f5f9", display:"grid", gridTemplateColumns:"1fr 70px 70px 70px", gap:4, fontSize:11, fontWeight:600, color:S.gray }}>
+          <span>Mortgage</span><span style={{textAlign:"right"}}>Balance</span><span style={{textAlign:"right"}}>Rate</span><span style={{textAlign:"right"}}>Interest/yr</span>
+        </div>
+        {annualInterest.map((m,i)=>(
+          <div key={i} style={{ padding:"9px 14px", borderBottom:"1px solid #f8fafc", display:"grid", gridTemplateColumns:"1fr 70px 70px 70px", gap:4, fontSize:12 }}>
+            <div>
+              <div style={{ fontWeight:600, fontSize:12 }}>{m.label.split(" ").slice(0,3).join(" ")}</div>
+              <div style={{ fontSize:10, color:S.gray }}>{m.ldr}</div>
+            </div>
+            <span style={{textAlign:"right"}}>{gbp(m.balance)}</span>
+            <span style={{textAlign:"right",color:m.rate>5.5?S.red:S.dark}}>{m.rate!=null?m.rate+"%":"?"}</span>
+            <span style={{textAlign:"right",fontWeight:600,color:S.red}}>{m.annual!=null?gbp(m.annual):"?"}</span>
+          </div>
+        ))}
+        <div style={{ padding:"11px 14px", background:"#f8fafc", borderTop:"1px solid #f1f5f9", display:"grid", gridTemplateColumns:"1fr 70px 70px 70px", gap:4, fontSize:12, fontWeight:700 }}>
+          <span>Total</span>
+          <span style={{textAlign:"right"}}>{gbp(totalBalance)}</span>
+          <span></span>
+          <span style={{textAlign:"right",color:S.red}}>{gbp(totalAnnualInterest)}</span>
+        </div>
+      </div>
+
+      <div style={{ ...card, ...cardPad, marginTop:2 }}>
+        <div style={{ fontSize:13, fontWeight:600, marginBottom:8 }}>💡 The real picture</div>
+        <div style={{ fontSize:12, color:S.dark, lineHeight:1.8 }}>
+          You're paying approximately <span style={{fontWeight:700,color:S.red}}>{gbp(totalAnnualInterest)}/year</span> in mortgage interest across your portfolio.
+          At 3% annual appreciation your properties gain roughly <span style={{fontWeight:700,color:S.green}}>{gbp(annualAppreciation)}/year</span> in value.
+          That means your portfolio is {annualAppreciation > totalAnnualInterest ? "building equity faster than interest is costing you" : "currently costing more in interest than it's gaining in appreciation at 3% growth"} — but rental income is on top of this.
+        </div>
+        <div style={{ fontSize:11, color:S.gray, marginTop:8 }}>Note: 3% appreciation is conservative. Leeds has historically grown faster. Update your property values in Portfolio Growth to see accurate figures.</div>
+      </div>
+    </div>
+  );
+}
+
+// ── AI LETTER WRITER ──────────────────────────────────────────────────────────
+function AILettersPage({ tenants, wide }) {
+  const [type, setType]         = useState("rent-increase");
+  const [selTenant, setSelTenant] = useState(tenants[0]?.id || "");
+  const [customRate, setCustomRate] = useState(5);
+  const [customMsg, setCustomMsg]   = useState("");
+  const [result, setResult]     = useState("");
+  const [loading, setLoading]   = useState(false);
+  const [copied, setCopied]     = useState(false);
+
+  const t = tenants.find(x=>x.id===selTenant);
+  const p = t ? PROPS.find(x=>x.id===t.pid) : null;
+  const newRent = t ? Math.round(t.rn * (1 + customRate/100)) : 0;
+
+  const LETTER_TYPES = [
+    { id:"rent-increase",   label:"Rent increase notice" },
+    { id:"maintenance",     label:"Maintenance visit notice" },
+    { id:"late-rent",       label:"Late rent reminder" },
+    { id:"renewal",         label:"Tenancy renewal offer" },
+    { id:"custom",          label:"Custom message" },
+  ];
+
+  const buildPrompt = () => {
+    const base = `You are helping Ash, a self-managing landlord in Leeds, write a personal and professional message to one of his tenants. 
+Ash is friendly, direct and professional — not robotic. Keep it warm and human. No legal jargon. Maximum 150 words.
+Tenant name: ${t?.nm || "tenant"}
+Property: ${p?.n || "the property"}
+`;
+    switch(type) {
+      case "rent-increase":
+        return base + `Write a rent increase letter. Current rent is ${t?t.rn:0} per month. New rent will be £${newRent} per month (a ${customRate}% increase). Give 1 month's notice. Be apologetic but firm. Explain it's to keep up with costs. Keep it personal.`;
+      case "maintenance":
+        return base + `Write a maintenance visit notice. Ash needs to arrange access. Message should ask when the tenant is available this week or next. Keep it short and friendly.`;
+      case "late-rent":
+        return base + `Write a polite but firm late rent reminder. Rent was due on the ${t?.dy || 1}${t?.dy===1?"st":t?.dy===2?"nd":t?.dy===3?"rd":"th"} of the month. Keep it friendly — this may be a genuine oversight. Don't be threatening.`;
+      case "renewal":
+        return base + `Write a tenancy renewal offer. Offer to continue on a new fixed term or rolling basis. Keep it positive — Ash wants to keep good tenants.`;
+      case "custom":
+        return base + `Write a message with this context: ${customMsg}. Keep it personal, friendly and professional.`;
+      default: return base;
+    }
+  };
+
+  const generate = async () => {
+    if (!t) return;
+    setLoading(true);
+    setResult("");
+    try {
+      const res = await fetch("https://api.anthropic.com/v1/messages", {
+        method:"POST",
+        headers:{ "Content-Type":"application/json" },
+        body: JSON.stringify({
+          model:"claude-sonnet-4-20250514",
+          max_tokens:400,
+          messages:[{ role:"user", content:buildPrompt() }]
+        })
+      });
+      const data = await res.json();
+      const text = data.content?.map(c=>c.text||"").join("") || "Sorry, couldn't generate. Try again.";
+      setResult(text);
+    } catch(e) {
+      setResult("Something went wrong — check your connection and try again.");
+    }
+    setLoading(false);
+  };
+
+  const copy = () => {
+    navigator.clipboard.writeText(result).catch(()=>{});
+    setCopied(true);
+    setTimeout(()=>setCopied(false), 2000);
+  };
+
+  return (
+    <div>
+      <div style={{ background:S.abg, borderRadius:11, padding:"10px 14px", marginBottom:14, fontSize:12, color:S.atx }}>
+        ✉️ Pick the type of message, select a tenant and tap Generate. The AI writes a personal letter in your voice — not robotic. Edit it before sending.
+      </div>
+
+      <div style={{ ...card, ...cardPad }}>
+        <div style={{ fontSize:11, color:S.gray, marginBottom:4 }}>Message type</div>
+        <Sel value={type} onChange={e=>setType(e.target.value)}>
+          {LETTER_TYPES.map(l=><option key={l.id} value={l.id}>{l.label}</option>)}
+        </Sel>
+
+        <div style={{ fontSize:11, color:S.gray, marginBottom:4 }}>Tenant</div>
+        <Sel value={selTenant} onChange={e=>setSelTenant(e.target.value)}>
+          {tenants.map(t2=>{
+            const p2=PROPS.find(x=>x.id===t2.pid);
+            return <option key={t2.id} value={t2.id}>{t2.nm} — {p2?p2.n:""}</option>;
+          })}
+        </Sel>
+
+        {type === "rent-increase" && (
+          <div style={{ marginBottom:8 }}>
+            <div style={{ fontSize:11, color:S.gray, marginBottom:4 }}>Increase rate: {customRate}%</div>
+            <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:4 }}>
+              <input type="range" min="1" max="20" step="0.5" value={customRate} onChange={e=>setCustomRate(parseFloat(e.target.value))} style={{ flex:1 }} />
+              <span style={{ fontSize:14, fontWeight:700 }}>{customRate}%</span>
+            </div>
+            {t && <div style={{ fontSize:11, color:S.gray }}>{gbp(t.rn)}/mo → <span style={{ color:S.green, fontWeight:700 }}>{gbp(newRent)}/mo</span></div>}
+          </div>
+        )}
+
+        {type === "custom" && (
+          <div style={{ marginBottom:8 }}>
+            <div style={{ fontSize:11, color:S.gray, marginBottom:4 }}>Describe what you need</div>
+            <textarea value={customMsg} onChange={e=>setCustomMsg(e.target.value)} placeholder="e.g. I need to arrange an inspection next week..." style={{ width:"100%", border:"1px solid #e2e8f0", borderRadius:10, padding:"10px 12px", fontSize:14, fontFamily:"system-ui", resize:"none", height:70, outline:"none" }} />
+          </div>
+        )}
+
+        <Btn onClick={generate} style={{ marginBottom:0 }}>
+          {loading ? "✍️ Writing..." : "✨ Generate Letter"}
+        </Btn>
+      </div>
+
+      {result && (
+        <div style={{ ...card, ...cardPad, marginTop:10 }}>
+          <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:10 }}>
+            <div style={{ fontSize:13, fontWeight:600 }}>Generated message</div>
+            <button onClick={copy} style={{ background:copied?S.green:S.light, color:copied?"#fff":S.dark, border:"none", borderRadius:8, padding:"5px 12px", fontSize:12, fontWeight:600, cursor:"pointer", fontFamily:"system-ui" }}>
+              {copied ? "✓ Copied!" : "Copy"}
+            </button>
+          </div>
+          <div style={{ fontSize:13, lineHeight:1.8, color:S.dark, whiteSpace:"pre-wrap" }}>{result}</div>
+          <div style={{ fontSize:11, color:S.gray, marginTop:10 }}>✏️ Review and edit before sending. This is a starting point, not a final draft.</div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── DEAL ANALYSER ─────────────────────────────────────────────────────────────
+function DealCheckPage({ wide }) {
+  const [f, setF] = useState({ price:"", rent:"", rate:5.5, deposit:25, costs:"", reno:"" });
+  const [result, setResult] = useState(null);
+
+  const analyse = () => {
+    const price    = parseFloat(f.price) || 0;
+    const rent     = parseFloat(f.rent)  || 0;
+    const rate     = parseFloat(f.rate)  || 5.5;
+    const deposit  = parseFloat(f.deposit) / 100;
+    const costs    = parseFloat(f.costs)  || Math.round(price * 0.03); // stamp duty estimate
+    const reno     = parseFloat(f.reno)   || 0;
+    const mortgage = Math.round(price * (1-deposit));
+    const monthlyInterest = Math.round(mortgage * rate / 100 / 12);
+    const ncf      = rent - monthlyInterest;
+    const grossYield = price > 0 ? ((rent*12)/price*100).toFixed(2) : 0;
+    const netYield = price > 0 ? ((ncf*12)/price*100).toFixed(2) : 0;
+    const totalIn  = Math.round(price * deposit) + costs + reno;
+    const cashROI  = totalIn > 0 ? ((ncf*12)/totalIn*100).toFixed(1) : 0;
+
+    // Compare to existing portfolio
+    const portYield = 6.5; // approximate from existing portfolio
+    const stacks = parseFloat(grossYield) >= 6 && ncf > 0;
+
+    setResult({ price, rent, mortgage, monthlyInterest, ncf, grossYield, netYield, totalIn, cashROI, stacks, rate, deposit:f.deposit });
+  };
+
+  return (
+    <div>
+      <div style={{ background:S.abg, borderRadius:11, padding:"10px 14px", marginBottom:14, fontSize:12, color:S.atx }}>
+        Enter the numbers for a property you're looking at. We'll tell you instantly whether it stacks up against your existing portfolio.
+      </div>
+
+      <div style={{ ...card, ...cardPad }}>
+        <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:8 }}>
+          <div><div style={{ fontSize:11, color:S.gray, marginBottom:3 }}>Asking price (£)</div><Inp type="number" value={f.price} onChange={e=>setF(x=>({...x,price:e.target.value}))} placeholder="e.g. 150000" style={{marginBottom:0}} /></div>
+          <div><div style={{ fontSize:11, color:S.gray, marginBottom:3 }}>Expected rent/mo (£)</div><Inp type="number" value={f.rent} onChange={e=>setF(x=>({...x,rent:e.target.value}))} placeholder="e.g. 850" style={{marginBottom:0}} /></div>
+        </div>
+        <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:8, marginTop:8 }}>
+          <div>
+            <div style={{ fontSize:11, color:S.gray, marginBottom:3 }}>Mortgage rate: {f.rate}%</div>
+            <input type="range" min="3" max="9" step="0.1" value={f.rate} onChange={e=>setF(x=>({...x,rate:e.target.value}))} style={{ width:"100%" }} />
+          </div>
+          <div>
+            <div style={{ fontSize:11, color:S.gray, marginBottom:3 }}>Deposit: {f.deposit}%</div>
+            <input type="range" min="20" max="40" step="5" value={f.deposit} onChange={e=>setF(x=>({...x,deposit:e.target.value}))} style={{ width:"100%" }} />
+          </div>
+        </div>
+        <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:8, marginTop:8 }}>
+          <div><div style={{ fontSize:11, color:S.gray, marginBottom:3 }}>Buying costs (£)</div><Inp type="number" value={f.costs} onChange={e=>setF(x=>({...x,costs:e.target.value}))} placeholder="Stamp duty, legal..." style={{marginBottom:0}} /></div>
+          <div><div style={{ fontSize:11, color:S.gray, marginBottom:3 }}>Renovation (£)</div><Inp type="number" value={f.reno} onChange={e=>setF(x=>({...x,reno:e.target.value}))} placeholder="Works needed" style={{marginBottom:0}} /></div>
+        </div>
+        <Btn onClick={analyse} style={{ marginTop:12, marginBottom:0 }}>Analyse This Deal</Btn>
+      </div>
+
+      {result && (
+        <div>
+          <div style={{ ...card, ...cardPad, background: result.stacks ? "#f0fdf4" : "#fff5f5", borderColor: result.stacks ? "#bbf7d0" : "#fecaca", marginTop:10 }}>
+            <div style={{ fontSize:15, fontWeight:700, color:result.stacks?S.green:S.red, marginBottom:4 }}>
+              {result.stacks ? "✅ This deal stacks up" : "⚠️ This deal needs scrutiny"}
+            </div>
+            <div style={{ fontSize:12, color:S.dark, lineHeight:1.7 }}>
+              {result.stacks
+                ? `At ${result.grossYield}% gross yield and ${gbp(result.ncf)}/mo net cash flow after the mortgage, this property performs solidly. Your existing portfolio averages around 6.5% so this is competitive.`
+                : `At ${result.grossYield}% gross yield${result.ncf < 0 ? " and negative cash flow of "+gbp(Math.abs(result.ncf))+"/mo" : ""}, this deal is below the threshold you should be targeting. Consider negotiating the price down or finding higher rent potential.`
+              }
+            </div>
+          </div>
+
+          <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10, marginTop:10 }}>
+            {[
+              {l:"Gross yield",       v:result.grossYield+"%",           g:parseFloat(result.grossYield)>=6},
+              {l:"Monthly mortgage",  v:gbp(result.monthlyInterest)+"/mo",g:false},
+              {l:"Net cash flow",     v:(result.ncf>=0?"":"-")+gbp(Math.abs(result.ncf))+"/mo", g:result.ncf>0},
+              {l:"Total cash in",     v:gbp(result.totalIn),             g:false},
+              {l:"Cash-on-cash ROI",  v:result.cashROI+"%",              g:parseFloat(result.cashROI)>=8},
+              {l:"Mortgage",          v:gbp(result.mortgage),            g:false},
+            ].map((k,i)=>(
+              <div key={i} style={{ background:"#fff", borderRadius:14, border:"1px solid #e2e8f0", padding:12 }}>
+                <div style={{ fontSize:11, color:S.gray, marginBottom:3 }}>{k.l}</div>
+                <div style={{ fontSize:16, fontWeight:700, color:k.g?S.green:S.dark }}>{k.v}</div>
+              </div>
+            ))}
+          </div>
+          <div style={{ fontSize:11, color:S.gray, marginTop:8, lineHeight:1.6 }}>
+            Note: Stamp duty for additional properties is 5% on the full purchase price (as of 2024). Remember to factor in management time, void periods and maintenance reserves.
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function AIStrategyPage({tenants, jobs, rp, outgoings}) {
+  const [res, setRes] = useState("");
+  const [load, setLoad] = useState(false);
+  const [tab, setTab] = useState("");
+  const inc = tenants.reduce(function(s,t){return s+t.rn;}, 0);
+  const mtg = MTGS.filter(function(m){return m.l !== "70 Coal Hill Lane (Home)";}).reduce(function(s,m){return s+m.m;}, 0);
+  const eq = PROPS.reduce(function(s,p){return s+(p.v-p.mtg);}, 0);
+  const ms = mKey(CYR, CMO);
+  const jc = jobs.filter(function(j){return j.status==="done"&&j.date&&j.date.startsWith(ms);}).reduce(function(s,j){return s+(j.cost||0);}, 0);
+  const oc = PROPS.reduce(function(s,p){return s+(outgoings[p.id+"-"+ms]||[]).reduce(function(x,o){return x+(o.amount||0);},0);}, 0);
+  const netInc = inc - mtg - jc - oc;
+  const base = "Leeds landlord: 9 units, 2 HMO + 7 BTL, target 50 by 2036. Rent " + gbp(inc) + "/mo, net " + gbp(netInc) + "/mo, equity " + gbp(eq) + ".";
+  const prompts = {
+    strategy: base + " Give 4 specific ways to scale faster. Be direct.",
+    finance: base + " Best 3 finance options for next deal. Which suits him?",
+    next: base + " BTL or HMO next? Specific Leeds recommendation."
+  };
+  function go(t) {
+    var k = localStorage.getItem("ash-api-key") || "";
+    if (!k) { setRes("Save your API key in More > AI Letter Writer first."); setTab(t); return; }
+    setTab(t); setLoad(true); setRes("");
+    fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: {"Content-Type":"application/json","x-api-key":k,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},
+      body: JSON.stringify({model:"claude-sonnet-4-20250514", max_tokens:350, messages:[{role:"user",content:prompts[t]}]})
+    }).then(function(r){return r.json();}).then(function(d){
+      setRes(d.content ? d.content.map(function(c){return c.text||"";}).join("") : "Error.");
+      setLoad(false);
+    }).catch(function(){setRes("Connection error."); setLoad(false);});
+  }
+  return (
+    <div>
+      <div style={{background:"#1e293b", borderRadius:13, padding:12, marginBottom:12, display:"grid", gridTemplateColumns:"1fr 1fr 1fr", gap:8, color:"#fff"}}>
+        <div style={{background:"rgba(255,255,255,0.08)", borderRadius:9, padding:9, textAlign:"center"}}>
+          <div style={{fontSize:10, color:"#64748b"}}>Rent</div>
+          <div style={{fontSize:12, fontWeight:700, color:"#4ade80"}}>{gbp(inc)}/mo</div>
+        </div>
+        <div style={{background:"rgba(255,255,255,0.08)", borderRadius:9, padding:9, textAlign:"center"}}>
+          <div style={{fontSize:10, color:"#64748b"}}>Net</div>
+          <div style={{fontSize:12, fontWeight:700, color:"#4ade80"}}>{gbp(netInc)}/mo</div>
+        </div>
+        <div style={{background:"rgba(255,255,255,0.08)", borderRadius:9, padding:9, textAlign:"center"}}>
+          <div style={{fontSize:10, color:"#64748b"}}>Equity</div>
+          <div style={{fontSize:12, fontWeight:700, color:"#4ade80"}}>{gbp(eq)}</div>
+        </div>
+      </div>
+      <div style={{display:"grid", gridTemplateColumns:"1fr 1fr 1fr", gap:8, marginBottom:12}}>
+        <button onClick={function(){go("strategy");}} style={{padding:"10px 4px", borderRadius:10, border:"none", cursor:"pointer", fontFamily:"system-ui", fontWeight:600, fontSize:12, background:tab==="strategy"&&res?"#1e293b":S.light, color:tab==="strategy"&&res?"#fff":S.dark}}>
+          {load&&tab==="strategy"?"...":"Growth"}
+        </button>
+        <button onClick={function(){go("finance");}} style={{padding:"10px 4px", borderRadius:10, border:"none", cursor:"pointer", fontFamily:"system-ui", fontWeight:600, fontSize:12, background:tab==="finance"&&res?"#1e293b":S.light, color:tab==="finance"&&res?"#fff":S.dark}}>
+          {load&&tab==="finance"?"...":"Finance"}
+        </button>
+        <button onClick={function(){go("next");}} style={{padding:"10px 4px", borderRadius:10, border:"none", cursor:"pointer", fontFamily:"system-ui", fontWeight:600, fontSize:12, background:tab==="next"&&res?"#1e293b":S.light, color:tab==="next"&&res?"#fff":S.dark}}>
+          {load&&tab==="next"?"...":"Next Buy"}
+        </button>
+      </div>
+      {load && <div style={{textAlign:"center", padding:"24px", color:S.gray}}>Analysing your portfolio...</div>}
+      {res && !load && (
+        <div style={{background:"#fff", borderRadius:13, border:"1px solid #e2e8f0", padding:14}}>
+          <div style={{fontSize:13, lineHeight:1.8, whiteSpace:"pre-wrap"}}>{res}</div>
+        </div>
+      )}
+      {!res && !load && (
+        <div style={{textAlign:"center", padding:"24px", color:S.gray, fontSize:12}}>
+          Tap a button above for AI advice based on your real numbers.
+          <div style={{marginTop:6, color:S.amber}}>Requires API key from console.anthropic.com</div>
+        </div>
+      )}
+    </div>
+  );
+}
+// ── VOIDS ─────────────────────────────────────────────────────────────────────
+function VoidsPage({ tenants }) {
+  const vacant = PROPS.filter(p => p.vc && tenants.filter(t => t.pid === p.id).length === 0);
+  if (!vacant.length) return <div style={{ textAlign:"center", padding:"50px 0", color:S.gray }}><div style={{ fontSize:36, marginBottom:10 }}>🏢</div><div>No vacant properties</div></div>;
+  return (
+    <div>
+      {vacant.map(p => (
+        <div key={p.id} style={{ ...card, ...cardPad, background:"#fff5f5", borderColor:"#fecaca" }}>
+          <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:10 }}>
+            <div>
+              <div style={{ fontSize:13, fontWeight:600, color:"#991b1b" }}>{p.n}, {p.town}</div>
+              <div style={{ fontSize:11, color:"#b91c1c" }}>Not yet let</div>
+            </div>
+            <Badge color="red">Vacant</Badge>
+          </div>
+          <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:8, marginBottom:10 }}>
+            <div style={{ background:"#fff", borderRadius:10, padding:10 }}><div style={{ fontSize:11, color:S.gray }}>Est. rent</div><div style={{ fontSize:16, fontWeight:700 }}>{gbp(825)}/mo</div></div>
+            <div style={{ background:"#fff", borderRadius:10, padding:10 }}><div style={{ fontSize:11, color:S.gray }}>Mortgage</div><div style={{ fontSize:16, fontWeight:700, color:S.red }}>{gbp(p.mm)}/mo</div></div>
+          </div>
+          <div style={{ fontSize:11, fontWeight:600, color:"#991b1b" }}>Advertise now — every vacant month costs approx {gbp(825)} in missed rent.</div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+  </script>
+</body>
+</html>
