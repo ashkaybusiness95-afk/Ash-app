@@ -453,32 +453,69 @@ function getAlerts(comp) {
 }
 
 // ── DASHBOARD ─────────────────────────────────────────────────────────────────
-function GoalTracker({tenants,savings,setSavings}){
-  const [ed,setEd]=useState(false),[sv,setSv]=useState(String(savings||0));
-  const inc=tenants.reduce(function(s,t){return s+t.rn;},0),ipct=Math.min(100,Math.round(inc/24500*100));
-  const pot=savings||0,ppct=Math.min(100,Math.round(pot/40000*100));
-  const net=Math.max(0,inc-MTGS.reduce(function(s,m){return s+m.m;},0)),mths=net>0?Math.ceil(Math.max(0,40000-pot)/net):"?";
-  const save=()=>{if(setSavings)setSavings(parseFloat(sv)||0);setEd(false);};
+function GoalTracker({tenants, savings, setSavings}) {
+  const [ed, setEd] = useState(false);
+  const [sv, setSv] = useState(String(savings || 0));
+  const inc = tenants.reduce(function(s, t) { return s + t.rn; }, 0);
+  const ipct = Math.min(100, Math.round(inc / 24500 * 100));
+  const pot = savings || 0;
+  const ppct = Math.min(100, Math.round(pot / 40000 * 100));
+  const net = Math.max(0, inc - MTGS.reduce(function(s, m) { return s + m.m; }, 0));
+  const mths = net > 0 ? Math.ceil(Math.max(0, 40000 - pot) / net) : "?";
+  const doSave = function() { if (setSavings) setSavings(parseFloat(sv) || 0); setEd(false); };
   return (
-    <div style={{background:"linear-gradient(135deg,#1e293b,#0f172a)",borderRadius:16,padding:16,marginBottom:10,color:"#fff"}}>
-      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
+    <div style={{background:"linear-gradient(135deg,#1e293b,#0f172a)", borderRadius:16, padding:16, marginBottom:10, color:"#fff"}}>
+      <div style={{display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:10}}>
         <div>
-          <div style={{fontSize:10,color:"#64748b",fontWeight:600,marginBottom:3}}>MISSION: 50 UNITS BY FEB 2036</div>
-          <div style={{fontSize:22,fontWeight:700}}>9 <span style={{color:"#64748b",fontSize:13}}>of 50</span></div>
-          <div style={{fontSize:10,color:"#4ade80"}}>Sale pending &#8212; 11 soon</div>
+          <div style={{fontSize:10, color:"#64748b", fontWeight:600, marginBottom:3}}>MISSION: 50 UNITS BY FEB 2036</div>
+          <div style={{fontSize:22, fontWeight:700}}>9 <span style={{color:"#64748b", fontSize:13}}>of 50</span></div>
+          <div style={{fontSize:10, color:"#4ade80"}}>Sale pending</div>
         </div>
         <div style={{textAlign:"right"}}>
-          <div style={{fontSize:10,color:"#64748b"}}>Rent income</div>
-          <div style={{fontSize:17,fontWeight:700,color:"#4ade80"}}>{gbp(inc)}</div>
-          <div style={{fontSize:10,color:"#64748b"}}>target {gbp(24500)}</div>
+          <div style={{fontSize:10, color:"#64748b"}}>Rent income</div>
+          <div style={{fontSize:17, fontWeight:700, color:"#4ade80"}}>{gbp(inc)}</div>
+          <div style={{fontSize:10, color:"#64748b"}}>target {gbp(24500)}</div>
         </div>
       </div>
-      <div style={{marginBottom:7}}><div style={{display:"flex",justifyContent:"space-between",fontSize:10,color:"#64748b",marginBottom:2}}><span>Units 9/50</span><span>18%</span></div><div style={{height:4,background:"#334155",borderRadius:99,overflow:"hidden"}}><div style={{height:"100%",background:"#3b82f6",width:"18%"}} /></div></div>
-      <div style={{marginBottom:10}}><div style={{display:"flex",justifyContent:"space-between",fontSize:10,color:"#64748b",marginBottom:2}}><span>Income {ipct}%</span><span>{ipct}%</span></div><div style={{height:4,background:"#334155",borderRadius:99,overflow:"hidden"}}><div style={{height:"100%",background:"#22c55e",width:ipct+"%"}} /></div></div>
-      <div style={{background:"rgba(255,255,255,0.07)",borderRadius:10,padding:10}}>
-        <div style={{display:"flex",justifyContent:"space-between",fontSize:10,color:"#94a3b8",marginBottom:5}}><span style={{fontWeight:600}}>Deposit pot</span><span>~{mths} months</span></div>
-        {ed?(<div style={{display:"flex",gap:6,marginBottom:6}}><input autoFocus type="number" value={sv} onChange={e=>setSv(e.target.value)} onKeyDown={e=>e.key==="Enter"&&save()} style={{flex:1,background:"#0f172a",border:"1px solid #334155",borderRadius:7,padding:"5px 8px",color:"#fff",fontSize:13,fontFamily:"system-ui",outline:"none"}} /><button onClick={save} style={{background:"#22c55e",color:"#fff",border:"none",borderRadius:7,padding:"5px 12px",fontWeight:700,cursor:"pointer",fontFamily:"system-ui"}}>Save</button><button onClick={()=>setEd(false)} style={{background:"#334155",color:"#94a3b8",border:"none",borderRadius:7,padding:"5px 8px",cursor:"pointer",fontFamily:"system-ui"}}>x</button></div>):(<div onClick={()=>setEd(true)} style={{cursor:"pointer",marginBottom:5}}><span style={{fontSize:16,fontWeight:700}}>{gbp(pot)}</span><span style={{fontSize:10,color:"#64748b"}}> of &#163;40,000 &#8212; tap to update</span></div>)}
-        <div style={{height:5,background:"#334155",borderRadius:99,overflow:"hidden"}}><div style={{height:"100%",background:"linear-gradient(90deg,#f59e0b,#22c55e)",width:ppct+"%",transition:"width .4s"}} /></div>
+      <div style={{marginBottom:7}}>
+        <div style={{display:"flex", justifyContent:"space-between", fontSize:10, color:"#64748b", marginBottom:2}}>
+          <span>Units 9/50</span><span>18%</span>
+        </div>
+        <div style={{height:4, background:"#334155", borderRadius:99, overflow:"hidden"}}>
+          <div style={{height:"100%", background:"#3b82f6", width:"18%"}} />
+        </div>
+      </div>
+      <div style={{marginBottom:10}}>
+        <div style={{display:"flex", justifyContent:"space-between", fontSize:10, color:"#64748b", marginBottom:2}}>
+          <span>Income {ipct}%</span><span>{ipct}%</span>
+        </div>
+        <div style={{height:4, background:"#334155", borderRadius:99, overflow:"hidden"}}>
+          <div style={{height:"100%", background:"#22c55e", width:ipct+"%"}} />
+        </div>
+      </div>
+      <div style={{background:"rgba(255,255,255,0.07)", borderRadius:10, padding:10}}>
+        <div style={{display:"flex", justifyContent:"space-between", fontSize:10, color:"#94a3b8", marginBottom:5}}>
+          <span style={{fontWeight:600}}>Deposit pot</span>
+          <span>~{mths} months</span>
+        </div>
+        {ed ? (
+          <div style={{display:"flex", gap:6, marginBottom:6}}>
+            <input autoFocus type="number" value={sv}
+              onChange={function(e){setSv(e.target.value);}}
+              onKeyDown={function(e){if(e.key==="Enter")doSave();}}
+              style={{flex:1, background:"#0f172a", border:"1px solid #334155", borderRadius:7, padding:"5px 8px", color:"#fff", fontSize:13, fontFamily:"system-ui", outline:"none"}} />
+            <button onClick={doSave} style={{background:"#22c55e", color:"#fff", border:"none", borderRadius:7, padding:"5px 12px", fontWeight:700, cursor:"pointer", fontFamily:"system-ui"}}>Save</button>
+            <button onClick={function(){setEd(false);}} style={{background:"#334155", color:"#94a3b8", border:"none", borderRadius:7, padding:"5px 8px", cursor:"pointer", fontFamily:"system-ui"}}>x</button>
+          </div>
+        ) : (
+          <div onClick={function(){setEd(true);}} style={{cursor:"pointer", marginBottom:5}}>
+            <span style={{fontSize:16, fontWeight:700}}>{gbp(pot)}</span>
+            <span style={{fontSize:10, color:"#64748b"}}> of {gbp(40000)} - tap to update</span>
+          </div>
+        )}
+        <div style={{height:5, background:"#334155", borderRadius:99, overflow:"hidden"}}>
+          <div style={{height:"100%", background:"linear-gradient(90deg,#f59e0b,#22c55e)", width:ppct+"%"}} />
+        </div>
       </div>
     </div>
   );
@@ -1833,9 +1870,32 @@ function RefinancePage() {
   );
 }
 
-function GrowthProjector({tv}){
-  const [gr,setGr]=useState(5);
-  return (<div style={{background:"#fff",borderRadius:14,border:"1px solid #e2e8f0",padding:14,marginBottom:12}}><div style={{fontSize:13,fontWeight:600,marginBottom:8}}>Portfolio Growth Projector</div><div style={{display:"flex",alignItems:"center",gap:10,marginBottom:10}}><input type="range" min="1" max="10" step="0.5" value={gr} onChange={e=>setGr(parseFloat(e.target.value))} style={{flex:1}} /><span style={{fontSize:16,fontWeight:700,color:"#16a34a",minWidth:38}}>{gr}%</span></div><div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:8}}>{[1,3,5,10].map(yr=>{const p=Math.round(tv*Math.pow(1+gr/100,yr));return(<div key={yr} style={{background:"#f0fdf4",borderRadius:10,padding:10,textAlign:"center"}}><div style={{fontSize:10,color:"#94a3b8"}}>{yr}yr</div><div style={{fontSize:13,fontWeight:700,color:"#16a34a"}}>&#163;{(p/1000).toFixed(0)}k</div><div style={{fontSize:10,color:"#15803d"}}>+&#163;{((p-tv)/1000).toFixed(0)}k</div></div>);})}</div></div>);
+function GrowthProjector({tv}) {
+  const [gr, setGr] = useState(5);
+  const years = [1, 3, 5, 10];
+  return (
+    <div style={{background:"#fff", borderRadius:14, border:"1px solid #e2e8f0", padding:14, marginBottom:12}}>
+      <div style={{fontSize:13, fontWeight:600, marginBottom:8}}>Portfolio Growth Projector</div>
+      <div style={{display:"flex", alignItems:"center", gap:10, marginBottom:10}}>
+        <input type="range" min="1" max="10" step="0.5" value={gr}
+          onChange={function(e){setGr(parseFloat(e.target.value));}}
+          style={{flex:1}} />
+        <span style={{fontSize:16, fontWeight:700, color:"#16a34a", minWidth:38}}>{gr}%</span>
+      </div>
+      <div style={{display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:8}}>
+        {years.map(function(yr) {
+          var p = Math.round(tv * Math.pow(1 + gr/100, yr));
+          return (
+            <div key={yr} style={{background:"#f0fdf4", borderRadius:10, padding:10, textAlign:"center"}}>
+              <div style={{fontSize:10, color:"#94a3b8"}}>{yr}yr</div>
+              <div style={{fontSize:13, fontWeight:700, color:"#16a34a"}}>{gbp(p)}</div>
+              <div style={{fontSize:10, color:"#15803d"}}>+{gbp(p-tv)}</div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
 }
 // ── PORTFOLIO GROWTH ──────────────────────────────────────────────────────────
 function GrowthPage({ tenants, propPurchase, setPropPurchase }) {
@@ -2634,20 +2694,77 @@ function DealCheckPage({ wide }) {
   );
 }
 
-function AIStrategyPage({tenants,jobs,rp,outgoings}){
-  const [res,setRes]=useState(""),[load,setLoad]=useState(false),[tab,setTab]=useState("");
-  const inc=tenants.reduce((s,t)=>s+t.rn,0),mtg=MTGS.filter(m=>m.l!=="70 Coal Hill Lane (Home)").reduce((s,m)=>s+m.m,0),eq=PROPS.reduce((s,p)=>s+(p.v-p.mtg),0);
-  const ms=mKey(CYR,CMO),jc=jobs.filter(j=>j.status==="done"&&j.date&&j.date.startsWith(ms)).reduce((s,j)=>s+(j.cost||0),0),oc=PROPS.reduce((s,p)=>s+(outgoings[p.id+"-"+ms]||[]).reduce((x,o)=>x+(o.amount||0),0),0);
-  const base="Leeds landlord: 9 units, 2HMO+7BTL, target 50. Rent \u00a3"+inc+"/mo, net \u00a3"+(inc-mtg-jc-oc)+"/mo, equity \u00a3"+eq+".";
-  const go=async t=>{
-    const k=localStorage.getItem("ash-api-key")||"";
-    if(!k){setRes("Save API key in More > AI Letter Writer first.");setTab(t);return;}
-    setTab(t);setLoad(true);setRes("");
-    const ps={strategy:base+" 4 ways to scale faster.",finance:base+" Best 3 finance options.",next:base+" BTL or HMO next? Leeds specific."};
-    try{const r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json","x-api-key":k,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:350,messages:[{role:"user",content:ps[t]}]})});const d=await r.json();setRes(d.content?.map(c=>c.text||"").join("")||"Error.");}catch(e){setRes("Error.");}
-    setLoad(false);
+function AIStrategyPage({tenants, jobs, rp, outgoings}) {
+  const [res, setRes] = useState("");
+  const [load, setLoad] = useState(false);
+  const [tab, setTab] = useState("");
+  const inc = tenants.reduce(function(s,t){return s+t.rn;}, 0);
+  const mtg = MTGS.filter(function(m){return m.l !== "70 Coal Hill Lane (Home)";}).reduce(function(s,m){return s+m.m;}, 0);
+  const eq = PROPS.reduce(function(s,p){return s+(p.v-p.mtg);}, 0);
+  const ms = mKey(CYR, CMO);
+  const jc = jobs.filter(function(j){return j.status==="done"&&j.date&&j.date.startsWith(ms);}).reduce(function(s,j){return s+(j.cost||0);}, 0);
+  const oc = PROPS.reduce(function(s,p){return s+(outgoings[p.id+"-"+ms]||[]).reduce(function(x,o){return x+(o.amount||0);},0);}, 0);
+  const netInc = inc - mtg - jc - oc;
+  const base = "Leeds landlord: 9 units, 2 HMO + 7 BTL, target 50 by 2036. Rent " + gbp(inc) + "/mo, net " + gbp(netInc) + "/mo, equity " + gbp(eq) + ".";
+  const prompts = {
+    strategy: base + " Give 4 specific ways to scale faster. Be direct.",
+    finance: base + " Best 3 finance options for next deal. Which suits him?",
+    next: base + " BTL or HMO next? Specific Leeds recommendation."
   };
-  return (<div><div style={{background:"#1e293b",borderRadius:13,padding:12,marginBottom:12,display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:8,color:"#fff"}}>{[["Rent",gbp(inc)],["Net",gbp(inc-mtg-jc-oc)],["Equity",gbp(eq)]].map(([l,v])=>(<div key={l} style={{background:"rgba(255,255,255,0.08)",borderRadius:9,padding:9,textAlign:"center"}}><div style={{fontSize:10,color:"#64748b"}}>{l}</div><div style={{fontSize:12,fontWeight:700,color:"#4ade80"}}>{v}</div></div>))}</div><div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:8,marginBottom:12}}>{[["strategy","Growth"],["finance","Finance"],["next","Next Buy"]].map(([t,l])=>(<button key={t} onClick={()=>go(t)} style={{padding:"10px 4px",borderRadius:10,border:"none",cursor:"pointer",fontFamily:"system-ui",fontWeight:600,fontSize:12,background:tab===t&&res?"#1e293b":S.light,color:tab===t&&res?"#fff":S.dark}}>{load&&tab===t?"...":l}</button>))}</div>{load&&<div style={{textAlign:"center",padding:"24px",color:S.gray}}>Analysing...</div>}{res&&!load&&<div style={{background:"#fff",borderRadius:13,border:"1px solid #e2e8f0",padding:14}}><div style={{fontSize:13,lineHeight:1.8,whiteSpace:"pre-wrap"}}>{res}</div></div>}{!res&&!load&&<div style={{textAlign:"center",padding:"24px",color:S.gray,fontSize:12}}>Tap a button. Needs API key from console.anthropic.com</div>}</div>);
+  function go(t) {
+    var k = localStorage.getItem("ash-api-key") || "";
+    if (!k) { setRes("Save your API key in More > AI Letter Writer first."); setTab(t); return; }
+    setTab(t); setLoad(true); setRes("");
+    fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: {"Content-Type":"application/json","x-api-key":k,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},
+      body: JSON.stringify({model:"claude-sonnet-4-20250514", max_tokens:350, messages:[{role:"user",content:prompts[t]}]})
+    }).then(function(r){return r.json();}).then(function(d){
+      setRes(d.content ? d.content.map(function(c){return c.text||"";}).join("") : "Error.");
+      setLoad(false);
+    }).catch(function(){setRes("Connection error."); setLoad(false);});
+  }
+  return (
+    <div>
+      <div style={{background:"#1e293b", borderRadius:13, padding:12, marginBottom:12, display:"grid", gridTemplateColumns:"1fr 1fr 1fr", gap:8, color:"#fff"}}>
+        <div style={{background:"rgba(255,255,255,0.08)", borderRadius:9, padding:9, textAlign:"center"}}>
+          <div style={{fontSize:10, color:"#64748b"}}>Rent</div>
+          <div style={{fontSize:12, fontWeight:700, color:"#4ade80"}}>{gbp(inc)}/mo</div>
+        </div>
+        <div style={{background:"rgba(255,255,255,0.08)", borderRadius:9, padding:9, textAlign:"center"}}>
+          <div style={{fontSize:10, color:"#64748b"}}>Net</div>
+          <div style={{fontSize:12, fontWeight:700, color:"#4ade80"}}>{gbp(netInc)}/mo</div>
+        </div>
+        <div style={{background:"rgba(255,255,255,0.08)", borderRadius:9, padding:9, textAlign:"center"}}>
+          <div style={{fontSize:10, color:"#64748b"}}>Equity</div>
+          <div style={{fontSize:12, fontWeight:700, color:"#4ade80"}}>{gbp(eq)}</div>
+        </div>
+      </div>
+      <div style={{display:"grid", gridTemplateColumns:"1fr 1fr 1fr", gap:8, marginBottom:12}}>
+        <button onClick={function(){go("strategy");}} style={{padding:"10px 4px", borderRadius:10, border:"none", cursor:"pointer", fontFamily:"system-ui", fontWeight:600, fontSize:12, background:tab==="strategy"&&res?"#1e293b":S.light, color:tab==="strategy"&&res?"#fff":S.dark}}>
+          {load&&tab==="strategy"?"...":"Growth"}
+        </button>
+        <button onClick={function(){go("finance");}} style={{padding:"10px 4px", borderRadius:10, border:"none", cursor:"pointer", fontFamily:"system-ui", fontWeight:600, fontSize:12, background:tab==="finance"&&res?"#1e293b":S.light, color:tab==="finance"&&res?"#fff":S.dark}}>
+          {load&&tab==="finance"?"...":"Finance"}
+        </button>
+        <button onClick={function(){go("next");}} style={{padding:"10px 4px", borderRadius:10, border:"none", cursor:"pointer", fontFamily:"system-ui", fontWeight:600, fontSize:12, background:tab==="next"&&res?"#1e293b":S.light, color:tab==="next"&&res?"#fff":S.dark}}>
+          {load&&tab==="next"?"...":"Next Buy"}
+        </button>
+      </div>
+      {load && <div style={{textAlign:"center", padding:"24px", color:S.gray}}>Analysing your portfolio...</div>}
+      {res && !load && (
+        <div style={{background:"#fff", borderRadius:13, border:"1px solid #e2e8f0", padding:14}}>
+          <div style={{fontSize:13, lineHeight:1.8, whiteSpace:"pre-wrap"}}>{res}</div>
+        </div>
+      )}
+      {!res && !load && (
+        <div style={{textAlign:"center", padding:"24px", color:S.gray, fontSize:12}}>
+          Tap a button above for AI advice based on your real numbers.
+          <div style={{marginTop:6, color:S.amber}}>Requires API key from console.anthropic.com</div>
+        </div>
+      )}
+    </div>
+  );
 }
 // ── VOIDS ─────────────────────────────────────────────────────────────────────
 function VoidsPage({ tenants }) {
