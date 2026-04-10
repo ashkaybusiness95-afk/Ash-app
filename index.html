@@ -133,7 +133,6 @@ const sx   = d => d >= 11 && d <= 13 ? "th" : ["th","st","nd","rd"][d % 10 <= 3 
 const mKey = (y, m) => y + "-" + String(m + 1).padStart(2, "0");
 const QUOTE = QUOTES[Math.floor((now - new Date(CYR, 0, 0)) / 86400000) % QUOTES.length];
 
-// ── STYLES ────────────────────────────────────────────────────────────────────
 const S = {
   dark:"#1e293b", mid:"#475569", gray:"#94a3b8", light:"#f1f5f9",
   green:"#16a34a", red:"#dc2626", amber:"#d97706", blue:"#2563eb",
@@ -161,7 +160,6 @@ function Sel({ children, style={}, ...p }) {
   return <select {...p} style={{ width:"100%", border:"1px solid #e2e8f0", borderRadius:10, padding:"10px 12px", fontSize:14, fontFamily:"system-ui", background:"#fff", color:S.dark, outline:"none", marginBottom:8, display:"block", ...style }}>{children}</select>;
 }
 
-// ── LOGIN ─────────────────────────────────────────────────────────────────────
 function LoginScreen({ onLogin }) {
   const [pw, setPw] = useState("");
   const [err, setErr] = useState(false);
@@ -189,7 +187,6 @@ function LoginScreen({ onLogin }) {
   );
 }
 
-// ── APP ───────────────────────────────────────────────────────────────────────
 function App() {
   const [loggedIn, setLoggedIn] = useState(() => {
     try {
@@ -326,14 +323,14 @@ function App() {
             {tab === "more"  && !more && <MoreMenu {...bag} setMore={setMore} data={data} />}
             {tab === "more"  && more === "outgoings"   && <OutgoingsPage {...bag} />}
             {tab === "more"  && more === "compliance"  && <CompPage {...bag} />}
-            {tab === "more"  && more === "tenants"     && <TenantsPage {...bag} />} />} />}
+            {tab === "more"  && more === "tenants"     && <TenantsPage {...bag} />}
             {tab === "more"  && more === "ailetters"   && <AILettersPage {...bag} />}
             {tab === "more"  && more === "aistrategy"  && <AIStrategyPage {...bag} />}
             {tab === "more"  && more === "dealcheck"   && <DealCheckPage {...bag} />}
             {tab === "more"  && more === "financials"  && <FinPage {...bag} />}
             {tab === "more"  && more === "tax"         && <TaxPage {...bag} />}
             {tab === "more"  && more === "timeline"    && <TimelinePage {...bag} />}
-            {tab === "more"  && more === "rentplanner" && <RentPlannerPage {...bag} />} />}
+            {tab === "more"  && more === "rentplanner" && <RentPlannerPage {...bag} />}
             {tab === "more"  && more === "notes"       && <NotesPage {...bag} />}
             {tab === "more"  && more === "refinance"   && <RefinancePage />}
             {tab === "more"  && more === "mtginterest" && <MtgInterestPage {...bag} />}
@@ -368,7 +365,6 @@ function App() {
   );
 }
 
-// ── WIDE LAYOUT ───────────────────────────────────────────────────────────────
 function WideLayout({ tab, setTab, more, setMore, bag, alerts, paidNow, urgent }) {
   const navItems = [
     {id:"dash",icon:"🏠",label:"Home"},
@@ -410,14 +406,14 @@ function WideLayout({ tab, setTab, more, setMore, bag, alerts, paidNow, urgent }
         {tab === "more"  && !more && <MoreMenu {...bag} setMore={setMore} data={bag} />}
         {tab === "more"  && more === "outgoings"   && <OutgoingsPage {...bag} />}
         {tab === "more"  && more === "compliance"  && <CompPage {...bag} />}
-        {tab === "more"  && more === "tenants"     && <TenantsPage {...bag} />} />} />}
+        {tab === "more"  && more === "tenants"     && <TenantsPage {...bag} />}
         {tab === "more"  && more === "ailetters"   && <AILettersPage {...bag} />}
-            {tab === "more"  && more === "aistrategy"  && <AIStrategyPage {...bag} />}
+        {tab === "more"  && more === "aistrategy"  && <AIStrategyPage {...bag} />}
         {tab === "more"  && more === "dealcheck"   && <DealCheckPage {...bag} />}
         {tab === "more"  && more === "financials"  && <FinPage {...bag} />}
         {tab === "more"  && more === "tax"         && <TaxPage {...bag} />}
         {tab === "more"  && more === "timeline"    && <TimelinePage {...bag} />}
-        {tab === "more"  && more === "rentplanner" && <RentPlannerPage {...bag} />} />}
+        {tab === "more"  && more === "rentplanner" && <RentPlannerPage {...bag} />}
         {tab === "more"  && more === "notes"       && <NotesPage {...bag} />}
         {tab === "more"  && more === "refinance"   && <RefinancePage />}
         {tab === "more"  && more === "mtginterest" && <MtgInterestPage {...bag} />}
@@ -430,7 +426,6 @@ function WideLayout({ tab, setTab, more, setMore, bag, alerts, paidNow, urgent }
   );
 }
 
-// ── ALERTS ────────────────────────────────────────────────────────────────────
 function getAlerts(comp) {
   const a = [];
   MTGS.forEach(m => {
@@ -452,7 +447,6 @@ function getAlerts(comp) {
   return a;
 }
 
-// ── DASHBOARD ─────────────────────────────────────────────────────────────────
 function GoalTracker({tenants, savings, setSavings}) {
   const [ed, setEd] = useState(false);
   const [sv, setSv] = useState(String(savings || 0));
@@ -468,7 +462,7 @@ function GoalTracker({tenants, savings, setSavings}) {
       <div style={{display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:10}}>
         <div>
           <div style={{fontSize:10, color:"#64748b", fontWeight:600, marginBottom:3}}>MISSION: 50 UNITS BY FEB 2036</div>
-          <div style={{fontSize:22, fontWeight:700}}>9 <span style={{color:"#64748b", fontSize:13}}>of 50</span></div>
+          <div style={{fontSize:22, fontWeight:700}}>{PROPS.length} <span style={{color:"#64748b", fontSize:13}}>of 50</span></div>
           <div style={{fontSize:10, color:"#4ade80"}}>Sale pending</div>
         </div>
         <div style={{textAlign:"right"}}>
@@ -479,10 +473,10 @@ function GoalTracker({tenants, savings, setSavings}) {
       </div>
       <div style={{marginBottom:7}}>
         <div style={{display:"flex", justifyContent:"space-between", fontSize:10, color:"#64748b", marginBottom:2}}>
-          <span>Units 9/50</span><span>18%</span>
+          <span>Units {PROPS.length}/50</span><span>{Math.round(PROPS.length/50*100)}%</span>
         </div>
         <div style={{height:4, background:"#334155", borderRadius:99, overflow:"hidden"}}>
-          <div style={{height:"100%", background:"#3b82f6", width:"18%"}} />
+          <div style={{height:"100%", background:"#3b82f6", width:Math.round(PROPS.length/50*100)+"%"}} />
         </div>
       </div>
       <div style={{marginBottom:10}}>
@@ -661,7 +655,7 @@ function DashPage({ alerts, paidNow, tenants, rp, jobs, comp, outgoings, wide, s
 
   return (
     <div>
-      {/* Smart action list */}
+
       {actions.length > 0 && (
         <div style={{ ...card, marginBottom:10 }}>
           <div style={{ padding:"11px 14px", background:S.dark, borderRadius:"15px 15px 0 0", display:"flex", justifyContent:"space-between", alignItems:"center" }}>
@@ -734,7 +728,6 @@ function DashPage({ alerts, paidNow, tenants, rp, jobs, comp, outgoings, wide, s
   );
 }
 
-// ── RENT ──────────────────────────────────────────────────────────────────────
 function RentPage({ tenants, rp, toggleRent, expMap, toggleExp, addTenant }) {
   const [selYr, setSelYr] = useState(CYR);
   const [selMo, setSelMo] = useState(CMO);
@@ -877,7 +870,6 @@ function RentPage({ tenants, rp, toggleRent, expMap, toggleExp, addTenant }) {
   );
 }
 
-// ── JOBS ──────────────────────────────────────────────────────────────────────
 function JobsPage({ jobs, addJob, updateJob, deleteJob, wide }) {
   const [show, setShow]   = useState(false);
   const [edit, setEdit]   = useState(null);
@@ -989,7 +981,6 @@ function JobsPage({ jobs, addJob, updateJob, deleteJob, wide }) {
   );
 }
 
-// ── MORTGAGES ─────────────────────────────────────────────────────────────────
 function MtgsPage() {
   const sorted = [...MTGS].sort((a, b) => (du(a.e) || 9999) - (du(b.e) || 9999));
   const mSt = e => {
@@ -1041,7 +1032,6 @@ function MtgsPage() {
   );
 }
 
-// ── MORE MENU ─────────────────────────────────────────────────────────────────
 function MoreMenu({ tenants, contractors, deals, setMore, data }) {
   const vc = PROPS.filter(p => p.vc && tenants.filter(t => t.pid === p.id).length === 0).length;
 
@@ -1058,7 +1048,7 @@ function MoreMenu({ tenants, contractors, deals, setMore, data }) {
       {[
         {id:"outgoings",   icon:"💸", label:"Outgoings",        sub:"Bills & expenses per property"},
         {id:"compliance",  icon:"🛡", label:"Compliance",        sub:"Gas, EICR, EPC, HMO licence"},
-        {id:"tenants",     icon:"👥", label:"Tenants",           sub:tenants.length+" tenants · 8 properties"},
+        {id:"tenants",     icon:"👥", label:"Tenants",           sub:tenants.length+" tenants · "+PROPS.length+" properties"},
         {id:"financials",  icon:"📊", label:"Financials",        sub:"Monthly & per-property breakdown"},
         {id:"tax",         icon:"🧾", label:"Tax Summary",       sub:"Annual P&L for self assessment"},
         {id:"ailetters",   icon:"✉️", label:"AI Letter Writer",   sub:"Draft personalised letters & messages"},
@@ -1092,7 +1082,6 @@ function MoreMenu({ tenants, contractors, deals, setMore, data }) {
   );
 }
 
-// ── COMPLIANCE ────────────────────────────────────────────────────────────────
 function CompPage({ comp, updateComp, wide }) {
   const urg = comp.filter(c => { const d = du(c.next); return c.next && d <= 60; }).length;
   const unk = comp.filter(c => !c.next).length;
@@ -1161,7 +1150,6 @@ function CompPage({ comp, updateComp, wide }) {
   );
 }
 
-// ── TENANTS ───────────────────────────────────────────────────────────────────
 function TenantsPage({ tenants, updateTenant, notes, setNote, wide }) {
   const [editing, setEditing] = useState(null);
   const [ef, setEf] = useState({});
@@ -1249,7 +1237,6 @@ function TenantsPage({ tenants, updateTenant, notes, setNote, wide }) {
   );
 }
 
-// ── FINANCIALS ────────────────────────────────────────────────────────────────
 function FinPage({ tenants, jobs, rp, outgoings, wide }) {
   const [view, setView]       = useState("summary");
   const [selProp, setSelProp] = useState(PROPS[0].id);
@@ -1307,7 +1294,7 @@ function FinPage({ tenants, jobs, rp, outgoings, wide }) {
         <div>
           <div style={{ display:"grid", gridTemplateColumns:wide?"repeat(4,1fr)":"1fr 1fr", gap:10, marginBottom:12 }}>
             {[
-              {l:"Portfolio Value",   v:gbp(tv),  s:"8 properties",                    g:false},
+              {l:"Portfolio Value",   v:gbp(tv),  s:PROPS.length+" properties",                    g:false},
               {l:"Total Equity",      v:gbp(eq),  s:Math.round(eq/tv*100)+"% of value",g:true},
               {l:"Total Debt",        v:gbp(td),  s:Math.round(td/tv*100)+"% LTV",     g:false},
               {l:"Gross Yield",       v:gy+"%",   s:"Annual rent / value",             g:true},
@@ -1407,7 +1394,6 @@ function FinPage({ tenants, jobs, rp, outgoings, wide }) {
   );
 }
 
-// ── FIN CHARTS ────────────────────────────────────────────────────────────────
 function FinCharts({ tenants, jobs, rp, outgoings }) {
   const barH = 180;
 
@@ -1512,8 +1498,7 @@ function FinCharts({ tenants, jobs, rp, outgoings }) {
   );
 }
 
-// ── OUTGOINGS ─────────────────────────────────────────────────────────────────
-function OutgoingsPage({ outgoings, addOutgoing, deleteOutgoing, fixedOutgoings, setFixedOutgoing, removeFixedOutgoing, wide }) {
+function OutgoingsPage({ outgoings, addOutgoing, deleteOutgoing, fixedOutgoings, setFixedOutgoing, removeFixedOutgoing, jobs, wide }) {
   const [selYr, setSelYr]         = useState(CYR);
   const [selMo, setSelMo]         = useState(CMO);
   const [addingTo, setAddingTo]   = useState(null);
@@ -1568,7 +1553,11 @@ function OutgoingsPage({ outgoings, addOutgoing, deleteOutgoing, fixedOutgoings,
           const items    = thisMonthItems(p.id);
           const prev     = getPrevOutgoings(p.id);
           const autoSug  = getAutoSuggest(p.id);
-          const total    = items.reduce((s, o) => s + (o.amount||0), 0);
+          const mk       = mKey(selYr, selMo);
+          const billTotal = items.reduce((s, o) => s + (o.amount||0), 0);
+          const pJobs    = (jobs||[]).filter(j => j.status==="done" && j.pid===p.id && j.date && j.date.startsWith(mk));
+          const jobTotal = pJobs.reduce((s, j) => s + (j.cost||0), 0);
+          const total    = billTotal + jobTotal + p.mm;
           const unrepeat = prev.filter(po => !items.find(i => i.label === po.label) && !autoSug.find(a => a.label === po.label));
 
           return (
@@ -1580,11 +1569,31 @@ function OutgoingsPage({ outgoings, addOutgoing, deleteOutgoing, fixedOutgoings,
                 </div>
                 <div style={{ textAlign:"right" }}>
                   <div style={{ fontSize:13, fontWeight:700, color:total>0?S.red:S.gray }}>{total>0?gbp(total):"--"}</div>
-                  <div style={{ fontSize:11, color:S.gray }}>this month</div>
+                  <div style={{ fontSize:11, color:S.gray }}>total this month</div>
                 </div>
               </div>
 
-              {/* Auto-suggest fixed bills not yet added */}
+
+              <div style={{ padding:"9px 14px", borderBottom:"1px solid #f8fafc", display:"flex", justifyContent:"space-between", alignItems:"center", background:"#f8fafc" }}>
+                <div style={{ display:"flex", alignItems:"center", gap:6 }}>
+                  <span style={{ fontSize:12 }}>💳</span>
+                  <span style={{ fontSize:12, fontWeight:600, color:S.mid }}>Mortgage</span>
+                </div>
+                <span style={{ fontSize:12, fontWeight:700, color:S.red }}>{gbp(p.mm)}</span>
+              </div>
+
+
+              {pJobs.map(j => (
+                <div key={j.id} style={{ padding:"9px 14px", borderBottom:"1px solid #f8fafc", display:"flex", justifyContent:"space-between", alignItems:"center", background:"#fffbeb" }}>
+                  <div style={{ display:"flex", alignItems:"center", gap:6 }}>
+                    <span style={{ fontSize:12 }}>🔧</span>
+                    <span style={{ fontSize:12, color:S.atx }}>{j.desc}</span>
+                  </div>
+                  <span style={{ fontSize:12, fontWeight:700, color:S.amber }}>{gbp(j.cost)}</span>
+                </div>
+              ))}
+
+
               {autoSug.length > 0 && (
                 <div style={{ padding:"10px 14px", borderBottom:"1px solid #f8fafc", background:"#f0fdf4" }}>
                   <div style={{ fontSize:11, color:S.gtx, fontWeight:600, marginBottom:6 }}>📌 Fixed bills — tap to add:</div>
@@ -1598,7 +1607,7 @@ function OutgoingsPage({ outgoings, addOutgoing, deleteOutgoing, fixedOutgoings,
                 </div>
               )}
 
-              {/* Previous month suggestions */}
+
               {unrepeat.length > 0 && (
                 <div style={{ padding:"10px 14px", borderBottom:"1px solid #f8fafc", background:"#fffbeb" }}>
                   <div style={{ fontSize:11, color:S.atx, fontWeight:600, marginBottom:6 }}>From last month — tap to add:</div>
@@ -1612,7 +1621,7 @@ function OutgoingsPage({ outgoings, addOutgoing, deleteOutgoing, fixedOutgoings,
                 </div>
               )}
 
-              {/* Current month items */}
+
               {items.map((o) => (
                 <div key={o.id} style={{ padding:"9px 14px", borderBottom:"1px solid #f8fafc" }}>
                   {editingItem === o.id ? (
@@ -1671,7 +1680,6 @@ function OutgoingsPage({ outgoings, addOutgoing, deleteOutgoing, fixedOutgoings,
   );
 }
 
-// ── CONTRACTORS ───────────────────────────────────────────────────────────────
 function ContractorsPage({ contractors, addContractor, deleteContractor, wide }) {
   const [show, setShow] = useState(false);
   const [f, setF]       = useState({ name:"", trade:"", phone:"", notes:"" });
@@ -1727,7 +1735,6 @@ function ContractorsPage({ contractors, addContractor, deleteContractor, wide })
   );
 }
 
-// ── DEALS ─────────────────────────────────────────────────────────────────────
 function DealsPage({ deals, addDeal, updateDeal, deleteDeal, wide }) {
   const [show, setShow] = useState(false);
   const [f, setF]       = useState({ addr:"", type:"BTL", status:"Researching", notes:"" });
@@ -1806,7 +1813,6 @@ function DealsPage({ deals, addDeal, updateDeal, deleteDeal, wide }) {
   );
 }
 
-// ── REFINANCE PLANNER ─────────────────────────────────────────────────────────
 function RefinancePage() {
   const [testRate, setTestRate] = useState(5.0);
   const sorted = [...MTGS].filter(m => m.e).sort((a,b) => new Date(a.e)-new Date(b.e));
@@ -1894,7 +1900,6 @@ function GrowthProjector({tv}) {
     </div>
   );
 }
-// ── PORTFOLIO GROWTH ──────────────────────────────────────────────────────────
 function GrowthPage({ tenants, propPurchase, setPropPurchase }) {
   const SK_VALS = "ash-prop-vals";
   const [vals, setVals] = useState(() => {
@@ -2067,7 +2072,6 @@ function GrowthPage({ tenants, propPurchase, setPropPurchase }) {
   );
 }
 
-// ── TAX SUMMARY ───────────────────────────────────────────────────────────────
 function TaxPage({ tenants, jobs, rp, outgoings, wide }) {
   const currentTaxYr = now.getMonth() >= 3 ? CYR : CYR - 1;
   const [selTaxYr, setSelTaxYr] = useState(currentTaxYr);
@@ -2187,7 +2191,6 @@ function TaxPage({ tenants, jobs, rp, outgoings, wide }) {
   );
 }
 
-// ── NOTES ─────────────────────────────────────────────────────────────────────
 function NotesPage({ generalNotes, setGeneralNotes, notes, setNote, wide }) {
   const grid = wide ? { display:"grid", gridTemplateColumns:"1fr 1fr", gap:16 } : {};
   return (
@@ -2226,7 +2229,6 @@ function NotesPage({ generalNotes, setGeneralNotes, notes, setNote, wide }) {
   );
 }
 
-// ── TIMELINE ──────────────────────────────────────────────────────────────────
 function TimelinePage({ tenants, comp, wide }) {
   const [days, setDays] = useState(30);
   const cutoff = new Date(now.getFullYear(), now.getMonth(), now.getDate() + days);
@@ -2306,7 +2308,6 @@ function TimelinePage({ tenants, comp, wide }) {
   );
 }
 
-// ── RENT PLANNER ──────────────────────────────────────────────────────────────
 function RentPlannerPage({ tenants, updateTenant, wide }) {
   const [rate, setRate] = useState(5);
   const [sv, setSv] = useState(5);
@@ -2384,7 +2385,6 @@ function RentPlannerPage({ tenants, updateTenant, wide }) {
   );
 }
 
-// ── MORTGAGE INTEREST TRACKER ─────────────────────────────────────────────────
 function MtgInterestPage({ wide }) {
   const SK_VALS = "ash-prop-vals";
   const [vals] = useState(() => {
@@ -2467,7 +2467,6 @@ function MtgInterestPage({ wide }) {
   );
 }
 
-// ── AI LETTER WRITER ──────────────────────────────────────────────────────────
 function AILettersPage({ tenants, wide }) {
   const [type, setType]         = useState("rent-increase");
   const [selTenant, setSelTenant] = useState(tenants[0]?.id || "");
@@ -2490,7 +2489,7 @@ function AILettersPage({ tenants, wide }) {
   ];
 
   const buildPrompt = () => {
-    const base = `You are helping Ash, a self-managing landlord in Leeds, write a personal and professional message to one of his tenants. 
+    const base = `You are helping Ash, a self-managing landlord in Leeds, write a personal and professional message to one of his tenants.
 Ash is friendly, direct and professional — not robotic. Keep it warm and human. No legal jargon. Maximum 150 words.
 Tenant name: ${t?.nm || "tenant"}
 Property: ${p?.n || "the property"}
@@ -2598,7 +2597,6 @@ Property: ${p?.n || "the property"}
   );
 }
 
-// ── DEAL ANALYSER ─────────────────────────────────────────────────────────────
 function DealCheckPage({ wide }) {
   const [f, setF] = useState({ price:"", rent:"", rate:5.5, deposit:25, costs:"", reno:"" });
   const [result, setResult] = useState(null);
@@ -2702,7 +2700,7 @@ function AIStrategyPage({tenants, jobs, rp, outgoings}) {
   const jc = jobs.filter(function(j){return j.status==="done"&&j.date&&j.date.startsWith(ms);}).reduce(function(s,j){return s+(j.cost||0);}, 0);
   const oc = PROPS.reduce(function(s,p){return s+(outgoings[p.id+"-"+ms]||[]).reduce(function(x,o){return x+(o.amount||0);},0);}, 0);
   const netInc = inc - mtg - jc - oc;
-  const base = "Leeds landlord: 9 units, 2 HMO + 7 BTL, target 50 by 2036. Rent " + gbp(inc) + "/mo, net " + gbp(netInc) + "/mo, equity " + gbp(eq) + ".";
+  const base = "Leeds landlord: " + PROPS.length + " units, 2 HMO + " + (PROPS.length-2) + " BTL, target 50 by 2036. Rent " + gbp(inc) + "/mo, net " + gbp(netInc) + "/mo, equity " + gbp(eq) + ".";
   const prompts = {
     strategy: base + " Give 4 specific ways to scale faster. Be direct.",
     finance: base + " Best 3 finance options for next deal. Which suits him?",
@@ -2763,7 +2761,6 @@ function AIStrategyPage({tenants, jobs, rp, outgoings}) {
     </div>
   );
 }
-// ── VOIDS ─────────────────────────────────────────────────────────────────────
 function VoidsPage({ tenants }) {
   const vacant = PROPS.filter(p => p.vc && tenants.filter(t => t.pid === p.id).length === 0);
   if (!vacant.length) return <div style={{ textAlign:"center", padding:"50px 0", color:S.gray }}><div style={{ fontSize:36, marginBottom:10 }}>🏢</div><div>No vacant properties</div></div>;
