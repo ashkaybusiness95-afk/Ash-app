@@ -125,7 +125,7 @@ const S = {
   gbg:"#dcfce7", gtx:"#15803d", rbg:"#fee2e2", rtx:"#b91c1c",
   abg:"#fef3c7", atx:"#b45309", bbg:"#dbeafe", btx:"#1d4ed8",
 };
-const card   = { background:"#fff", borderRadius:15, border:"1px solid #e2e8f0", marginBottom:10, overflow:"hidden" };
+const card   = { background:"#fff", borderRadius:15, border:"1px solid #e2e8f0", marginBottom:10, overflow:"hidden", boxShadow:"0 1px 3px rgba(0,0,0,0.04)" };
 const cardPad = { padding:14 };
 function Badge({ children, color="gray" }) {
   const map = { green:{background:S.gbg,color:S.gtx}, red:{background:S.rbg,color:S.rtx}, amber:{background:S.abg,color:S.atx}, blue:{background:S.bbg,color:S.btx}, gray:{background:S.light,color:S.mid} };
@@ -198,6 +198,14 @@ function App() {
  if(!d.propPurchase)d.propPurchase={};
  if(!d.roomNotes)d.roomNotes={};
  if(!d.personalOut)d.personalOut={};
+      if(!d.snapshots)d.snapshots={};
+      const snapKey=mKey(CYR,CMO);
+      if(!d.snapshots[snapKey]){
+        const sInc=d.tenants.reduce((s,t)=>s+t.rn,0);
+        const sMtg=PROPS.reduce((s,p)=>s+p.mm,0);
+        const sEq=PROPS.reduce((s,p)=>s+(p.v-p.mtg),0);
+        d.snapshots[snapKey]={units:PROPS.length,rent:sInc,net:sInc-sMtg,equity:sEq,date:now.toISOString()};
+      }
  if(d.savings===undefined)d.savings=0;
  if(!d.tenants.find(t=>t.id==="t17"))d.tenants.push({id:"t17",pid:"airedale",rm:"Whole",nm:"Chelsea",dy:10,rn:795,dp:null,rv:null,nt:""});
  setData(d);
@@ -215,7 +223,7 @@ function App() {
   const upd = fn => setData(p => ({ ...p, ...fn(p) }));
   if (!loggedIn) return <LoginScreen onLogin={() => setLoggedIn(true)} />;
   if (!data) return <div style={{display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",height:"100vh",background:S.dark}}><div style={{fontSize:40}}>&#127968;</div><div style={{color:"#fff",fontWeight:700,marginTop:12}}>Loading...</div></div>;
-  const { tenants, rp, jobs, comp, contractors, deals, notes, outgoings, generalNotes, fixedOutgoings, propPurchase, roomNotes, savings, personalOut } = data;
+  const { tenants, rp, jobs, comp, contractors, deals, notes, outgoings, generalNotes, fixedOutgoings, propPurchase, roomNotes, savings, personalOut, snapshots } = data;
   // Check if outgoings entered this month for any property
   const outgoingsMissing = PROPS.some(p => {
     const k = p.id + "-" + mKey(CYR, CMO);
@@ -255,7 +263,7 @@ function App() {
   const toggleExp       = pid => setExpMap(e => ({ ...e, [pid]: !e[pid] }));
   const addPersonalOut = (yr, mo, item) => { const k = "p-"+mKey(yr,mo); upd(d => ({ personalOut: { ...d.personalOut, [k]: [...(d.personalOut[k]||[]), { id:"po"+Date.now(), ...item }] } })); };
   const deletePersonalOut = (yr, mo, id) => { const k = "p-"+mKey(yr,mo); upd(d => ({ personalOut: { ...d.personalOut, [k]: (d.personalOut[k]||[]).filter(x => x.id !== id) } })); };
-  const bag = { tenants, rp, jobs, comp, contractors, deals, notes, outgoings, generalNotes, fixedOutgoings, propPurchase, roomNotes, expMap, toggleRent, addJob, updateJob, deleteJob, updateComp, updateTenant, addTenant, addContractor, deleteContractor, addDeal, updateDeal, deleteDeal, setNote, toggleExp, addOutgoing, deleteOutgoing, setGeneralNotes, setFixedOutgoing, removeFixedOutgoing, setPropPurchase, setRoomNote, savings, setSavings, personalOut, addPersonalOut, deletePersonalOut, wide };
+  const bag = { tenants, rp, jobs, comp, contractors, deals, notes, outgoings, generalNotes, fixedOutgoings, propPurchase, roomNotes, expMap, toggleRent, addJob, updateJob, deleteJob, updateComp, updateTenant, addTenant, addContractor, deleteContractor, addDeal, updateDeal, deleteDeal, setNote, toggleExp, addOutgoing, deleteOutgoing, setGeneralNotes, setFixedOutgoing, removeFixedOutgoing, setPropPurchase, setRoomNote, savings, setSavings, personalOut, addPersonalOut, deletePersonalOut, snapshots, wide };
   const moreLabels = { outgoings:"Outgoings", personal:"Personal Costs", compliance:"Compliance", tenants:"Tenants", ailetters:"AI Letter Writer", aistrategy:"AI Strategy", dealcheck:"Deal Analyser", financials:"Financials", tax:"Tax Summary", timeline:"Timeline", rentplanner:"Rent Planner", notes:"Notes", refinance:"Refinance Planner", mtginterest:"Mortgage Interest", growth:"Portfolio Growth", contractors:"Contractors", deals:"Deal Pipeline", voids:"Void Tracker" };
   const maxW = wide ? 1100 : 480;
   return (
@@ -346,6 +354,12 @@ function WideLayout({ tab, setTab, more, setMore, bag, alerts, paidNow, urgent }
   return (
     <div style={{ display:"grid", gridTemplateColumns:"200px 1fr", gap:16 }}>
  <div>
+ <div style={{ background:"linear-gradient(135deg,#1e293b,#0f172a)", borderRadius:15, padding:14, marginBottom:10, color:"#fff", textAlign:"center" }}>
+  <div style={{ fontSize:32, marginBottom:6 }}>🏠</div>
+  <div style={{ fontSize:14, fontWeight:700 }}>Ash</div>
+  <div style={{ fontSize:10, color:"#64748b" }}>{PROPS.length} units · {gbp(bag.tenants.reduce((s,t)=>s+t.rn,0))}/mo</div>
+  <div style={{ fontSize:10, color:"#4ade80", marginTop:3 }}>Target: 50 by 2036</div>
+ </div>
  <div style={{ background:"#fff", borderRadius:15, border:"1px solid #e2e8f0", overflow:"hidden", marginBottom:10 }}>
  {navItems.map(b => (
   <button key={b.id} onClick={() => { setTab(b.id); if (b.id !== "more") setMore(null); }}
@@ -413,15 +427,18 @@ function getAlerts(comp) {
   });
   return a;
 }
-function GoalTracker({tenants, savings, setSavings}) {
+function GoalTracker({tenants, savings, setSavings, personalOut}) {
   const [ed, setEd] = useState(false);
   const [sv, setSv] = useState(String(savings || 0));
-  const inc = tenants.reduce(function(s, t) { return s + t.rn; }, 0);
+  const inc = tenants.reduce((s, t) => s + t.rn, 0);
   const ipct = Math.min(100, Math.round(inc / 24500 * 100));
   const pot = savings || 0;
   const ppct = Math.min(100, Math.round(pot / 40000 * 100));
-  const net = Math.max(0, inc - MTGS.reduce(function(s, m) { return s + m.m; }, 0));
-  const mths = net > 0 ? Math.ceil(Math.max(0, 40000 - pot) / net) : "?";
+  const portNet = Math.max(0, inc - MTGS.reduce((s, m) => s + m.m, 0));
+  const pk = "p-"+mKey(CYR, CMO);
+  const pCosts = (personalOut&&personalOut[pk]||[]).reduce((s,o)=>s+(o.amount||0),0);
+  const realSave = Math.max(0, portNet - pCosts);
+  const mths = realSave > 0 ? Math.ceil(Math.max(0, 40000 - pot) / realSave) : "?";
   const doSave = function() { if (setSavings) setSavings(parseFloat(sv) || 0); setEd(false); };
   return (
     <div style={{background:"linear-gradient(135deg,#1e293b,#0f172a)", borderRadius:16, padding:16, marginBottom:10, color:"#fff"}}>
@@ -476,6 +493,7 @@ function GoalTracker({tenants, savings, setSavings}) {
  <div style={{height:5, background:"#334155", borderRadius:99, overflow:"hidden"}}>
  <div style={{height:"100%", background:"linear-gradient(90deg,#f59e0b,#22c55e)", width:ppct+"%"}} />
  </div>
+ {pCosts>0&&<div style={{fontSize:10,color:"#64748b",marginTop:5}}>Saving ~{gbp(realSave)}/mo after personal costs</div>}
  </div>
     </div>
   );
@@ -505,16 +523,16 @@ function DashPage({ alerts, paidNow, tenants, rp, jobs, comp, outgoings, wide, s
     const paid = !!rp[t.id+"-"+CYR+"-"+CMO];
     if (!paid) {
  const dueThisMonth = t.dy <= now.getDate();
- if (dueThisMonth) actions.push({ priority:"r", icon:"💷", msg: t.nm+" at "+PROPS.find(p=>p.id===t.pid)?.n?.split(" ")[0]+" — rent due, not paid", category:"Rent" });
+ if (dueThisMonth) actions.push({ priority:"r", icon:"💷", msg: t.nm+" at "+PROPS.find(p=>p.id===t.pid)?.n+" — rent due, not paid", category:"Rent" });
     }
   });
-  tenants.forEach(t=>{if(t.moveOut){const dO=Math.round((new Date(t.moveOut)-now)/86400000);if(dO>=0&&dO<=60){const pp=PROPS.find(x=>x.id===t.pid);actions.push({priority:dO<=14?"r":"a",icon:"📦",msg:t.nm+" at "+(pp?pp.n.split(" ")[0]:"")+" moving out in "+dO+" days",category:"Void Risk"});}}});
+  tenants.forEach(t=>{if(t.moveOut){const dO=Math.round((new Date(t.moveOut)-now)/86400000);if(dO>=0&&dO<=60){const pp=PROPS.find(x=>x.id===t.pid);actions.push({priority:dO<=14?"r":"a",icon:"📦",msg:t.nm+" at "+(pp?pp.n:"")+" moving out in "+dO+" days",category:"Void Risk"});}}});
   // Open jobs older than 7 days
   jobs.filter(j=>j.status==="open").forEach(j => {
     const age = j.date ? Math.round((now-new Date(j.date))/86400000) : 0;
     if (age >= 7) {
  const p = PROPS.find(x=>x.id===j.pid);
- actions.push({ priority:"a", icon:"🔧", msg: j.desc+(p?" at "+p.n.split(" ")[0]:"")+" — open "+age+" days", category:"Jobs" });
+ actions.push({ priority:"a", icon:"🔧", msg: j.desc+(p?" at "+p.n:"")+" — open "+age+" days", category:"Jobs" });
     }
   });
   // Compliance expiring within 60 days
@@ -522,7 +540,7 @@ function DashPage({ alerts, paidNow, tenants, rp, jobs, comp, outgoings, wide, s
     const d = du(c.next);
     if (c.next && d <= 60) {
  const ct = CTYPES.find(x=>x.k===c.type), pp = PROPS.find(p=>p.id===c.pid);
- actions.push({ priority:"r", icon:"🛡", msg:(pp?pp.n.split(" ")[0]:"")+" "+( ct?ct.l:"")+" "+(d<0?"OVERDUE":d+"d left"), category:"Compliance" });
+ actions.push({ priority:"r", icon:"🛡", msg:(pp?pp.n:"")+" "+( ct?ct.l:"")+" "+(d<0?"OVERDUE":d+"d left"), category:"Compliance" });
     }
   });
   // Mortgages expiring within 180 days
@@ -541,7 +559,7 @@ function DashPage({ alerts, paidNow, tenants, rp, jobs, comp, outgoings, wide, s
  const mSince = Math.round((now - sd) / (30.44*86400000));
  if (mSince > 0 && mSince % 12 <= 1 && mSince >= 11) {
  const pp = PROPS.find(x=>x.id===t.pid);
- actions.push({ priority:"a", icon:"📋", msg:t.nm+" at "+(pp?pp.n.split(" ")[0]:"")+" — "+Math.floor(mSince/12)+" year anniversary, review rent", category:"Rent Review" });
+ actions.push({ priority:"a", icon:"📋", msg:t.nm+" at "+(pp?pp.n:"")+" — "+Math.floor(mSince/12)+" year anniversary, review rent", category:"Rent Review" });
  }
     }
   });
@@ -638,7 +656,7 @@ function DashPage({ alerts, paidNow, tenants, rp, jobs, comp, outgoings, wide, s
  ))}
  </div>
  )}
- <GoalTracker tenants={tenants} savings={savings} setSavings={setSavings} />
+ <GoalTracker tenants={tenants} savings={savings} setSavings={setSavings} personalOut={personalOut} />
  {actions.length === 0 && (
  <div style={{ ...card, ...cardPad, background:"#f0fdf4", borderColor:"#bbf7d0", marginBottom:10, display:"flex", alignItems:"center", gap:10 }}>
  <span style={{ fontSize:20 }}>✅</span>
@@ -998,23 +1016,30 @@ function MoreMenu({ tenants, contractors, deals, setMore, data }) {
   return (
     <div>
  {[
+ {g:"Money"},
  {id:"outgoings",   icon:"💸", label:"Outgoings",        sub:"Bills & expenses per property"},
  {id:"personal",    icon:"🏠", label:"Personal Costs",   sub:"Home mortgage, car, bills"},
- {id:"compliance",  icon:"🛡", label:"Compliance",        sub:"Gas, EICR, EPC, HMO licence"},
- {id:"tenants",     icon:"👥", label:"Tenants",           sub:tenants.length+" tenants · "+PROPS.length+" properties"},
  {id:"financials",  icon:"📊", label:"Financials",        sub:"Monthly & per-property breakdown"},
  {id:"tax",         icon:"🧾", label:"Tax Summary",       sub:"Annual P&L for self assessment"},
- {id:"ailetters",   icon:"✉️", label:"AI Letter Writer",   sub:"Draft personalised letters & messages"},
- {id:"dealcheck",   icon:"🔍", label:"Deal Analyser",      sub:"Check if a new property stacks up"},
- {id:"rentplanner", icon:"🔖", label:"Rent Planner",      sub:"Plan rent increases systematically"},
- {id:"notes",       icon:"📝", label:"Notes",             sub:"General notepad & property notes"},
- {id:"refinance",   icon:"🔄", label:"Refinance Planner", sub:"Upcoming mortgage expiries & rates"},
- {id:"mtginterest", icon:"💳", label:"Mortgage Interest", sub:"Interest paid vs equity growth"},
- {id:"growth",      icon:"📈", label:"Portfolio Growth",  sub:"Equity & value over time"},
- {id:"contractors", icon:"📞", label:"Contractors",       sub:contractors.length+" contacts saved"},
- {id:"deals",       icon:"🎯", label:"Deal Pipeline",     sub:deals.length+" deals tracked"},
+ {g:"Properties"},
+ {id:"compliance",  icon:"🛡", label:"Compliance",        sub:"Gas, EICR, EPC, HMO licence"},
+ {id:"tenants",     icon:"👥", label:"Tenants",           sub:tenants.length+" tenants · "+PROPS.length+" properties"},
+ {id:"rentplanner", icon:"🔖", label:"Rent Planner",      sub:"Plan rent increases"},
  {id:"voids",       icon:"🏢", label:"Void Tracker",      sub:vc>0?vc+" vacant":"All let"},
- ].map(item => (
+ {id:"contractors", icon:"📞", label:"Contractors",       sub:contractors.length+" contacts saved"},
+ {g:"AI Tools"},
+ {id:"ailetters",   icon:"✉️", label:"AI Letter Writer",   sub:"Draft personalised letters"},
+ {id:"dealcheck",   icon:"🔍", label:"Deal Analyser",      sub:"Check if a deal stacks up"},
+ {id:"aistrategy",  icon:"🤖", label:"AI Strategy",       sub:"AI advice on your portfolio"},
+ {g:"Planning"},
+ {id:"refinance",   icon:"🔄", label:"Refinance Planner", sub:"Mortgage expiries & rates"},
+ {id:"mtginterest", icon:"💳", label:"Mortgage Interest", sub:"Interest vs equity growth"},
+ {id:"growth",      icon:"📈", label:"Portfolio Growth",  sub:"Equity & value over time"},
+ {id:"deals",       icon:"🎯", label:"Deal Pipeline",     sub:deals.length+" deals tracked"},
+ {id:"notes",       icon:"📝", label:"Notes",             sub:"General notepad"},
+ ].map((item,i) => item.g ? (
+ <div key={i} style={{ fontSize:11, fontWeight:700, color:S.gray, padding:"12px 4px 6px", textTransform:"uppercase", letterSpacing:1 }}>{item.g}</div>
+ ) : (
  <button key={item.id} onClick={() => setMore(item.id)} style={{ background:"#fff", border:"1px solid #e2e8f0", borderRadius:13, padding:"13px 14px", display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:8, cursor:"pointer", width:"100%", textAlign:"left", fontFamily:"system-ui" }}>
  <div style={{ display:"flex", alignItems:"center", flex:1 }}>
   <div style={{ width:38, height:38, background:S.light, borderRadius:10, display:"flex", alignItems:"center", justifyContent:"center", fontSize:17, marginRight:11, flexShrink:0 }}>{item.icon}</div>
@@ -1105,8 +1130,8 @@ function TenantsPage({ tenants, updateTenant, notes, setNote, wide }) {
   const [editing, setEditing] = useState(null);
   const [ef, setEf] = useState({});
   const grid = wide ? { display:"grid", gridTemplateColumns:"1fr 1fr", gap:16 } : {};
-  const startEdit = t => { setEditing(t.id); setEf({ nm:t.nm, rn:String(t.rn), dy:String(t.dy), dp:t.dp!=null?String(t.dp):"", nt:t.nt||"", mo:t.moveOut||"", sd:t.startDate||"" }); };
-  const saveEdit  = id => { updateTenant(id, { nm:ef.nm, rn:parseFloat(ef.rn)||0, dy:parseInt(ef.dy)||1, dp:ef.dp!==""?parseFloat(ef.dp):null, nt:ef.nt, moveOut:ef.mo||null, startDate:ef.sd||null }); setEditing(null); };
+  const startEdit = t => { setEditing(t.id); setEf({ nm:t.nm, rn:String(t.rn), dy:String(t.dy), dp:t.dp!=null?String(t.dp):"", nt:t.nt||"", mo:t.moveOut||"", sd:t.startDate||"", mr:t.marketRent?String(t.marketRent):"" }); };
+  const saveEdit  = id => { updateTenant(id, { nm:ef.nm, rn:parseFloat(ef.rn)||0, dy:parseInt(ef.dy)||1, dp:ef.dp!==""?parseFloat(ef.dp):null, nt:ef.nt, moveOut:ef.mo||null, startDate:ef.sd||null, marketRent:ef.mr?parseFloat(ef.mr):null }); setEditing(null); };
   return (
     <div style={grid}>
  {PROPS.map(p => {
@@ -1153,6 +1178,7 @@ function TenantsPage({ tenants, updateTenant, notes, setNote, wide }) {
    </div>
    <div style={{marginTop:8}}><div style={{fontSize:11,color:S.gray,marginBottom:3}}>Move-out date</div><input type="date" value={ef.mo||""} onChange={e=>setEf(f=>({...f,mo:e.target.value}))} style={{width:"100%",border:"1px solid #e2e8f0",borderRadius:10,padding:"10px 12px",fontSize:14,fontFamily:"system-ui",outline:"none",marginBottom:8}} /></div>
    <div style={{marginTop:0}}><div style={{fontSize:11,color:S.gray,marginBottom:3}}>Tenancy start date</div><input type="date" value={ef.sd||""} onChange={e=>setEf(f=>({...f,sd:e.target.value}))} style={{width:"100%",border:"1px solid #e2e8f0",borderRadius:10,padding:"10px 12px",fontSize:14,fontFamily:"system-ui",outline:"none",marginBottom:8}} /></div>
+   <div style={{marginTop:0}}><div style={{fontSize:11,color:S.gray,marginBottom:3}}>Market rent estimate (£/mo)</div><Inp type="number" value={ef.mr} onChange={e=>setEf(f=>({...f,mr:e.target.value}))} placeholder="What could you get today?" style={{marginBottom:0}} /></div>
    <div style={{ display:"flex", gap:8, marginTop:12 }}>
      <Btn onClick={() => saveEdit(t.id)} style={{ flex:1, padding:10, marginBottom:0 }}>Save Changes</Btn>
      <button onClick={() => setEditing(null)} style={{ padding:"10px 14px", borderRadius:10, background:S.light, border:"none", cursor:"pointer", fontFamily:"system-ui", fontWeight:600 }}>Cancel</button>
@@ -1164,6 +1190,7 @@ function TenantsPage({ tenants, updateTenant, notes, setNote, wide }) {
      <div style={{ fontSize:13, fontWeight:600, marginBottom:2 }}>{p.ty==="HMO"?t.rm+" · ":""}{t.nm}</div>
      <div style={{ fontSize:11, color:S.gray }}>Pays on {t.dy}{sx(t.dy)} · {gbp(t.rn)}/mo</div>
      {t.dp != null && <div style={{ fontSize:11, color:S.gray }}>Deposit: {gbp(t.dp)}</div>}
+     {t.marketRent && t.marketRent > t.rn && <div style={{ fontSize:11, color:S.amber, fontWeight:600 }}>Below market: {gbp(t.rn)} vs {gbp(t.marketRent)} potential (+{gbp(t.marketRent-t.rn)})</div>}
      {t.nt && <div style={{ fontSize:11, color:S.amber, marginTop:3 }}>{t.nt}</div>}
      {t.startDate && <div style={{ fontSize:11, color:S.gray }}>Started: {new Date(t.startDate).toLocaleDateString("en-GB")}{(() => { const m2 = Math.round((now - new Date(t.startDate))/(30.44*86400000)); return m2 >= 12 ? " · "+Math.floor(m2/12)+"yr"+(m2%12>0?" "+m2%12+"mo":"") : m2>0?" · "+m2+"mo":""; })()}</div>}
      {t.moveOut && <div style={{ fontSize:11, color:S.red, fontWeight:600 }}>Moving out: {new Date(t.moveOut).toLocaleDateString("en-GB")}</div>}
@@ -1797,7 +1824,7 @@ function GrowthProjector({tv}) {
     </div>
   );
 }
-function GrowthPage({ tenants, propPurchase, setPropPurchase }) {
+function GrowthPage({ tenants, propPurchase, setPropPurchase, jobs, snapshots }) {
   const SK_VALS = "ash-prop-vals";
   const [vals, setVals] = useState(() => {
     try { return JSON.parse(localStorage.getItem(SK_VALS)) || {}; } catch { return {}; }
@@ -1955,6 +1982,33 @@ function GrowthPage({ tenants, propPurchase, setPropPurchase }) {
  </div>
  );
  })}
+    {snapshots && Object.keys(snapshots).length > 0 && (
+      <div style={{ ...card, ...cardPad, marginTop:12 }}>
+        <div style={{ fontSize:13, fontWeight:600, marginBottom:10 }}>Monthly snapshots</div>
+        {Object.entries(snapshots).sort((a,b)=>b[0].localeCompare(a[0])).slice(0,12).map(([k,s])=>(
+          <div key={k} style={{ display:"flex", justifyContent:"space-between", padding:"8px 0", borderBottom:"1px solid #f8fafc", fontSize:12 }}>
+            <span style={{ color:S.mid, fontWeight:600 }}>{MSHORT[parseInt(k.split("-")[1])-1]} {k.split("-")[0]}</span>
+            <div style={{ display:"flex", gap:12 }}>
+              <span>{s.units} units</span>
+              <span style={{ color:S.green }}>{gbp(s.rent)}/mo</span>
+              <span style={{ fontWeight:600 }}>{gbp(s.equity)} eq</span>
+            </div>
+          </div>
+        ))}
+      </div>
+    )}
+    {jobs && (
+      <div style={{ ...card, ...cardPad, marginTop:12 }}>
+        <div style={{ fontSize:13, fontWeight:600, marginBottom:10 }}>Maintenance spend per property</div>
+        {PROPS.map(p=>{const c=jobs.filter(j=>j.status==="done"&&j.pid===p.id&&j.cost>0).reduce((s,j)=>s+(j.cost||0),0);return c>0?{p,c}:null;}).filter(Boolean).sort((a,b)=>b.c-a.c).map(({p,c})=>(
+          <div key={p.id} style={{ display:"flex", justifyContent:"space-between", alignItems:"center", padding:"6px 0", borderBottom:"1px solid #f8fafc" }}>
+            <div style={{ display:"flex", alignItems:"center", gap:8 }}><div style={{ width:8, height:8, borderRadius:"50%", background:p.color }} /><span style={{ fontSize:12 }}>{p.n}</span></div>
+            <span style={{ fontSize:12, fontWeight:700, color:S.red }}>{gbp(c)}</span>
+          </div>
+        ))}
+        {PROPS.every(p=>!jobs.some(j=>j.status==="done"&&j.pid===p.id&&j.cost>0))&&<div style={{fontSize:12,color:S.gray,textAlign:"center",padding:10}}>No completed jobs with costs yet</div>}
+      </div>
+    )}
     </div>
   );
 }
@@ -2462,12 +2516,15 @@ function DealCheckPage({ wide }) {
   const [result, setResult] = useState(null);
   const [aiRes, setAiRes] = useState("");
   const [aiLoad, setAiLoad] = useState(false);
+  const calcSDLT = pr => { let t=0; t+=Math.min(pr,125000)*0.05; if(pr>125000)t+=(Math.min(pr,250000)-125000)*0.07; if(pr>250000)t+=(Math.min(pr,925000)-250000)*0.10; if(pr>925000)t+=(Math.min(pr,1500000)-925000)*0.15; if(pr>1500000)t+=(pr-1500000)*0.17; return Math.round(t); };
   const analyse = () => {
     const price    = parseFloat(f.price) || 0;
     const rent     = parseFloat(f.rent)  || 0;
     const rate     = parseFloat(f.rate)  || 5.5;
     const deposit  = parseFloat(f.deposit) / 100;
-    const costs    = parseFloat(f.costs)  || Math.round(price * 0.03); // stamp duty estimate
+    const sdlt     = calcSDLT(price);
+    const legal    = 1500;
+    const costs    = parseFloat(f.costs) || (sdlt + legal);
     const reno     = parseFloat(f.reno)   || 0;
     const mortgage = Math.round(price * (1-deposit));
     const monthlyInterest = Math.round(mortgage * rate / 100 / 12);
@@ -2479,7 +2536,7 @@ function DealCheckPage({ wide }) {
     // Compare to existing portfolio
     const portYield = 6.5; // approximate from existing portfolio
     const stacks = parseFloat(grossYield) >= 6 && ncf > 0;
-    setResult({ price, rent, mortgage, monthlyInterest, ncf, grossYield, netYield, totalIn, cashROI, stacks, rate, deposit:f.deposit });
+    setResult({ price, rent, mortgage, monthlyInterest, ncf, grossYield, netYield, totalIn, cashROI, stacks, rate, deposit:f.deposit, sdlt });
   };
   return (
     <div>
@@ -2511,7 +2568,7 @@ function DealCheckPage({ wide }) {
  </div>
  </div>
  <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:8, marginTop:8 }}>
- <div><div style={{ fontSize:11, color:S.gray, marginBottom:3 }}>Buying costs (£)</div><Inp type="number" value={f.costs} onChange={e=>setF(x=>({...x,costs:e.target.value}))} placeholder="Stamp duty, legal..." style={{marginBottom:0}} /></div>
+ <div><div style={{ fontSize:11, color:S.gray, marginBottom:3 }}>Buying costs (£)</div><Inp type="number" value={f.costs} onChange={e=>setF(x=>({...x,costs:e.target.value}))} placeholder="Auto-calculated if blank" style={{marginBottom:0}} />{f.price&&!f.costs&&<div style={{fontSize:10,color:S.gtx,marginTop:2}}>Auto: {gbp(calcSDLT(parseFloat(f.price)||0))} SDLT + {gbp(1500)} legal = {gbp(calcSDLT(parseFloat(f.price)||0)+1500)}</div>}</div>
  <div><div style={{ fontSize:11, color:S.gray, marginBottom:3 }}>Renovation (£)</div><Inp type="number" value={f.reno} onChange={e=>setF(x=>({...x,reno:e.target.value}))} placeholder="Works needed" style={{marginBottom:0}} /></div>
  </div>
  <Btn onClick={analyse} style={{ marginTop:12, marginBottom:0 }}>Analyse This Deal</Btn>
@@ -2536,6 +2593,7 @@ function DealCheckPage({ wide }) {
     {l:"Net cash flow",     v:(result.ncf>=0?"":"-")+gbp(Math.abs(result.ncf))+"/mo", g:result.ncf>0},
     {l:"Total cash in",     v:gbp(result.totalIn),             g:false},
     {l:"Cash-on-cash ROI",  v:result.cashROI+"%",              g:parseFloat(result.cashROI)>=8},
+    {l:"Stamp duty (SDLT)", v:gbp(result.sdlt),                g:false},
     {l:"Mortgage",          v:gbp(result.mortgage),            g:false},
   ].map((k,i)=>(
     <div key={i} style={{ background:"#fff", borderRadius:14, border:"1px solid #e2e8f0", padding:12 }}>
@@ -2545,7 +2603,7 @@ function DealCheckPage({ wide }) {
   ))}
  </div>
  <div style={{ fontSize:11, color:S.gray, marginTop:8, lineHeight:1.6 }}>
-  Note: Stamp duty for additional properties is 5% on the full purchase price (as of 2024). Remember to factor in management time, void periods and maintenance reserves.
+  Note: Stamp duty auto-calculated using additional property SDLT rates (5% surcharge). Remember to factor in management time, void periods and maintenance reserves.
  </div>
  <button onClick={() => {
   const k = localStorage.getItem("ash-api-key") || "";
@@ -2572,18 +2630,21 @@ function AIStrategyPage({tenants, jobs, rp, outgoings}) {
   const [res, setRes] = useState("");
   const [load, setLoad] = useState(false);
   const [tab, setTab] = useState("");
-  const inc = tenants.reduce(function(s,t){return s+t.rn;}, 0);
-  const mtg = MTGS.filter(function(m){return m.l !== "70 Coal Hill Lane (Home)";}).reduce(function(s,m){return s+m.m;}, 0);
-  const eq = PROPS.reduce(function(s,p){return s+(p.v-p.mtg);}, 0);
+  const inc = tenants.reduce((s,t)=>s+t.rn, 0);
+  const mtg = MTGS.filter(m=>m.l!=="70 Coal Hill Lane (Home)").reduce((s,m)=>s+m.m, 0);
+  const eq = PROPS.reduce((s,p)=>s+(p.v-p.mtg), 0);
   const ms = mKey(CYR, CMO);
-  const jc = jobs.filter(function(j){return j.status==="done"&&j.date&&j.date.startsWith(ms);}).reduce(function(s,j){return s+(j.cost||0);}, 0);
-  const oc = PROPS.reduce(function(s,p){return s+(outgoings[p.id+"-"+ms]||[]).reduce(function(x,o){return x+(o.amount||0);},0);}, 0);
+  const jc = jobs.filter(j=>j.status==="done"&&j.date&&j.date.startsWith(ms)).reduce((s,j)=>s+(j.cost||0), 0);
+  const oc = PROPS.reduce((s,p)=>s+(outgoings[p.id+"-"+ms]||[]).reduce((x,o)=>x+(o.amount||0),0), 0);
   const netInc = inc - mtg - jc - oc;
-  const base = "Leeds landlord: " + PROPS.length + " units, 2 HMO + " + (PROPS.length-2) + " BTL, target 50 by 2036. Rent " + gbp(inc) + "/mo, net " + gbp(netInc) + "/mo, equity " + gbp(eq) + ".";
+  const openJ = jobs.filter(j=>j.status==="open").length;
+  const expMtg = MTGS.filter(m=>{const d=du(m.e);return d!=null&&d<=365&&d>=0;}).map(m=>m.l+" expires in "+du(m.e)+"d at "+m.r+"%").join("; ");
+  const propList = PROPS.map(p=>{const pt=tenants.filter(t=>t.pid===p.id);return p.n+" ("+p.ty+", val "+gbp(p.v)+", mtg "+gbp(p.mtg)+", rent "+gbp(pt.reduce((s,t)=>s+t.rn,0))+"/mo, net "+gbp(pt.reduce((s,t)=>s+t.rn,0)-p.mm)+")";}).join(". ");
+  const base = "Leeds/Bradford landlord with "+PROPS.length+" units (2 HMO, "+(PROPS.length-2)+" BTL). Target: 50 units by Feb 2036. Monthly rent "+gbp(inc)+", net after mortgages/bills "+gbp(netInc)+"/mo. Total equity "+gbp(eq)+". "+openJ+" open maintenance jobs. Properties: "+propList+". Upcoming mortgage expiries: "+(expMtg||"none in next 12 months")+". Be specific to Leeds market. Be direct and honest.";
   const prompts = {
-    strategy: base + " Give 4 specific ways to scale faster. Be direct.",
-    finance: base + " Best 3 finance options for next deal. Which suits him?",
-    next: base + " BTL or HMO next? Specific Leeds recommendation."
+    strategy: base + " Give 4 specific, actionable ways to scale faster. Consider remortgaging, HMO conversions, deal sourcing, and creative finance.",
+    finance: base + " Best 3 finance strategies for the next purchase. Consider which mortgages to remortgage, bridging, JV partners, or portfolio lending. Give specific numbers.",
+    next: base + " Should the next purchase be BTL or HMO? Recommend specific Leeds/Bradford areas and price ranges. What yield to target?"
   };
   function go(t) {
     var k = localStorage.getItem("ash-api-key") || "";
