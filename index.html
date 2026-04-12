@@ -1877,19 +1877,19 @@ function GrowthPage({ tenants, propPurchase, setPropPurchase }) {
  <div style={{ display:"flex", alignItems:"center", gap:4 }}><div style={{ width:10, height:10, borderRadius:2, background:"#22c55e" }}/><span style={{ fontSize:11, color:S.gray }}>Equity</span></div>
  <div style={{ display:"flex", alignItems:"center", gap:4 }}><div style={{ width:10, height:10, borderRadius:2, background:"#ef4444" }}/><span style={{ fontSize:11, color:S.gray }}>Mortgage</span></div>
  </div>
- <div style={{ display:"flex", alignItems:"flex-end", gap:3, height:140 }}>
- {PROPS.map((p,i) => {
-  const v2   = getV(p), mtg2 = getMtg(p), eq2 = v2 - mtg2;
-  const maxV = Math.max.apply(null, PROPS.map(function(pp){return getV(pp);}));
-  const eqH  = Math.max(2, Math.round((eq2/maxV)*120));
-  const mtgH = Math.max(2, Math.round((mtg2/maxV)*120));
+ <div style={{ display:"flex", alignItems:"flex-end", gap:6, height:160, padding:"10px 0" }}>
+ {PROPS.map(function(p) {
+  var v2=getV(p), mtg2=getMtg(p), eq2=v2-mtg2;
+  var maxV=280000;
+  var eqH=Math.max(4, Math.round((eq2/maxV)*120));
+  var mtgH=Math.max(4, Math.round((mtg2/maxV)*120));
   return (
-    <div key={p.id} style={{ flex:1, display:"flex", flexDirection:"column", alignItems:"center", gap:2 }}>
- <div style={{ display:"flex", alignItems:"flex-end", gap:1, height:120 }}>
- <div style={{ width:"44%", background:"#22c55e", borderRadius:"3px 3px 0 0", height:eqH+"px" }} title={gbp(eq2)} />
- <div style={{ width:"44%", background:"#ef4444", borderRadius:"3px 3px 0 0", height:mtgH+"px" }} title={gbp(mtg2)} />
+    <div key={p.id} style={{ flex:1, textAlign:"center" }}>
+ <div style={{ display:"flex", justifyContent:"center", alignItems:"flex-end", gap:2, height:120, marginBottom:4 }}>
+ <div style={{ width:12, minWidth:12, background:"#22c55e", borderRadius:"3px 3px 0 0", height:eqH }} />
+ <div style={{ width:12, minWidth:12, background:"#ef4444", borderRadius:"3px 3px 0 0", height:mtgH }} />
  </div>
- <div style={{ fontSize:9, color:S.gray, textAlign:"center" }}>{p.n.split(" ")[0]}</div>
+ <div style={{ fontSize:9, color:S.gray }}>{p.n.split(" ")[0]}</div>
     </div>
   );
  })}
