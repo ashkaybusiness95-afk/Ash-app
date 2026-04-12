@@ -178,6 +178,7 @@ function App() {
   const [more, setMore]     = useState(null);
   const [expMap, setExpMap] = useState({});
   const [wide, setWide]     = useState(window.innerWidth >= 600);
+  const [dm, setDm]         = useState(function(){try{return localStorage.getItem("ash-dm")==="1";}catch(e){return false;}});
   useEffect(() => {
     const handler = () => setWide(window.innerWidth >= 600);
     window.addEventListener("resize", handler);
@@ -185,6 +186,7 @@ function App() {
     screen.orientation && screen.orientation.addEventListener("change", () => setTimeout(handler, 300));
     return () => window.removeEventListener("resize", handler);
   }, []);
+  useEffect(function(){document.body.style.background=dm?"#0f172a":"#f1f5f9";},[dm]);
   useEffect(() => {
  db.collection("ashapp").doc("data").get().then(doc=>{
  let d=doc.exists?doc.data():JSON.parse(JSON.stringify(SEED));
@@ -260,7 +262,7 @@ function App() {
   const maxW = wide ? 1100 : 480;
   return (
     <div style={{ fontFamily:"system-ui,-apple-system,sans-serif", background:"#f1f5f9", minHeight:"100vh", maxWidth:maxW, margin:"0 auto", overflowX:"hidden" }}>
- <div style={{ background:S.dark, color:"#fff", padding:"40px 16px 12px", position:"sticky", top:0, zIndex:50 }}>
+ <div style={{ background:"linear-gradient(135deg,#1e293b,#0f172a)", color:"#fff", padding:"40px 16px 12px", position:"sticky", top:0, zIndex:50 }}>
  {tab === "more" && more ? (
  <div style={{ display:"flex", alignItems:"center", gap:10 }}>
   <button onClick={() => setMore(null)} style={{ background:"none", border:"none", color:"#fff", fontSize:22, cursor:"pointer" }}>&#8592;</button>
@@ -274,13 +276,14 @@ function App() {
     <div style={{ fontSize:11, color:"#94a3b8", fontStyle:"italic", marginTop:4 }}>{QUOTE.a?QUOTE.t+"—"+QUOTE.a:QUOTE.t}</div>
   </div>
   <div style={{ display:"flex", alignItems:"center", gap:8 }}>
+    <button onClick={function(){var v=!dm;setDm(v);try{localStorage.setItem("ash-dm",v?"1":"0");}catch(e){}}} style={{background:"none",border:"none",fontSize:18,cursor:"pointer",padding:0}}>{dm?"☀️":"🌙"}</button>
     <span style={{ fontSize:11, color:"#4ade80" }}>&#9679; Saved</span>
     {urgent > 0 && <span style={{ background:"#ef4444", color:"#fff", fontSize:11, fontWeight:700, padding:"3px 8px", borderRadius:99 }}>{urgent} urgent</span>}
   </div>
  </div>
  )}
  </div>
- <div style={{ padding: wide ? "16px 16px 16px" : "14px 14px 100px" }}>
+ <div style={{ padding: wide ? "16px 16px 16px" : "14px 14px 100px", filter:dm?"invert(0.88) hue-rotate(180deg)":"none" }}>
  {wide ? (
  <WideLayout tab={tab} setTab={setTab} more={more} setMore={setMore} bag={bag} alerts={alerts} paidNow={paidNow} urgent={urgent} />
  ) : (
@@ -312,7 +315,7 @@ function App() {
  )}
  </div>
  {!wide && (
- <nav style={{ position:"fixed", bottom:0, left:"50%", transform:"translateX(-50%)", width:"100%", maxWidth:480, background:"#fff", borderTop:"1px solid #e2e8f0", display:"flex", zIndex:50 }}>
+ <nav style={{ position:"fixed", bottom:0, left:"50%", transform:"translateX(-50%)", width:"100%", maxWidth:480, background:"#fff", borderTop:"1px solid #e2e8f0", display:"flex", zIndex:50, boxShadow:"0 -2px 8px rgba(0,0,0,0.06)" }}>
  {[
   {id:"dash",icon:"🏠",label:"Home",   badge:0},
   {id:"rent",icon:"✓", label:"Rent",   badge:tenants.length - paidNow},
@@ -347,7 +350,9 @@ function WideLayout({ tab, setTab, more, setMore, bag, alerts, paidNow, urgent }
     <div style={{ display:"grid", gridTemplateColumns:"200px 1fr", gap:16 }}>
  <div>
  <div style={{ background:"linear-gradient(135deg,#1e293b,#0f172a)", borderRadius:15, padding:14, marginBottom:10, color:"#fff", textAlign:"center" }}>
-  <div style={{ fontSize:32, marginBottom:6 }}>🏠</div>
+  <div onClick={function(){var u=prompt("Paste image URL for your profile photo:");if(u){localStorage.setItem("ash-photo",u);location.reload();}}} style={{ cursor:"pointer", marginBottom:6 }}>
+   {localStorage.getItem("ash-photo")?<img src={localStorage.getItem("ash-photo")} style={{width:50,height:50,borderRadius:"50%",objectFit:"cover"}}/>:<div style={{fontSize:32}}>🏠</div>}
+  </div>
   <div style={{ fontSize:14, fontWeight:700 }}>Ash</div>
   <div style={{ fontSize:10, color:"#64748b" }}>{PROPS.length} units · {gbp(bag.tenants.reduce(function(s,t){return s+t.rn;},0))}/mo</div>
   <div style={{ fontSize:10, color:"#4ade80", marginTop:3 }}>Target: 50 by 2036</div>
@@ -605,13 +610,34 @@ function DashPage({ alerts, paidNow, tenants, rp, jobs, comp, outgoings, wide, s
  <div style={card}><div style={{padding:"11px 14px",background:"#f8fafc",borderBottom:"1px solid #f1f5f9",fontSize:13,fontWeight:600}}>Tenants</div>
  {pvt.map((t,i)=><div key={t.id} style={{padding:"10px 14px",borderBottom:i<pvt.length-1?"1px solid #f8fafc":"none",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
   <div><div style={{fontSize:13,fontWeight:600}}>{pv&&pv.ty==="HMO"?t.rm+" · ":""}{t.nm}</div><div style={{fontSize:11,color:S.gray}}>{gbp(t.rn)}/mo</div>{t.moveOut&&<div style={{fontSize:11,color:S.red,fontWeight:600}}>Moving out: {new Date(t.moveOut).toLocaleDateString("en-GB")}</div>}</div>
-  <div style={{width:32,height:32,borderRadius:"50%",background:rp[t.id+"-"+CYR+"-"+CMO]?"#22c55e":"#e2e8f0",display:"flex",alignItems:"center",justifyContent:"center",color:rp[t.id+"-"+CYR+"-"+CMO]?"#fff":S.gray}}>{rp[t.id+"-"+CYR+"-"+CMO]?"&#10003;":"&#9675;"}</div>
+  <div style={{width:32,height:32,borderRadius:"50%",background:rp[t.id+"-"+CYR+"-"+CMO]?"#22c55e":"#e2e8f0",display:"flex",alignItems:"center",justifyContent:"center",color:rp[t.id+"-"+CYR+"-"+CMO]?"#fff":S.gray}}>{rp[t.id+"-"+CYR+"-"+CMO]?"✓":"○"}</div>
  </div>)}
  </div>
  {pvJobs.length>0&&<div style={{...card,marginTop:8}}><div style={{padding:"11px 14px",background:"#f8fafc",borderBottom:"1px solid #f1f5f9",fontSize:13,fontWeight:600}}>Open Jobs ({pvJobs.length})</div>{pvJobs.map((j,i)=><div key={j.id} style={{padding:"10px 14px",borderBottom:i<pvJobs.length-1?"1px solid #f8fafc":"none",fontSize:13}}>{j.desc}</div>)}</div>}
  <div style={{...card,marginTop:8}}><div style={{padding:"11px 14px",background:"#f8fafc",borderBottom:"1px solid #f1f5f9",fontSize:13,fontWeight:600}}>Compliance</div>
  {pvComp.map((c,i)=>{const ct=CTYPES.find(x=>x.k===c.type);const d2=c.next?Math.round((new Date(c.next)-now)/86400000):null;const col=!c.next?"amber":d2<=60?"red":d2<=180?"amber":"green";return(<div key={c.id} style={{padding:"10px 14px",borderBottom:i<pvComp.length-1?"1px solid #f8fafc":"none",display:"flex",justifyContent:"space-between",alignItems:"center"}}><div><div style={{fontSize:13}}>{ct?ct.l:c.type}</div><div style={{fontSize:11,color:S.gray}}>{c.next?new Date(c.next).toLocaleDateString("en-GB"):"Not set"}</div></div><Badge color={col}>{!c.next?"Unknown":d2<=0?"OVERDUE":d2+"d"}</Badge></div>);})}
  </div>
+ {(function(){
+  var months=[];for(var mi=5;mi>=0;mi--){var md=new Date(CYR,CMO-mi,1);var my=md.getFullYear();var mm=md.getMonth();var mk2=mKey(my,mm);var mRent=pvt.filter(function(t2){return rp[t2.id+"-"+my+"-"+mm];}).reduce(function(s2,t2){return s2+t2.rn;},0);var mCost=(pv?pv.mm:0)+jobs.filter(function(j2){return j2.status==="done"&&j2.pid===propView&&j2.date&&j2.date.startsWith(mk2);}).reduce(function(s2,j2){return s2+(j2.cost||0);},0)+(outgoings[propView+"-"+mk2]||[]).reduce(function(s2,o2){return s2+(o2.amount||0);},0);months.push({l:MSHORT[mm],rent:mRent,cost:mCost,net:mRent-mCost});}
+  var maxVal=Math.max.apply(null,months.map(function(m2){return Math.max(m2.rent,m2.cost,1);}));
+  return (<div style={{...card,...cardPad,marginTop:8}}>
+   <div style={{fontSize:13,fontWeight:600,marginBottom:10}}>6 Month P&L</div>
+   <div style={{display:"flex",gap:4,alignItems:"flex-end",height:100}}>
+    {months.map(function(m2,i){return(<div key={i} style={{flex:1,textAlign:"center"}}>
+     <div style={{display:"flex",gap:1,justifyContent:"center",alignItems:"flex-end",height:80}}>
+      <div style={{width:"40%",background:S.green,borderRadius:"3px 3px 0 0",height:Math.max(2,m2.rent/maxVal*80)}} title={"Rent: "+gbp(m2.rent)}/>
+      <div style={{width:"40%",background:S.red,borderRadius:"3px 3px 0 0",height:Math.max(2,m2.cost/maxVal*80)}} title={"Cost: "+gbp(m2.cost)}/>
+     </div>
+     <div style={{fontSize:9,color:S.gray,marginTop:3}}>{m2.l}</div>
+     <div style={{fontSize:9,fontWeight:600,color:m2.net>=0?S.green:S.red}}>{m2.net>=0?"+":""}{gbp(m2.net)}</div>
+    </div>);})}
+   </div>
+   <div style={{display:"flex",gap:12,justifyContent:"center",marginTop:8}}>
+    <div style={{display:"flex",alignItems:"center",gap:4}}><div style={{width:8,height:8,borderRadius:2,background:S.green}}/><span style={{fontSize:10,color:S.gray}}>Rent</span></div>
+    <div style={{display:"flex",alignItems:"center",gap:4}}><div style={{width:8,height:8,borderRadius:2,background:S.red}}/><span style={{fontSize:10,color:S.gray}}>Costs</span></div>
+   </div>
+  </div>);
+ })()}
  </div>
     );
   }
@@ -994,23 +1020,31 @@ function MoreMenu({ tenants, contractors, deals, setMore, data }) {
   return (
     <div>
  {[
+ {g:"Money"},
  {id:"outgoings",   icon:"💸", label:"Outgoings",        sub:"Bills & expenses per property"},
  {id:"personal",    icon:"🏠", label:"Personal Costs",   sub:"Home mortgage, car, bills"},
- {id:"compliance",  icon:"🛡", label:"Compliance",        sub:"Gas, EICR, EPC, HMO licence"},
- {id:"tenants",     icon:"👥", label:"Tenants",           sub:tenants.length+" tenants · "+PROPS.length+" properties"},
  {id:"financials",  icon:"📊", label:"Financials",        sub:"Monthly & per-property breakdown"},
  {id:"tax",         icon:"🧾", label:"Tax Summary",       sub:"Annual P&L for self assessment"},
- {id:"ailetters",   icon:"✉️", label:"AI Letter Writer",   sub:"Draft personalised letters & messages"},
- {id:"dealcheck",   icon:"🔍", label:"Deal Analyser",      sub:"Check if a new property stacks up"},
- {id:"rentplanner", icon:"🔖", label:"Rent Planner",      sub:"Plan rent increases systematically"},
- {id:"notes",       icon:"📝", label:"Notes",             sub:"General notepad & property notes"},
- {id:"refinance",   icon:"🔄", label:"Refinance Planner", sub:"Upcoming mortgage expiries & rates"},
- {id:"mtginterest", icon:"💳", label:"Mortgage Interest", sub:"Interest paid vs equity growth"},
- {id:"growth",      icon:"📈", label:"Portfolio Growth",  sub:"Equity & value over time"},
- {id:"contractors", icon:"📞", label:"Contractors",       sub:contractors.length+" contacts saved"},
- {id:"deals",       icon:"🎯", label:"Deal Pipeline",     sub:deals.length+" deals tracked"},
+ {g:"Properties"},
+ {id:"compliance",  icon:"🛡", label:"Compliance",        sub:"Gas, EICR, EPC, HMO licence"},
+ {id:"tenants",     icon:"👥", label:"Tenants",           sub:tenants.length+" tenants · "+PROPS.length+" properties"},
+ {id:"rentplanner", icon:"🔖", label:"Rent Planner",      sub:"Plan rent increases"},
  {id:"voids",       icon:"🏢", label:"Void Tracker",      sub:vc>0?vc+" vacant":"All let"},
- ].map(item => (
+ {id:"contractors", icon:"📞", label:"Contractors",       sub:contractors.length+" contacts saved"},
+ {g:"AI Tools"},
+ {id:"ailetters",   icon:"✉️", label:"AI Letter Writer",   sub:"Draft personalised letters"},
+ {id:"dealcheck",   icon:"🔍", label:"Deal Analyser",      sub:"Check if a deal stacks up"},
+ {id:"aistrategy",  icon:"🤖", label:"AI Strategy",       sub:"AI advice on your portfolio"},
+ {g:"Planning"},
+ {id:"refinance",   icon:"🔄", label:"Refinance Planner", sub:"Mortgage expiries & rates"},
+ {id:"mtginterest", icon:"💳", label:"Mortgage Interest", sub:"Interest vs equity growth"},
+ {id:"growth",      icon:"📈", label:"Portfolio Growth",  sub:"Equity & value over time"},
+ {id:"deals",       icon:"🎯", label:"Deal Pipeline",     sub:deals.length+" deals tracked"},
+ {id:"timeline",    icon:"📅", label:"Timeline",          sub:"Upcoming dates & events"},
+ {id:"notes",       icon:"📝", label:"Notes",             sub:"General notepad"},
+ ].map(function(item,i) { return item.g ? (
+ <div key={i} style={{ fontSize:11, fontWeight:700, color:S.gray, padding:"12px 4px 6px", textTransform:"uppercase", letterSpacing:1 }}>{item.g}</div>
+ ) : (
  <button key={item.id} onClick={() => setMore(item.id)} style={{ background:"#fff", border:"1px solid #e2e8f0", borderRadius:13, padding:"13px 14px", display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:8, cursor:"pointer", width:"100%", textAlign:"left", fontFamily:"system-ui" }}>
  <div style={{ display:"flex", alignItems:"center", flex:1 }}>
   <div style={{ width:38, height:38, background:S.light, borderRadius:10, display:"flex", alignItems:"center", justifyContent:"center", fontSize:17, marginRight:11, flexShrink:0 }}>{item.icon}</div>
@@ -1021,7 +1055,7 @@ function MoreMenu({ tenants, contractors, deals, setMore, data }) {
  </div>
  <span style={{ color:"#cbd5e1", fontSize:18 }}>›</span>
  </button>
- ))}
+ ); })}
  <div style={{ marginTop:8, padding:14, background:"#fff", border:"1px solid #e2e8f0", borderRadius:13 }}>
  <div style={{ fontSize:13, fontWeight:600, marginBottom:4 }}>💾 Backup your data</div>
  <div style={{ fontSize:11, color:S.gray, marginBottom:10 }}>Download a backup file and save it to Google Drive. Restore it any time if something goes wrong.</div>
@@ -1846,8 +1880,9 @@ function GrowthPage({ tenants, propPurchase, setPropPurchase }) {
  <div style={{ display:"flex", alignItems:"flex-end", gap:3, height:140 }}>
  {PROPS.map((p,i) => {
   const v2   = getV(p), mtg2 = getMtg(p), eq2 = v2 - mtg2;
-  const eqH  = Math.max(2, Math.round((eq2/tv)*120));
-  const mtgH = Math.max(2, Math.round((mtg2/tv)*120));
+  const maxV = Math.max.apply(null, PROPS.map(function(pp){return getV(pp);}));
+  const eqH  = Math.max(2, Math.round((eq2/maxV)*120));
+  const mtgH = Math.max(2, Math.round((mtg2/maxV)*120));
   return (
     <div key={p.id} style={{ flex:1, display:"flex", flexDirection:"column", alignItems:"center", gap:2 }}>
  <div style={{ display:"flex", alignItems:"flex-end", gap:1, height:120 }}>
@@ -2571,6 +2606,9 @@ function AIStrategyPage({tenants, jobs, rp, outgoings}) {
   const [res, setRes] = useState("");
   const [load, setLoad] = useState(false);
   const [tab, setTab] = useState("");
+  const [sKey, setSKey] = useState(function(){return localStorage.getItem("ash-api-key")||"";});
+  const [showKey, setShowKey] = useState(false);
+  const [kInp, setKInp] = useState("");
   const inc = tenants.reduce(function(s,t){return s+t.rn;}, 0);
   const mtg = MTGS.filter(function(m){return m.l !== "70 Coal Hill Lane (Home)";}).reduce(function(s,m){return s+m.m;}, 0);
   const eq = PROPS.reduce(function(s,p){return s+(p.v-p.mtg);}, 0);
@@ -2588,8 +2626,8 @@ function AIStrategyPage({tenants, jobs, rp, outgoings}) {
     next: base + " BTL or HMO next? Recommend specific Leeds/Bradford areas and price ranges."
   };
   function go(t) {
-    var k = localStorage.getItem("ash-api-key") || "";
-    if (!k) { setRes("Save your API key in More > AI Letter Writer first."); setTab(t); return; }
+    var k = sKey || localStorage.getItem("ash-api-key") || "";
+    if (!k) { setRes("No API key found. Tap 'Add Key' above."); setTab(t); return; }
     setTab(t); setLoad(true); setRes("");
     fetch("https://api.anthropic.com/v1/messages", {
  method: "POST",
@@ -2602,6 +2640,10 @@ function AIStrategyPage({tenants, jobs, rp, outgoings}) {
   }
   return (
     <div>
+ {!sKey&&<div style={{...card,...cardPad,marginBottom:10,background:"#fff5f5",borderColor:"#fecaca"}}>
+  <div style={{fontSize:12,fontWeight:600,color:S.red,marginBottom:6}}>No API key set on this device</div>
+  {showKey?(<div><Inp placeholder="Paste key from console.anthropic.com" value={kInp} onChange={function(e){setKInp(e.target.value);}} type="password" /><Btn onClick={function(){localStorage.setItem("ash-api-key",kInp);setSKey(kInp);setShowKey(false);}} style={{marginBottom:0}}>Save Key</Btn></div>):(<button onClick={function(){setShowKey(true);}} style={{padding:"8px 14px",borderRadius:8,border:"none",background:S.dark,color:"#fff",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"system-ui"}}>Add Key</button>)}
+ </div>}
  <div style={{background:"#1e293b", borderRadius:13, padding:12, marginBottom:12, display:"grid", gridTemplateColumns:"1fr 1fr 1fr", gap:8, color:"#fff"}}>
  <div style={{background:"rgba(255,255,255,0.08)", borderRadius:9, padding:9, textAlign:"center"}}>
  <div style={{fontSize:10, color:"#64748b"}}>Rent</div>
