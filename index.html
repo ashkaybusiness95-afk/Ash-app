@@ -346,6 +346,12 @@ function WideLayout({ tab, setTab, more, setMore, bag, alerts, paidNow, urgent }
   return (
     <div style={{ display:"grid", gridTemplateColumns:"200px 1fr", gap:16 }}>
  <div>
+ <div style={{ background:"linear-gradient(135deg,#1e293b,#0f172a)", borderRadius:15, padding:14, marginBottom:10, color:"#fff", textAlign:"center" }}>
+  <div style={{ fontSize:32, marginBottom:6 }}>🏠</div>
+  <div style={{ fontSize:14, fontWeight:700 }}>Ash</div>
+  <div style={{ fontSize:10, color:"#64748b" }}>{PROPS.length} units · {gbp(bag.tenants.reduce(function(s,t){return s+t.rn;},0))}/mo</div>
+  <div style={{ fontSize:10, color:"#4ade80", marginTop:3 }}>Target: 50 by 2036</div>
+ </div>
  <div style={{ background:"#fff", borderRadius:15, border:"1px solid #e2e8f0", overflow:"hidden", marginBottom:10 }}>
  {navItems.map(b => (
   <button key={b.id} onClick={() => { setTab(b.id); if (b.id !== "more") setMore(null); }}
