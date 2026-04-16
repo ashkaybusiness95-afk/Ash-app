@@ -178,7 +178,7 @@ function App() {
   const [more, setMore]     = useState(null);
   const [expMap, setExpMap] = useState({});
   const [wide, setWide]     = useState(window.innerWidth >= 600);
-  const [dm, setDm]         = useState(function(){try{return localStorage.getItem("ash-dm")==="1";}catch(e){return false;}});
+
   useEffect(() => {
     const handler = () => setWide(window.innerWidth >= 600);
     window.addEventListener("resize", handler);
@@ -186,7 +186,7 @@ function App() {
     screen.orientation && screen.orientation.addEventListener("change", () => setTimeout(handler, 300));
     return () => window.removeEventListener("resize", handler);
   }, []);
-  useEffect(function(){document.body.style.background=dm?"#0f172a":"#f1f5f9";},[dm]);
+
   useEffect(() => {
  db.collection("ashapp").doc("data").get().then(doc=>{
  let d=doc.exists?doc.data():JSON.parse(JSON.stringify(SEED));
@@ -258,7 +258,7 @@ function App() {
   const addPersonalOut = (yr, mo, item) => { const k = "p-"+mKey(yr,mo); upd(d => ({ personalOut: { ...d.personalOut, [k]: [...(d.personalOut[k]||[]), { id:"po"+Date.now(), ...item }] } })); };
   const deletePersonalOut = (yr, mo, id) => { const k = "p-"+mKey(yr,mo); upd(d => ({ personalOut: { ...d.personalOut, [k]: (d.personalOut[k]||[]).filter(x => x.id !== id) } })); };
   const bag = { tenants, rp, jobs, comp, contractors, deals, notes, outgoings, generalNotes, fixedOutgoings, propPurchase, roomNotes, expMap, toggleRent, addJob, updateJob, deleteJob, updateComp, updateTenant, addTenant, addContractor, deleteContractor, addDeal, updateDeal, deleteDeal, setNote, toggleExp, addOutgoing, deleteOutgoing, setGeneralNotes, setFixedOutgoing, removeFixedOutgoing, setPropPurchase, setRoomNote, savings, setSavings, personalOut, addPersonalOut, deletePersonalOut, wide };
-  const moreLabels = { outgoings:"Outgoings", personal:"Personal Costs", compliance:"Compliance", tenants:"Tenants", ailetters:"AI Letter Writer", aistrategy:"AI Strategy", dealcheck:"Deal Analyser", financials:"Financials", tax:"Tax Summary", timeline:"Timeline", rentplanner:"Rent Planner", notes:"Notes", refinance:"Refinance Planner", mtginterest:"Mortgage Interest", growth:"Portfolio Growth", contractors:"Contractors", deals:"Deal Pipeline", voids:"Void Tracker" };
+  const moreLabels = { outgoings:"Outgoings", personal:"Personal Costs", compliance:"Compliance", tenants:"Tenants", ailetters:"AI Letter Writer", dealcheck:"Deal Analyser", financials:"Financials", tax:"Tax Summary", timeline:"Timeline", rentplanner:"Rent Planner", notes:"Notes", growth:"Portfolio Growth", contractors:"Contractors", deals:"Deal Pipeline", rentgap:"Rent Gap", performers:"Top & Bottom", equity:"Equity Release" };
   const maxW = wide ? 1100 : 480;
   return (
     <div style={{ fontFamily:"system-ui,-apple-system,sans-serif", background:"#f1f5f9", minHeight:"100vh", maxWidth:maxW, margin:"0 auto", overflowX:"hidden" }}>
@@ -276,14 +276,13 @@ function App() {
     <div style={{ fontSize:11, color:"#94a3b8", fontStyle:"italic", marginTop:4 }}>{QUOTE.a?QUOTE.t+"—"+QUOTE.a:QUOTE.t}</div>
   </div>
   <div style={{ display:"flex", alignItems:"center", gap:8 }}>
-    <button onClick={function(){var v=!dm;setDm(v);try{localStorage.setItem("ash-dm",v?"1":"0");}catch(e){}}} style={{background:"none",border:"none",fontSize:18,cursor:"pointer",padding:0}}>{dm?"☀️":"🌙"}</button>
     <span style={{ fontSize:11, color:"#4ade80" }}>&#9679; Saved</span>
     {urgent > 0 && <span style={{ background:"#ef4444", color:"#fff", fontSize:11, fontWeight:700, padding:"3px 8px", borderRadius:99 }}>{urgent} urgent</span>}
   </div>
  </div>
  )}
  </div>
- <div style={{ padding: wide ? "16px 16px 16px" : "14px 14px 100px", filter:dm?"invert(0.88) hue-rotate(180deg)":"none" }}>
+ <div style={{ padding: wide ? "16px 16px 16px" : "14px 14px 100px" }}>
  {wide ? (
  <WideLayout tab={tab} setTab={setTab} more={more} setMore={setMore} bag={bag} alerts={alerts} paidNow={paidNow} urgent={urgent} />
  ) : (
@@ -298,19 +297,18 @@ function App() {
   {tab === "more"  && more === "compliance"  && <CompPage {...bag} />}
   {tab === "more"  && more === "tenants"     && <TenantsPage {...bag} />}
   {tab === "more"  && more === "ailetters"   && <AILettersPage {...bag} />}
-  {tab === "more"  && more === "aistrategy"  && <AIStrategyPage {...bag} />}
   {tab === "more"  && more === "dealcheck"   && <DealCheckPage {...bag} />}
   {tab === "more"  && more === "financials"  && <FinPage {...bag} />}
   {tab === "more"  && more === "tax"         && <TaxPage {...bag} />}
   {tab === "more"  && more === "timeline"    && <TimelinePage {...bag} />}
   {tab === "more"  && more === "rentplanner" && <RentPlannerPage {...bag} />}
   {tab === "more"  && more === "notes"       && <NotesPage {...bag} />}
-  {tab === "more"  && more === "refinance"   && <RefinancePage />}
-  {tab === "more"  && more === "mtginterest" && <MtgInterestPage {...bag} />}
   {tab === "more"  && more === "growth"      && <GrowthPage {...bag} />}
   {tab === "more"  && more === "contractors" && <ContractorsPage {...bag} />}
   {tab === "more"  && more === "deals"       && <DealsPage {...bag} />}
-  {tab === "more"  && more === "voids"       && <VoidsPage {...bag} />}
+  {tab === "more"  && more === "rentgap"     && <RentGapPage {...bag} />}
+  {tab === "more"  && more === "performers"  && <PerformersPage {...bag} />}
+  {tab === "more"  && more === "equity"      && <EquityPage {...bag} />}
  </>
  )}
  </div>
@@ -344,8 +342,8 @@ function WideLayout({ tab, setTab, more, setMore, bag, alerts, paidNow, urgent }
     {id:"mtgs",icon:"💳",label:"Mortgages"},
     {id:"more",icon:"⋯", label:"More"},
   ];
-  const moreItems = ["outgoings","personal","compliance","tenants","ailetters","aistrategy","dealcheck","financials","tax","timeline","rentplanner","notes","refinance","mtginterest","growth","contractors","deals","voids"];
-  const moreLabels = { outgoings:"Outgoings", personal:"Personal Costs", compliance:"Compliance", tenants:"Tenants", ailetters:"AI Letter Writer", aistrategy:"AI Strategy", dealcheck:"Deal Analyser", financials:"Financials", tax:"Tax Summary", timeline:"Timeline", rentplanner:"Rent Planner", notes:"Notes", refinance:"Refinance Planner", mtginterest:"Mortgage Interest", growth:"Portfolio Growth", contractors:"Contractors", deals:"Deal Pipeline", voids:"Void Tracker" };
+  const moreItems = ["outgoings","personal","compliance","tenants","ailetters","dealcheck","financials","tax","timeline","rentplanner","notes","growth","contractors","deals","rentgap","performers","equity"];
+  const moreLabels = { outgoings:"Outgoings", personal:"Personal Costs", compliance:"Compliance", tenants:"Tenants", ailetters:"AI Letter Writer", dealcheck:"Deal Analyser", financials:"Financials", tax:"Tax Summary", timeline:"Timeline", rentplanner:"Rent Planner", notes:"Notes", growth:"Portfolio Growth", contractors:"Contractors", deals:"Deal Pipeline", rentgap:"Rent Gap", performers:"Top & Bottom", equity:"Equity Release" };
   return (
     <div style={{ display:"grid", gridTemplateColumns:"200px 1fr", gap:16 }}>
  <div>
@@ -387,19 +385,18 @@ function WideLayout({ tab, setTab, more, setMore, bag, alerts, paidNow, urgent }
  {tab === "more"  && more === "compliance"  && <CompPage {...bag} />}
  {tab === "more"  && more === "tenants"     && <TenantsPage {...bag} />}
  {tab === "more"  && more === "ailetters"   && <AILettersPage {...bag} />}
- {tab === "more"  && more === "aistrategy"  && <AIStrategyPage {...bag} />}
  {tab === "more"  && more === "dealcheck"   && <DealCheckPage {...bag} />}
  {tab === "more"  && more === "financials"  && <FinPage {...bag} />}
  {tab === "more"  && more === "tax"         && <TaxPage {...bag} />}
  {tab === "more"  && more === "timeline"    && <TimelinePage {...bag} />}
  {tab === "more"  && more === "rentplanner" && <RentPlannerPage {...bag} />}
  {tab === "more"  && more === "notes"       && <NotesPage {...bag} />}
- {tab === "more"  && more === "refinance"   && <RefinancePage />}
- {tab === "more"  && more === "mtginterest" && <MtgInterestPage {...bag} />}
  {tab === "more"  && more === "growth"      && <GrowthPage {...bag} />}
  {tab === "more"  && more === "contractors" && <ContractorsPage {...bag} />}
  {tab === "more"  && more === "deals"       && <DealsPage {...bag} />}
- {tab === "more"  && more === "voids"       && <VoidsPage {...bag} />}
+ {tab === "more"  && more === "rentgap"     && <RentGapPage {...bag} />}
+ {tab === "more"  && more === "performers"  && <PerformersPage {...bag} />}
+ {tab === "more"  && more === "equity"      && <EquityPage {...bag} />}
  </div>
     </div>
   );
@@ -504,6 +501,16 @@ function DashPage({ alerts, paidNow, tenants, rp, jobs, comp, outgoings, wide, s
   const oc=PROPS.reduce((s,p)=>s+(outgoings[p.id+"-"+ms]||[]).reduce((x,o)=>x+(o.amount||0),0),0);
   const totalOut=tm+jc+oc;
   const ncf=pr-totalOut;
+  // YTD figures (Jan of current tax year = April 6 previous year for UK but using calendar year for simplicity)
+  let ytdRent = 0, ytdCosts = 0;
+  for (let m = 0; m <= CMO; m++) {
+    const mk = mKey(CYR, m);
+    ytdRent += tenants.filter(t => rp[t.id+"-"+CYR+"-"+m]).reduce((s,t) => s + t.rn, 0);
+    ytdCosts += PROPS.reduce((s,p) => s + p.mm, 0);
+    ytdCosts += jobs.filter(j => j.status==="done" && j.date && j.date.startsWith(mk)).reduce((s,j) => s + (j.cost||0), 0);
+    ytdCosts += PROPS.reduce((s,p) => s + (outgoings[p.id+"-"+mk]||[]).reduce((x,o) => x+(o.amount||0), 0), 0);
+  }
+  const ytdNet = ytdRent - ytdCosts;
   const tv  = PROPS.reduce((s, p) => s + p.v, 0);
   const td  = PROPS.reduce((s, p) => s + p.mtg, 0);
   const eq  = tv - td;
@@ -670,6 +677,19 @@ function DashPage({ alerts, paidNow, tenants, rp, jobs, comp, outgoings, wide, s
  </div>
  </div>
  )}
+ <div style={{ background:"linear-gradient(135deg,#0f172a,#1e293b)", borderRadius:15, padding:"14px 16px", marginBottom:12, color:"#fff" }}>
+ <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center" }}>
+ <div>
+ <div style={{ fontSize:10, color:"#94a3b8", fontWeight:700, textTransform:"uppercase", letterSpacing:".5px" }}>Year to date · {CYR}</div>
+ <div style={{ fontSize:24, fontWeight:700, color:ytdNet>=0?"#4ade80":"#f87171", marginTop:2 }}>{ytdNet>=0?"+":"-"}{gbp(Math.abs(ytdNet))}</div>
+ <div style={{ fontSize:11, color:"#94a3b8", marginTop:1 }}>{gbp(ytdRent)} rent – {gbp(ytdCosts)} costs</div>
+ </div>
+ <div style={{ textAlign:"right" }}>
+ <div style={{ fontSize:10, color:"#94a3b8" }}>Avg/month</div>
+ <div style={{ fontSize:15, fontWeight:700, color:ytdNet>=0?"#4ade80":"#f87171" }}>{ytdNet>=0?"+":"-"}{gbp(Math.abs(Math.round(ytdNet/(CMO+1))))}</div>
+ </div>
+ </div>
+ </div>
  <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:10}}>
  <button onClick={()=>{const d=new Date(selYr,selMo-1,1);setSelYr(d.getFullYear());setSelMo(d.getMonth());}} style={{width:36,height:36,borderRadius:"50%",border:"1px solid #e2e8f0",background:"#fff",cursor:"pointer",fontSize:18}}>&#8249;</button>
  <span style={{fontSize:15,fontWeight:700}}>{MFULL[selMo]} {selYr}</span>
@@ -959,7 +979,13 @@ function JobsPage({ jobs, addJob, updateJob, deleteJob, wide }) {
   );
 }
 function MtgsPage() {
+  const [testRate, setTestRate] = useState(5.0);
   const sorted = [...MTGS].sort((a, b) => (du(a.e) || 9999) - (du(b.e) || 9999));
+  const ioPayment = (balance, rate) => Math.round(balance * (rate/100) / 12);
+  const btlMtgs = MTGS.filter(m=>m.l!=="70 Coal Hill Lane (Home)");
+  const curBtlTotal = btlMtgs.reduce((s,m)=>s+m.m,0);
+  const newBtlTotal = btlMtgs.reduce((s,m)=>s+ioPayment(m.b,testRate),0);
+  const rateDiff = newBtlTotal - curBtlTotal;
   const mSt = e => {
     const d = du(e);
     if (d === null)  return { color:"amber", label:"Unknown" };
@@ -978,6 +1004,19 @@ function MtgsPage() {
  <div style={{ background:"#fff", borderRadius:14, border:"1px solid #e2e8f0", padding:12 }}>
  <div style={{ fontSize:11, color:S.gray, marginBottom:3 }}>Monthly</div>
  <div style={{ fontSize:19, fontWeight:700 }}>{gbp(MTGS.reduce((s, m) => s + m.m, 0))}</div>
+ </div>
+ </div>
+ <div style={{ ...card, ...cardPad, marginBottom:10, background:"linear-gradient(135deg,#f8fafc,#fff)" }}>
+ <div style={{ fontSize:12, fontWeight:700, color:S.mid, marginBottom:4 }}>🧮 Rate scenario</div>
+ <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:6 }}>
+ <input type="range" min="2" max="9" step="0.1" value={testRate} onChange={e=>setTestRate(parseFloat(e.target.value))} style={{ flex:1 }} />
+ <span style={{ fontSize:17, fontWeight:700, minWidth:48 }}>{testRate.toFixed(1)}%</span>
+ </div>
+ <div style={{ fontSize:11, color:S.gray }}>
+  At {testRate.toFixed(1)}%: <span style={{ fontWeight:700, color:S.dark }}>{gbp(newBtlTotal)}/mo</span>
+  {Math.abs(rateDiff)>=5 && <span style={{ color:rateDiff>0?S.red:S.green, fontWeight:600 }}>
+   {" "}({rateDiff>0?"+":""}{gbp(Math.abs(rateDiff))}/mo {rateDiff>0?"more":"less"})
+  </span>}
  </div>
  </div>
  {sorted.map((m, i) => {
@@ -1009,7 +1048,6 @@ function MtgsPage() {
   );
 }
 function MoreMenu({ tenants, contractors, deals, setMore, data }) {
-  const vc = PROPS.filter(p => p.vc && tenants.filter(t => t.pid === p.id).length === 0).length;
   const exportBackup = () => {
     const blob = new Blob([JSON.stringify({ ...data, exportedAt: new Date().toISOString() }, null, 2)], { type:"application/json" });
     const a = document.createElement("a");
@@ -1024,26 +1062,25 @@ function MoreMenu({ tenants, contractors, deals, setMore, data }) {
  {id:"outgoings",   icon:"💸", label:"Outgoings",        sub:"Bills & expenses per property"},
  {id:"personal",    icon:"🏠", label:"Personal Costs",   sub:"Home mortgage, car, bills"},
  {id:"financials",  icon:"📊", label:"Financials",        sub:"Monthly & per-property breakdown"},
+ {id:"performers",  icon:"🏆", label:"Top & Bottom",      sub:"Best & worst performing properties"},
+ {id:"equity",      icon:"💰", label:"Equity Release",    sub:"What you can pull out at 75% LTV"},
  {id:"tax",         icon:"🧾", label:"Tax Summary",       sub:"Annual P&L for self assessment"},
  {g:"Properties"},
  {id:"compliance",  icon:"🛡", label:"Compliance",        sub:"Gas, EICR, EPC, HMO licence"},
  {id:"tenants",     icon:"👥", label:"Tenants",           sub:tenants.length+" tenants · "+PROPS.length+" properties"},
+ {id:"rentgap",     icon:"📊", label:"Rent Gap",          sub:"Where you're leaving money on the table"},
  {id:"rentplanner", icon:"🔖", label:"Rent Planner",      sub:"Plan rent increases"},
- {id:"voids",       icon:"🏢", label:"Void Tracker",      sub:vc>0?vc+" vacant":"All let"},
  {id:"contractors", icon:"📞", label:"Contractors",       sub:contractors.length+" contacts saved"},
  {g:"AI Tools"},
  {id:"ailetters",   icon:"✉️", label:"AI Letter Writer",   sub:"Draft personalised letters"},
  {id:"dealcheck",   icon:"🔍", label:"Deal Analyser",      sub:"Check if a deal stacks up"},
- {id:"aistrategy",  icon:"🤖", label:"AI Strategy",       sub:"AI advice on your portfolio"},
  {g:"Planning"},
- {id:"refinance",   icon:"🔄", label:"Refinance Planner", sub:"Mortgage expiries & rates"},
- {id:"mtginterest", icon:"💳", label:"Mortgage Interest", sub:"Interest vs equity growth"},
  {id:"growth",      icon:"📈", label:"Portfolio Growth",  sub:"Equity & value over time"},
  {id:"deals",       icon:"🎯", label:"Deal Pipeline",     sub:deals.length+" deals tracked"},
  {id:"timeline",    icon:"📅", label:"Timeline",          sub:"Upcoming dates & events"},
  {id:"notes",       icon:"📝", label:"Notes",             sub:"General notepad"},
  ].map(function(item,i) { return item.g ? (
- <div key={i} style={{ fontSize:11, fontWeight:700, color:S.gray, padding:"12px 4px 6px", textTransform:"uppercase", letterSpacing:1 }}>{item.g}</div>
+ <div key={i} style={{ fontSize:10, fontWeight:700, color:S.mid, padding:"16px 4px 6px", textTransform:"uppercase", letterSpacing:1.2, borderBottom:"1px solid #e2e8f0", marginBottom:8, marginTop:i===0?0:4 }}>{item.g}</div>
  ) : (
  <button key={item.id} onClick={() => setMore(item.id)} style={{ background:"#fff", border:"1px solid #e2e8f0", borderRadius:13, padding:"13px 14px", display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:8, cursor:"pointer", width:"100%", textAlign:"left", fontFamily:"system-ui" }}>
  <div style={{ display:"flex", alignItems:"center", flex:1 }}>
@@ -1744,62 +1781,6 @@ function DealsPage({ deals, addDeal, updateDeal, deleteDeal, wide }) {
     </div>
   );
 }
-function RefinancePage() {
-  const [testRate, setTestRate] = useState(5.0);
-  const sorted = [...MTGS].filter(m => m.e).sort((a,b) => new Date(a.e)-new Date(b.e));
-  // BTL mortgages are interest-only: monthly payment = balance × rate / 12
-  const ioPayment = (balance, rate) => Math.round(balance * (rate/100) / 12);
-  return (
-    <div>
- <div style={{ ...card, ...cardPad, marginBottom:10 }}>
- <div style={{ fontSize:13, fontWeight:600, marginBottom:4 }}>Test a rate scenario</div>
- <div style={{ fontSize:11, color:S.gray, marginBottom:10 }}>Drag to see what your interest-only payments would be at a new rate</div>
- <div style={{ display:"flex", alignItems:"center", gap:12, marginBottom:8 }}>
- <input type="range" min="2" max="9" step="0.1" value={testRate} onChange={e=>setTestRate(parseFloat(e.target.value))} style={{ flex:1 }} />
- <span style={{ fontSize:18, fontWeight:700, minWidth:50, color:S.dark }}>{testRate.toFixed(1)}%</span>
- </div>
- <div style={{ fontSize:11, color:S.gray }}>Total at {testRate.toFixed(1)}%: <span style={{ fontWeight:700, color:S.dark }}>{gbp(MTGS.filter(m=>m.l!=="70 Coal Hill Lane (Home)").reduce((s,m)=>s+ioPayment(m.b,testRate),0))}/mo</span> vs current <span style={{ fontWeight:700 }}>{gbp(MTGS.filter(m=>m.l!=="70 Coal Hill Lane (Home)").reduce((s,m)=>s+m.m,0))}/mo</span></div>
- </div>
- {sorted.map((m, i) => {
- const d = du(m.e);
- const urgency = d!=null&&d<=0?"red":d!=null&&d<=180?"red":d!=null&&d<=365?"amber":"green";
- const newPayment = ioPayment(m.b, testRate);
- const diff = newPayment - m.m;
- const isHome = m.l === "70 Coal Hill Lane (Home)";
- return (
- <div key={i} style={{ ...card, ...cardPad, ...(isHome?{opacity:.7}:{}) }}>
-  <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:10 }}>
-    <div>
- <div style={{ fontSize:13, fontWeight:600 }}>{m.l}</div>
- <div style={{ fontSize:11, color:S.gray }}>{m.ldr} · Current rate: {m.r!=null?m.r+"%":"Unknown"}</div>
- {isHome && <div style={{ fontSize:11, color:S.amber }}>Residential — repayment mortgage</div>}
-    </div>
-    <Badge color={urgency}>{d!=null&&d<=0?"EXPIRED":d!=null?d+"d":"Unknown"}</Badge>
-  </div>
-  <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr 1fr", gap:8 }}>
-    <div style={{ background:S.light, borderRadius:9, padding:10 }}>
- <div style={{ fontSize:11, color:S.gray }}>Balance</div>
- <div style={{ fontSize:13, fontWeight:700 }}>{gbp(m.b)}</div>
-    </div>
-    <div style={{ background:S.light, borderRadius:9, padding:10 }}>
- <div style={{ fontSize:11, color:S.gray }}>Current</div>
- <div style={{ fontSize:13, fontWeight:700 }}>{gbp(m.m)}/mo</div>
-    </div>
-    <div style={{ background:diff>50?"#fff5f5":diff<-50?"#f0fdf4":S.light, borderRadius:9, padding:10 }}>
- <div style={{ fontSize:11, color:S.gray }}>At {testRate.toFixed(1)}%</div>
- <div style={{ fontSize:13, fontWeight:700, color:diff>50?S.red:diff<-50?S.green:S.dark }}>{gbp(newPayment)}/mo</div>
-    </div>
-  </div>
-  <div style={{ fontSize:11, color:diff>50?S.red:diff<-50?S.green:S.gray, marginTop:8, fontWeight:600 }}>
-    {Math.abs(diff) < 5 ? "Roughly same as current rate" : diff > 0 ? "▲ "+gbp(diff)+"/mo more than current" : "▼ "+gbp(Math.abs(diff))+"/mo less than current"}
-  </div>
-  {m.e && <div style={{ fontSize:11, color:S.gray, marginTop:4 }}>Expires: {new Date(m.e).toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"})}{d&&d>0?" ("+d+" days)":""}</div>}
- </div>
- );
- })}
-    </div>
-  );
-}
 function GrowthProjector({tv}) {
   const [gr, setGr] = useState(5);
   const years = [1, 3, 5, 10];
@@ -2274,79 +2255,6 @@ function RentPlannerPage({ tenants, updateTenant, wide }) {
     </div>
   );
 }
-function MtgInterestPage({ wide }) {
-  const SK_VALS = "ash-prop-vals";
-  const [vals] = useState(() => {
-    try { return JSON.parse(localStorage.getItem(SK_VALS)) || {}; } catch { return {}; }
-  });
-  const getV = p => vals[p.id+"_v"] ?? p.v;
-  const annualInterest = MTGS.map(m => ({
-    label: m.l,
-    ldr: m.ldr,
-    balance: m.b,
-    rate: m.r,
-    annual: m.r != null ? Math.round(m.b * m.r / 100) : null,
-    monthly: m.m,
-  }));
-  const totalAnnualInterest = annualInterest.filter(m=>m.annual!=null).reduce((s,m)=>s+m.annual,0);
-  const totalBalance        = MTGS.reduce((s,m)=>s+m.b,0);
-  const portfolioValue      = PROPS.reduce((s,p)=>s+getV(p),0);
-  const totalEquity         = portfolioValue - totalBalance;
-  // Estimate equity built per year via appreciation (conservative 3%)
-  const annualAppreciation  = Math.round(portfolioValue * 0.03);
-  return (
-    <div>
- <div style={{ background:S.abg, borderRadius:11, padding:"10px 14px", marginBottom:12, fontSize:12, color:S.atx, lineHeight:1.6 }}>
- Since your BTL mortgages are interest-only, you're not reducing the debt through payments — only through house price growth. This shows what you're paying in interest vs what you're gaining in equity each year.
- </div>
- <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10, marginBottom:12 }}>
- {[
- {l:"Annual interest cost", v:gbp(totalAnnualInterest), s:"Across all mortgages",     g:false},
- {l:"Est. annual appreciation", v:gbp(annualAppreciation), s:"At 3% — your equity gain",g:true},
- {l:"Net equity position",  v:gbp(annualAppreciation-totalAnnualInterest), s:"Appreciation minus interest", g:annualAppreciation>totalAnnualInterest},
- {l:"Total interest/month", v:gbp(Math.round(totalAnnualInterest/12)), s:"What you pay in interest",   g:false},
- ].map((k,i)=>(
- <div key={i} style={{ background:"#fff", borderRadius:14, border:"1px solid #e2e8f0", padding:12 }}>
-  <div style={{ fontSize:11, color:S.gray, marginBottom:3 }}>{k.l}</div>
-  <div style={{ fontSize:18, fontWeight:700, color:k.g?S.green:S.dark }}>{k.v}</div>
-  <div style={{ fontSize:11, color:S.gray, marginTop:2 }}>{k.s}</div>
- </div>
- ))}
- </div>
- <div style={card}>
- <div style={{ padding:"11px 14px", background:"#f8fafc", borderBottom:"1px solid #f1f5f9", display:"grid", gridTemplateColumns:"1fr 70px 70px 70px", gap:4, fontSize:11, fontWeight:600, color:S.gray }}>
- <span>Mortgage</span><span style={{textAlign:"right"}}>Balance</span><span style={{textAlign:"right"}}>Rate</span><span style={{textAlign:"right"}}>Interest/yr</span>
- </div>
- {annualInterest.map((m,i)=>(
- <div key={i} style={{ padding:"9px 14px", borderBottom:"1px solid #f8fafc", display:"grid", gridTemplateColumns:"1fr 70px 70px 70px", gap:4, fontSize:12 }}>
-  <div>
-    <div style={{ fontWeight:600, fontSize:12 }}>{m.label.split(" ").slice(0,3).join(" ")}</div>
-    <div style={{ fontSize:10, color:S.gray }}>{m.ldr}</div>
-  </div>
-  <span style={{textAlign:"right"}}>{gbp(m.balance)}</span>
-  <span style={{textAlign:"right",color:m.rate>5.5?S.red:S.dark}}>{m.rate!=null?m.rate+"%":"?"}</span>
-  <span style={{textAlign:"right",fontWeight:600,color:S.red}}>{m.annual!=null?gbp(m.annual):"?"}</span>
- </div>
- ))}
- <div style={{ padding:"11px 14px", background:"#f8fafc", borderTop:"1px solid #f1f5f9", display:"grid", gridTemplateColumns:"1fr 70px 70px 70px", gap:4, fontSize:12, fontWeight:700 }}>
- <span>Total</span>
- <span style={{textAlign:"right"}}>{gbp(totalBalance)}</span>
- <span></span>
- <span style={{textAlign:"right",color:S.red}}>{gbp(totalAnnualInterest)}</span>
- </div>
- </div>
- <div style={{ ...card, ...cardPad, marginTop:2 }}>
- <div style={{ fontSize:13, fontWeight:600, marginBottom:8 }}>💡 The real picture</div>
- <div style={{ fontSize:12, color:S.dark, lineHeight:1.8 }}>
- You're paying approximately <span style={{fontWeight:700,color:S.red}}>{gbp(totalAnnualInterest)}/year</span> in mortgage interest across your portfolio.
- At 3% annual appreciation your properties gain roughly <span style={{fontWeight:700,color:S.green}}>{gbp(annualAppreciation)}/year</span> in value.
- That means your portfolio is {annualAppreciation > totalAnnualInterest ? "building equity faster than interest is costing you" : "currently costing more in interest than it's gaining in appreciation at 3% growth"} — but rental income is on top of this.
- </div>
- <div style={{ fontSize:11, color:S.gray, marginTop:8 }}>Note: 3% appreciation is conservative. Leeds has historically grown faster. Update your property values in Portfolio Growth to see accurate figures.</div>
- </div>
-    </div>
-  );
-}
 function AILettersPage({ tenants, wide }) {
   const [type, setType]         = useState("rent-increase");
   const [selTenant, setSelTenant] = useState(tenants[0]?.id || "");
@@ -2602,88 +2510,6 @@ function DealCheckPage({ wide }) {
     </div>
   );
 }
-function AIStrategyPage({tenants, jobs, rp, outgoings}) {
-  const [res, setRes] = useState("");
-  const [load, setLoad] = useState(false);
-  const [tab, setTab] = useState("");
-  const [sKey, setSKey] = useState(function(){return localStorage.getItem("ash-api-key")||"";});
-  const [showKey, setShowKey] = useState(false);
-  const [kInp, setKInp] = useState("");
-  const inc = tenants.reduce(function(s,t){return s+t.rn;}, 0);
-  const mtg = MTGS.filter(function(m){return m.l !== "70 Coal Hill Lane (Home)";}).reduce(function(s,m){return s+m.m;}, 0);
-  const eq = PROPS.reduce(function(s,p){return s+(p.v-p.mtg);}, 0);
-  const ms = mKey(CYR, CMO);
-  const jc = jobs.filter(function(j){return j.status==="done"&&j.date&&j.date.startsWith(ms);}).reduce(function(s,j){return s+(j.cost||0);}, 0);
-  const oc = PROPS.reduce(function(s,p){return s+(outgoings[p.id+"-"+ms]||[]).reduce(function(x,o){return x+(o.amount||0);},0);}, 0);
-  const netInc = inc - mtg - jc - oc;
-  var openJ=jobs.filter(function(j){return j.status==="open";}).length;
-  var expMtg=MTGS.filter(function(m){var d2=du(m.e);return d2!=null&&d2<=365&&d2>=0;}).map(function(m){return m.l+" in "+du(m.e)+"d at "+m.r+"%";}).join("; ");
-  var propSum=PROPS.map(function(p){var pt=tenants.filter(function(t2){return t2.pid===p.id;});return p.n+" ("+p.ty+", val "+gbp(p.v)+", net "+gbp(pt.reduce(function(s2,t2){return s2+t2.rn;},0)-p.mm)+")";}).join(". ");
-  const base = "Leeds/Bradford landlord, "+PROPS.length+" units (2 HMO, "+(PROPS.length-2)+" BTL). Target 50 by 2036. Rent "+gbp(inc)+"/mo, net "+gbp(netInc)+"/mo, equity "+gbp(eq)+". "+openJ+" open jobs. Properties: "+propSum+". Mortgages expiring: "+(expMtg||"none soon")+". Be specific to Leeds. Be direct.";
-  const prompts = {
-    strategy: base + " Give 4 specific, actionable ways to scale faster. Consider remortgaging, HMO conversions, deal sourcing.",
-    finance: base + " Best 3 finance strategies for next purchase. Give specific numbers.",
-    next: base + " BTL or HMO next? Recommend specific Leeds/Bradford areas and price ranges."
-  };
-  function go(t) {
-    var k = sKey || localStorage.getItem("ash-api-key") || "";
-    if (!k) { setRes("No API key found. Tap 'Add Key' above."); setTab(t); return; }
-    setTab(t); setLoad(true); setRes("");
-    fetch("https://api.anthropic.com/v1/messages", {
- method: "POST",
- headers: {"Content-Type":"application/json","x-api-key":k,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},
- body: JSON.stringify({model:"claude-sonnet-4-20250514", max_tokens:350, messages:[{role:"user",content:prompts[t]}]})
-    }).then(function(r){return r.json();}).then(function(d){
- setRes(d.content ? d.content.map(function(c){return c.text||"";}).join("") : "Error.");
- setLoad(false);
-    }).catch(function(){setRes("Connection error."); setLoad(false);});
-  }
-  return (
-    <div>
- {!sKey&&<div style={{...card,...cardPad,marginBottom:10,background:"#fff5f5",borderColor:"#fecaca"}}>
-  <div style={{fontSize:12,fontWeight:600,color:S.red,marginBottom:6}}>No API key set on this device</div>
-  {showKey?(<div><Inp placeholder="Paste key from console.anthropic.com" value={kInp} onChange={function(e){setKInp(e.target.value);}} type="password" /><Btn onClick={function(){localStorage.setItem("ash-api-key",kInp);setSKey(kInp);setShowKey(false);}} style={{marginBottom:0}}>Save Key</Btn></div>):(<button onClick={function(){setShowKey(true);}} style={{padding:"8px 14px",borderRadius:8,border:"none",background:S.dark,color:"#fff",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"system-ui"}}>Add Key</button>)}
- </div>}
- <div style={{background:"#1e293b", borderRadius:13, padding:12, marginBottom:12, display:"grid", gridTemplateColumns:"1fr 1fr 1fr", gap:8, color:"#fff"}}>
- <div style={{background:"rgba(255,255,255,0.08)", borderRadius:9, padding:9, textAlign:"center"}}>
- <div style={{fontSize:10, color:"#64748b"}}>Rent</div>
- <div style={{fontSize:12, fontWeight:700, color:"#4ade80"}}>{gbp(inc)}/mo</div>
- </div>
- <div style={{background:"rgba(255,255,255,0.08)", borderRadius:9, padding:9, textAlign:"center"}}>
- <div style={{fontSize:10, color:"#64748b"}}>Net</div>
- <div style={{fontSize:12, fontWeight:700, color:"#4ade80"}}>{gbp(netInc)}/mo</div>
- </div>
- <div style={{background:"rgba(255,255,255,0.08)", borderRadius:9, padding:9, textAlign:"center"}}>
- <div style={{fontSize:10, color:"#64748b"}}>Equity</div>
- <div style={{fontSize:12, fontWeight:700, color:"#4ade80"}}>{gbp(eq)}</div>
- </div>
- </div>
- <div style={{display:"grid", gridTemplateColumns:"1fr 1fr 1fr", gap:8, marginBottom:12}}>
- <button onClick={function(){go("strategy");}} style={{padding:"10px 4px", borderRadius:10, border:"none", cursor:"pointer", fontFamily:"system-ui", fontWeight:600, fontSize:12, background:tab==="strategy"&&res?"#1e293b":S.light, color:tab==="strategy"&&res?"#fff":S.dark}}>
- {load&&tab==="strategy"?"...":"Growth"}
- </button>
- <button onClick={function(){go("finance");}} style={{padding:"10px 4px", borderRadius:10, border:"none", cursor:"pointer", fontFamily:"system-ui", fontWeight:600, fontSize:12, background:tab==="finance"&&res?"#1e293b":S.light, color:tab==="finance"&&res?"#fff":S.dark}}>
- {load&&tab==="finance"?"...":"Finance"}
- </button>
- <button onClick={function(){go("next");}} style={{padding:"10px 4px", borderRadius:10, border:"none", cursor:"pointer", fontFamily:"system-ui", fontWeight:600, fontSize:12, background:tab==="next"&&res?"#1e293b":S.light, color:tab==="next"&&res?"#fff":S.dark}}>
- {load&&tab==="next"?"...":"Next Buy"}
- </button>
- </div>
- {load && <div style={{textAlign:"center", padding:"24px", color:S.gray}}>Analysing your portfolio...</div>}
- {res && !load && (
- <div style={{background:"#fff", borderRadius:13, border:"1px solid #e2e8f0", padding:14}}>
- <div style={{fontSize:13, lineHeight:1.8, whiteSpace:"pre-wrap"}}>{res}</div>
- </div>
- )}
- {!res && !load && (
- <div style={{textAlign:"center", padding:"24px", color:S.gray, fontSize:12}}>
- Tap a button above for AI advice based on your real numbers.
- <div style={{marginTop:6, color:S.amber}}>Requires API key from console.anthropic.com</div>
- </div>
- )}
-    </div>
-  );
-}
 function PersonalOutPage({ tenants, rp, jobs, outgoings, personalOut, addPersonalOut, deletePersonalOut }) {
   const [selYr, setSelYr] = useState(CYR);
   const [selMo, setSelMo] = useState(CMO);
@@ -2755,27 +2581,213 @@ function PersonalOutPage({ tenants, rp, jobs, outgoings, personalOut, addPersona
     </div>
   );
 }
-function VoidsPage({ tenants }) {
-  const vacant = PROPS.filter(p => p.vc && tenants.filter(t => t.pid === p.id).length === 0);
-  if (!vacant.length) return <div style={{ textAlign:"center", padding:"50px 0", color:S.gray }}><div style={{ fontSize:36, marginBottom:10 }}>🏢</div><div>No vacant properties</div></div>;
+function RentGapPage({ tenants, updateTenant }) {
+  const [showAll, setShowAll] = useState(false);
+  // Estimate "review needed" based on start date or review date
+  const analysed = tenants.map(t => {
+    const p = PROPS.find(x => x.id === t.pid);
+    const ref = t.rv || t.startDate;
+    const monthsSince = ref ? Math.round((now - new Date(ref)) / (30.44 * 86400000)) : null;
+    // Rough benchmark: estimate 4% annual market drift
+    const estGap = monthsSince != null ? Math.round(t.rn * (Math.pow(1.04, monthsSince/12) - 1)) : 0;
+    let status = "ok", label = "Recently reviewed";
+    if (monthsSince == null) { status = "unknown"; label = "No review date set"; }
+    else if (monthsSince >= 24) { status = "red"; label = Math.floor(monthsSince/12)+"yr "+monthsSince%12+"mo"; }
+    else if (monthsSince >= 12) { status = "amber"; label = Math.floor(monthsSince/12)+"yr"+(monthsSince%12>0?" "+(monthsSince%12)+"mo":""); }
+    else if (monthsSince >= 6) { status = "ok"; label = monthsSince+" months ago"; }
+    else { status = "ok"; label = monthsSince+" months ago"; }
+    return { ...t, propName: p ? p.n : "?", monthsSince, estGap, status, label };
+  });
+  const needsReview = analysed.filter(t => t.status === "red" || t.status === "amber");
+  const displayed = showAll ? analysed : needsReview;
+  const totalGap = needsReview.reduce((s,t) => s + Math.max(0, t.estGap), 0);
+  const totalAnnual = totalGap * 12;
   return (
     <div>
- {vacant.map(p => (
- <div key={p.id} style={{ ...card, ...cardPad, background:"#fff5f5", borderColor:"#fecaca" }}>
- <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:10 }}>
-  <div>
-    <div style={{ fontSize:13, fontWeight:600, color:"#991b1b" }}>{p.n}, {p.town}</div>
-    <div style={{ fontSize:11, color:"#b91c1c" }}>Not yet let</div>
+ <div style={{ background:"linear-gradient(135deg,#fef3c7,#fef9e0)", borderRadius:15, padding:16, marginBottom:12, border:"1px solid #fde68a" }}>
+ <div style={{ fontSize:11, color:S.atx, fontWeight:700, textTransform:"uppercase", letterSpacing:".5px", marginBottom:4 }}>Estimated rent gap</div>
+ <div style={{ fontSize:28, fontWeight:700, color:S.amber }}>{gbp(totalGap)}/mo</div>
+ <div style={{ fontSize:12, color:S.atx, marginTop:2 }}>That's <span style={{ fontWeight:700 }}>{gbp(totalAnnual)}/year</span> across {needsReview.length} tenant{needsReview.length!==1?"s":""}</div>
+ <div style={{ fontSize:10, color:S.atx, marginTop:8, lineHeight:1.5, opacity:.8 }}>Rough estimate assuming 4%/yr market drift from last review date. Verify with local comparables before increasing rent.</div>
+ </div>
+ <div style={{ display:"flex", gap:8, marginBottom:10 }}>
+ <button onClick={() => setShowAll(false)} style={{ flex:1, padding:"8px 12px", borderRadius:10, border:"1px solid #e2e8f0", background:!showAll?S.dark:"#fff", color:!showAll?"#fff":S.dark, fontSize:12, fontWeight:600, cursor:"pointer", fontFamily:"system-ui" }}>
+  Needs review ({needsReview.length})
+ </button>
+ <button onClick={() => setShowAll(true)} style={{ flex:1, padding:"8px 12px", borderRadius:10, border:"1px solid #e2e8f0", background:showAll?S.dark:"#fff", color:showAll?"#fff":S.dark, fontSize:12, fontWeight:600, cursor:"pointer", fontFamily:"system-ui" }}>
+  All tenants ({analysed.length})
+ </button>
+ </div>
+ {displayed.length === 0 && (
+ <div style={{ ...card, ...cardPad, textAlign:"center", padding:"30px 14px" }}>
+ <div style={{ fontSize:32, marginBottom:8 }}>✅</div>
+ <div style={{ fontSize:13, fontWeight:600 }}>No rent reviews overdue</div>
+ </div>
+ )}
+ {displayed.sort((a,b) => (b.monthsSince||0) - (a.monthsSince||0)).map(t => (
+ <div key={t.id} style={{ ...card, ...cardPad, borderLeft:t.status==="red"?"4px solid "+S.red:t.status==="amber"?"4px solid "+S.amber:t.status==="unknown"?"4px solid "+S.gray:"4px solid "+S.green }}>
+ <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:6 }}>
+  <div style={{ flex:1 }}>
+  <div style={{ fontSize:14, fontWeight:700 }}>{t.nm}</div>
+  <div style={{ fontSize:11, color:S.gray }}>{t.propName}</div>
   </div>
-  <Badge color="red">Vacant</Badge>
+  <Badge color={t.status==="red"?"red":t.status==="amber"?"amber":t.status==="unknown"?"gray":"green"}>{t.label}</Badge>
  </div>
- <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:8, marginBottom:10 }}>
-  <div style={{ background:"#fff", borderRadius:10, padding:10 }}><div style={{ fontSize:11, color:S.gray }}>Est. rent</div><div style={{ fontSize:16, fontWeight:700 }}>{gbp(825)}/mo</div></div>
-  <div style={{ background:"#fff", borderRadius:10, padding:10 }}><div style={{ fontSize:11, color:S.gray }}>Mortgage</div><div style={{ fontSize:16, fontWeight:700, color:S.red }}>{gbp(p.mm)}/mo</div></div>
+ <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr 1fr", gap:6, marginTop:8 }}>
+  <div style={{ background:S.light, borderRadius:8, padding:8 }}>
+   <div style={{ fontSize:10, color:S.gray }}>Current</div>
+   <div style={{ fontSize:13, fontWeight:700 }}>{gbp(t.rn)}</div>
+  </div>
+  <div style={{ background:t.estGap>0?"#f0fdf4":S.light, borderRadius:8, padding:8 }}>
+   <div style={{ fontSize:10, color:S.gray }}>Est gap</div>
+   <div style={{ fontSize:13, fontWeight:700, color:t.estGap>0?S.green:S.gray }}>{t.estGap>0?"+":""}{gbp(t.estGap)}</div>
+  </div>
+  <div style={{ background:t.estGap>0?"#f0fdf4":S.light, borderRadius:8, padding:8 }}>
+   <div style={{ fontSize:10, color:S.gray }}>Per year</div>
+   <div style={{ fontSize:13, fontWeight:700, color:t.estGap>0?S.green:S.gray }}>{gbp(t.estGap*12)}</div>
+  </div>
  </div>
- <div style={{ fontSize:11, fontWeight:600, color:"#991b1b" }}>Advertise now — every vacant month costs approx {gbp(825)} in missed rent.</div>
  </div>
  ))}
+    </div>
+  );
+}
+function PerformersPage({ tenants, jobs, outgoings, rp }) {
+  const analysed = PROPS.map(p => {
+    const pt = tenants.filter(t => t.pid === p.id);
+    const monthlyRent = pt.reduce((s,t) => s + t.rn, 0);
+    const annualRent = monthlyRent * 12;
+    // Last 6 months avg net — use actual payments
+    let sumNet = 0;
+    for (let i = 0; i < 6; i++) {
+      const d = new Date(CYR, CMO - i, 1);
+      const y = d.getFullYear(), m = d.getMonth();
+      const mk = mKey(y, m);
+      const r = pt.filter(t => rp[t.id+"-"+y+"-"+m]).reduce((s,t) => s + t.rn, 0);
+      const jc = jobs.filter(j => j.status==="done" && j.pid===p.id && j.date && j.date.startsWith(mk)).reduce((s,j) => s + (j.cost||0), 0);
+      const oc = (outgoings[p.id+"-"+mk]||[]).reduce((s,o) => s + (o.amount||0), 0);
+      sumNet += r - p.mm - jc - oc;
+    }
+    const avgMonthlyNet = Math.round(sumNet / 6);
+    const grossYield = p.v > 0 ? (annualRent / p.v * 100) : 0;
+    const netYield = p.v > 0 ? (avgMonthlyNet * 12 / p.v * 100) : 0;
+    const equity = p.v - p.mtg;
+    const ltv = p.v > 0 ? (p.mtg / p.v * 100) : 0;
+    return { ...p, monthlyRent, annualRent, avgMonthlyNet, grossYield, netYield, equity, ltv };
+  });
+  const [sortBy, setSortBy] = useState("net");
+  const sortFns = {
+    net: (a,b) => b.avgMonthlyNet - a.avgMonthlyNet,
+    gross: (a,b) => b.grossYield - a.grossYield,
+    equity: (a,b) => b.equity - a.equity,
+    ltv: (a,b) => a.ltv - b.ltv
+  };
+  const sortLabels = { net: "Net profit", gross: "Gross yield", equity: "Equity", ltv: "LTV (low first)" };
+  const sorted = [...analysed].sort(sortFns[sortBy]);
+  const best = sorted[0], worst = sorted[sorted.length-1];
+  return (
+    <div>
+ <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10, marginBottom:12 }}>
+ <div style={{ background:"linear-gradient(135deg,#dcfce7,#f0fdf4)", borderRadius:13, padding:14, border:"1px solid #bbf7d0" }}>
+ <div style={{ fontSize:10, color:S.gtx, fontWeight:700, textTransform:"uppercase", letterSpacing:".5px" }}>🏆 Best</div>
+ <div style={{ fontSize:14, fontWeight:700, marginTop:4 }}>{best.n.split(" ").slice(0,3).join(" ")}</div>
+ <div style={{ fontSize:11, color:S.gtx, marginTop:2 }}>{gbp(best.avgMonthlyNet)}/mo net · {best.grossYield.toFixed(1)}% yield</div>
+ </div>
+ <div style={{ background:"linear-gradient(135deg,#fee2e2,#fff5f5)", borderRadius:13, padding:14, border:"1px solid #fecaca" }}>
+ <div style={{ fontSize:10, color:S.rtx, fontWeight:700, textTransform:"uppercase", letterSpacing:".5px" }}>⚠ Worst</div>
+ <div style={{ fontSize:14, fontWeight:700, marginTop:4 }}>{worst.n.split(" ").slice(0,3).join(" ")}</div>
+ <div style={{ fontSize:11, color:S.rtx, marginTop:2 }}>{gbp(worst.avgMonthlyNet)}/mo net · {worst.grossYield.toFixed(1)}% yield</div>
+ </div>
+ </div>
+ <div style={{ display:"flex", gap:6, marginBottom:10, overflowX:"auto" }}>
+ {Object.keys(sortLabels).map(k => (
+ <button key={k} onClick={() => setSortBy(k)} style={{ padding:"6px 12px", borderRadius:8, border:"1px solid #e2e8f0", background:sortBy===k?S.dark:"#fff", color:sortBy===k?"#fff":S.dark, fontSize:12, fontWeight:600, cursor:"pointer", fontFamily:"system-ui", whiteSpace:"nowrap" }}>
+  {sortLabels[k]}
+ </button>
+ ))}
+ </div>
+ {sorted.map((p, i) => (
+ <div key={p.id} style={{ ...card, ...cardPad, display:"flex", alignItems:"center", gap:12 }}>
+ <div style={{ width:32, height:32, borderRadius:"50%", background:i===0?"#dcfce7":i===sorted.length-1?"#fee2e2":S.light, display:"flex", alignItems:"center", justifyContent:"center", fontSize:14, fontWeight:700, color:i===0?S.gtx:i===sorted.length-1?S.rtx:S.mid, flexShrink:0 }}>{i+1}</div>
+ <div style={{ flex:1, minWidth:0 }}>
+  <div style={{ fontSize:13, fontWeight:600, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{p.n}</div>
+  <div style={{ fontSize:11, color:S.gray }}>{p.ty} · {p.town}</div>
+ </div>
+ <div style={{ textAlign:"right", flexShrink:0 }}>
+  <div style={{ fontSize:13, fontWeight:700, color:p.avgMonthlyNet>=0?S.green:S.red }}>{p.avgMonthlyNet>=0?"+":""}{gbp(p.avgMonthlyNet)}/mo</div>
+  <div style={{ fontSize:11, color:S.gray }}>{p.grossYield.toFixed(1)}% yield · {Math.round(p.ltv)}% LTV</div>
+ </div>
+ </div>
+ ))}
+ <div style={{ fontSize:11, color:S.gray, textAlign:"center", marginTop:8, lineHeight:1.5 }}>Net profit = 6-month average (rent – mortgage – jobs – bills)</div>
+    </div>
+  );
+}
+function EquityPage({ tenants }) {
+  const [ltvTarget, setLtvTarget] = useState(75);
+  const analysed = PROPS.map(p => {
+    const maxBorrow = Math.round(p.v * (ltvTarget / 100));
+    const releasable = Math.max(0, maxBorrow - p.mtg);
+    const rent = tenants.filter(t => t.pid === p.id).reduce((s,t) => s + t.rn, 0);
+    // New mortgage payment assuming current rate or 5.5% if unknown
+    const mtgRecord = MTGS.find(m => m.l === p.n);
+    const rate = mtgRecord && mtgRecord.r ? mtgRecord.r : 5.5;
+    const newMonthly = Math.round(maxBorrow * (rate/100) / 12);
+    const oldMonthly = p.mm;
+    const mtgDiff = newMonthly - oldMonthly;
+    const newNet = rent - newMonthly;
+    return { ...p, maxBorrow, releasable, rent, rate, newMonthly, mtgDiff, newNet };
+  });
+  const totalReleasable = analysed.reduce((s,p) => s + p.releasable, 0);
+  const totalNewDebt = analysed.reduce((s,p) => s + p.mtgDiff, 0);
+  const sortable = [...analysed].sort((a,b) => b.releasable - a.releasable);
+  return (
+    <div>
+ <div style={{ background:"linear-gradient(135deg,#1e293b,#0f172a)", borderRadius:15, padding:16, marginBottom:12, color:"#fff" }}>
+ <div style={{ fontSize:11, color:"#94a3b8", fontWeight:700, textTransform:"uppercase", letterSpacing:".5px", marginBottom:4 }}>Releasable at {ltvTarget}% LTV</div>
+ <div style={{ fontSize:32, fontWeight:700, color:"#4ade80" }}>{gbp(totalReleasable)}</div>
+ <div style={{ fontSize:12, color:"#94a3b8", marginTop:3 }}>Would add <span style={{ fontWeight:700, color:"#f87171" }}>{gbp(totalNewDebt)}/mo</span> to total mortgage payments</div>
+ </div>
+ <div style={{ ...card, ...cardPad, marginBottom:12 }}>
+ <div style={{ fontSize:12, fontWeight:600, marginBottom:6 }}>Target LTV: {ltvTarget}%</div>
+ <div style={{ display:"flex", alignItems:"center", gap:10 }}>
+ <input type="range" min="60" max="80" step="1" value={ltvTarget} onChange={e=>setLtvTarget(parseInt(e.target.value))} style={{ flex:1 }} />
+ <span style={{ fontSize:13, fontWeight:700, color:ltvTarget>=75?S.amber:S.dark, minWidth:34 }}>{ltvTarget}%</span>
+ </div>
+ <div style={{ fontSize:11, color:S.gray, marginTop:6 }}>Most BTL lenders go up to 75%. Above that is stretched and harder to place.</div>
+ </div>
+ {sortable.map(p => {
+ const pct = p.v > 0 ? (p.mtg / p.v * 100) : 0;
+ const canRelease = p.releasable > 0;
+ return (
+ <div key={p.id} style={{ ...card, ...cardPad, opacity:canRelease?1:.55 }}>
+ <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:8 }}>
+ <div>
+  <div style={{ fontSize:14, fontWeight:700 }}>{p.n}</div>
+  <div style={{ fontSize:11, color:S.gray }}>{p.ty} · currently {Math.round(pct)}% LTV</div>
+ </div>
+ <div style={{ textAlign:"right" }}>
+  <div style={{ fontSize:18, fontWeight:700, color:canRelease?S.green:S.gray }}>{gbp(p.releasable)}</div>
+  <div style={{ fontSize:10, color:S.gray }}>releasable</div>
+ </div>
+ </div>
+ <div style={{ height:8, background:S.light, borderRadius:99, overflow:"hidden", marginBottom:8, position:"relative" }}>
+ <div style={{ height:"100%", background:"#ef4444", width:Math.min(100, pct)+"%" }} />
+ <div style={{ position:"absolute", top:0, left:ltvTarget+"%", width:2, height:"100%", background:S.dark }} />
+ </div>
+ {canRelease ? (
+ <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr 1fr", gap:6, fontSize:11 }}>
+ <div><div style={{ color:S.gray }}>New mtg</div><div style={{ fontWeight:700 }}>{gbp(p.newMonthly)}/mo</div></div>
+ <div><div style={{ color:S.gray }}>Extra cost</div><div style={{ fontWeight:700, color:p.mtgDiff>0?S.red:S.green }}>+{gbp(p.mtgDiff)}/mo</div></div>
+ <div><div style={{ color:S.gray }}>New net</div><div style={{ fontWeight:700, color:p.newNet>=0?S.green:S.red }}>{p.newNet>=0?"":"-"}{gbp(Math.abs(p.newNet))}/mo</div></div>
+ </div>
+ ) : (
+ <div style={{ fontSize:11, color:S.gray, fontWeight:600 }}>Already at or above target LTV — no equity to release</div>
+ )}
+ </div>
+ );
+ })}
+ <div style={{ fontSize:11, color:S.gray, textAlign:"center", marginTop:8, lineHeight:1.5 }}>Calculations assume interest-only at current rate on file (or 5.5% if unknown). Actual lender offers will vary.</div>
     </div>
   );
 }
