@@ -29,32 +29,32 @@ const SK = "ash-p8";
 const AUTH_KEY = "ash-auth";
 const ONE_DAY = 86400000;
 const PROPS = [
-  {id:"stanns", color:"#3b82f6",    n:"12 St Anns Mount",    town:"Burley",      ty:"HMO",v:280000,mtg:155000,mm:820.05},
-  {id:"stanmore", color:"#22c55e",  n:"4 Stanmore Mount",     town:"Burley",      ty:"HMO",v:280000,mtg:169902,mm:518.10},
-  {id:"randolph", color:"#f59e0b",  n:"42 Randolph Street",   town:"Bramley",     ty:"BTL",v:180000,mtg:118248,mm:261.15},
-  {id:"musgrave", color:"#8b5cf6",  n:"26 Musgrave Mount",    town:"Bramley",     ty:"BTL",v:180000,mtg:135000,mm:563.63},
-  {id:"henley", color:"#ec4899",    n:"23 Henley Road",       town:"Bramley",     ty:"BTL",v:150000,mtg:115000,mm:469.69},
+  {id:"stanns", color:"#3b82f6", n:"12 St Anns Mount", town:"Burley", ty:"HMO",v:280000,mtg:155000,mm:820.05},
+  {id:"stanmore", color:"#22c55e", n:"4 Stanmore Mount", town:"Burley", ty:"HMO",v:280000,mtg:169902,mm:518.10},
+  {id:"randolph", color:"#f59e0b", n:"42 Randolph Street", town:"Bramley", ty:"BTL",v:180000,mtg:118248,mm:261.15},
+  {id:"musgrave", color:"#8b5cf6", n:"26 Musgrave Mount", town:"Bramley", ty:"BTL",v:180000,mtg:135000,mm:563.63},
+  {id:"henley", color:"#ec4899", n:"23 Henley Road", town:"Bramley", ty:"BTL",v:150000,mtg:115000,mm:469.69},
   {id:"churchhill", color:"#14b8a6",n:"15 Church Hill Mount", town:"Stanningley", ty:"BTL",v:170000,mtg:120000,mm:466.00},
-  {id:"snowden", color:"#f97316",   n:"37 Snowden Crescent",  town:"Bramley",     ty:"BTL",v:100000,mtg:56999, mm:137.29},
-  {id:"airedale", color:"#06b6d4",  n:"2 Airedale House",     town:"Rodley",      ty:"BTL",v:90000, mtg:61500, mm:200.00},
+  {id:"snowden", color:"#f97316", n:"37 Snowden Crescent", town:"Bramley", ty:"BTL",v:100000,mtg:56999, mm:137.29},
+  {id:"airedale", color:"#06b6d4", n:"2 Airedale House", town:"Rodley", ty:"BTL",v:90000, mtg:61500, mm:200.00},
 ];
 const MTGS = [
-  {l:"70 Coal Hill Lane (Home)",ldr:"TMW",       ac:"P20401104",b:98436, r:4.89,m:401.44,e:"2027-04-01"},
-  {l:"12 St Anns Mount",        ldr:"Kensington",ac:"",         b:155000,r:6.50,m:820.05,e:"2026-10-31"},
-  {l:"4 Stanmore Mount (L1)",   ldr:"TMW",       ac:"",         b:127806,r:2.74,m:291.95,e:"2031-04-30"},
-  {l:"4 Stanmore Mount (L2)",   ldr:"Unknown",   ac:"15424731", b:42096, r:6.44,m:226.15,e:"2027-04-01"},
-  {l:"42 Randolph Street",      ldr:"GML",       ac:"",         b:118248,r:2.65,m:261.15,e:"2027-10-31"},
-  {l:"26 Musgrave Mount",       ldr:"GML",       ac:"25943010", b:135000,r:5.01,m:563.63,e:"2031-03-31"},
-  {l:"23 Henley Road",          ldr:"GML",       ac:"25940000", b:115000,r:5.01,m:469.69,e:"2031-03-31"},
-  {l:"15 Church Hill Mount",    ldr:"GML",       ac:"",         b:120000,r:4.66,m:466.00,e:"2030-02-28"},
-  {l:"37 Snowden Crescent",     ldr:"GML",       ac:"",         b:56999, r:2.89,m:137.29,e:"2027-10-31"},
-  {l:"2 Airedale House",        ldr:"Unknown",   ac:"",         b:61500, r:3.76, m:198.48,e:"2031-03-23"},
+  {l:"70 Coal Hill Lane (Home)",ldr:"TMW", ac:"P20401104",b:98436, r:4.89,m:401.44,e:"2027-04-01"},
+  {l:"12 St Anns Mount", ldr:"Kensington",ac:"", b:155000,r:6.50,m:820.05,e:"2026-10-31"},
+  {l:"4 Stanmore Mount (L1)", ldr:"TMW", ac:"", b:127806,r:2.74,m:291.95,e:"2031-04-30"},
+  {l:"4 Stanmore Mount (L2)", ldr:"Unknown", ac:"15424731", b:42096, r:6.44,m:226.15,e:"2027-04-01"},
+  {l:"42 Randolph Street", ldr:"GML", ac:"", b:118248,r:2.65,m:261.15,e:"2027-10-31"},
+  {l:"26 Musgrave Mount", ldr:"GML", ac:"25943010", b:135000,r:5.01,m:563.63,e:"2031-03-31"},
+  {l:"23 Henley Road", ldr:"GML", ac:"25940000", b:115000,r:5.01,m:469.69,e:"2031-03-31"},
+  {l:"15 Church Hill Mount", ldr:"GML", ac:"", b:120000,r:4.66,m:466.00,e:"2030-02-28"},
+  {l:"37 Snowden Crescent", ldr:"GML", ac:"", b:56999, r:2.89,m:137.29,e:"2027-10-31"},
+  {l:"2 Airedale House", ldr:"Unknown", ac:"", b:61500, r:3.76, m:198.48,e:"2031-03-23"},
 ];
 const CTYPES = [
-  {k:"gas", l:"Gas Safety",     n:"Annual",  h:false},
+  {k:"gas", l:"Gas Safety", n:"Annual", h:false},
   {k:"eicr",l:"Electrical EICR",n:"5 years", h:false},
-  {k:"epc", l:"EPC",            n:"10 years",h:false},
-  {k:"hmo", l:"HMO Licence",    n:"5 years", h:true},
+  {k:"epc", l:"EPC", n:"10 years",h:false},
+  {k:"hmo", l:"HMO Licence", n:"5 years", h:true},
 ];
 const JCATS = ["Repairs","Plumbing","Electrical","Heating","Cleaning","Decorating","Appliances","Other"];
 const TRADES = ["Plumber","Gas Engineer","Electrician","Handyman","Builder","Decorator","Roofer","Locksmith","Other"];
@@ -72,30 +72,30 @@ const QUOTES = [
   {t:"It's not about working harder — it's about building systems that work for you.",a:""},
 ];
 const SEED_T = [
-  {id:"t1", pid:"stanns",    rm:"Room 1",nm:"Rick",         dy:1, rn:500,dp:200,  rv:null,nt:""},
-  {id:"t2", pid:"stanns",    rm:"Room 2",nm:"Nijil",        dy:12,rn:500,dp:215,  rv:null,nt:""},
-  {id:"t3", pid:"stanns",    rm:"Room 3",nm:"Keely",        dy:1, rn:500,dp:200,  rv:null,nt:""},
-  {id:"t4", pid:"stanns",    rm:"Room 4",nm:"Shreya",       dy:28,rn:500,dp:null, rv:null,nt:""},
-  {id:"t5", pid:"stanns",    rm:"Room 5",nm:"Anuj",         dy:11,rn:575,dp:187.5,rv:"2026-04-07",nt:""},
-  {id:"t6", pid:"stanns",    rm:"Room 6",nm:"Ronn",         dy:31,rn:425,dp:225,  rv:null,nt:""},
-  {id:"t7", pid:"stanmore",  rm:"Room 1",nm:"Rajarshi",     dy:27,rn:450,dp:495,  rv:null,nt:"Verify - may have moved out Jun 2021"},
-  {id:"t8", pid:"stanmore",  rm:"Room 2",nm:"Ashish",       dy:28,rn:600,dp:null, rv:null,nt:""},
-  {id:"t9", pid:"stanmore",  rm:"Room 3",nm:"Rory",         dy:28,rn:525,dp:430,  rv:null,nt:"3 months notice"},
-  {id:"t10",pid:"stanmore",  rm:"Room 4",nm:"Rupen",        dy:20,rn:500,dp:450,  rv:null,nt:"6 months notice"},
-  {id:"t11",pid:"stanmore",  rm:"Room 5",nm:"Ash (tenant)", dy:5, rn:450,dp:295,  rv:null,nt:""},
-  {id:"t12",pid:"randolph",  rm:"Whole", nm:"Adam & Emily", dy:2, rn:850,dp:595,  rv:null,nt:""},
-  {id:"t13",pid:"henley",    rm:"Whole", nm:"Beth",         dy:4, rn:925,dp:null, rv:null,nt:"Rent increased from 900"},
-  {id:"t14",pid:"musgrave",  rm:"Whole", nm:"Rhys & Amelia",dy:8, rn:875,dp:null, rv:null,nt:""},
-  {id:"t15",pid:"snowden",   rm:"Whole", nm:"Declan",       dy:4, rn:795,dp:null, rv:null,nt:""},
-  {id:"t16",pid:"churchhill",rm:"Whole", nm:"Sophie",       dy:13,rn:975,dp:null, rv:null,nt:""},
-  {id:"t17",pid:"airedale",  rm:"Whole", nm:"Chelsea",      dy:10,rn:795,dp:null, rv:null,nt:""},
+  {id:"t1", pid:"stanns", rm:"Room 1",nm:"Rick", dy:1, rn:500,dp:200, rv:null,nt:""},
+  {id:"t2", pid:"stanns", rm:"Room 2",nm:"Nijil", dy:12,rn:500,dp:215, rv:null,nt:""},
+  {id:"t3", pid:"stanns", rm:"Room 3",nm:"Keely", dy:1, rn:500,dp:200, rv:null,nt:""},
+  {id:"t4", pid:"stanns", rm:"Room 4",nm:"Shreya", dy:28,rn:500,dp:null, rv:null,nt:""},
+  {id:"t5", pid:"stanns", rm:"Room 5",nm:"Anuj", dy:11,rn:575,dp:187.5,rv:"2026-04-07",nt:""},
+  {id:"t6", pid:"stanns", rm:"Room 6",nm:"Ronn", dy:31,rn:425,dp:225, rv:null,nt:""},
+  {id:"t7", pid:"stanmore", rm:"Room 1",nm:"Rajarshi", dy:27,rn:450,dp:495, rv:null,nt:"Verify - may have moved out Jun 2021"},
+  {id:"t8", pid:"stanmore", rm:"Room 2",nm:"Ashish", dy:28,rn:600,dp:null, rv:null,nt:""},
+  {id:"t9", pid:"stanmore", rm:"Room 3",nm:"Rory", dy:28,rn:525,dp:430, rv:null,nt:"3 months notice"},
+  {id:"t10",pid:"stanmore", rm:"Room 4",nm:"Rupen", dy:20,rn:500,dp:450, rv:null,nt:"6 months notice"},
+  {id:"t11",pid:"stanmore", rm:"Room 5",nm:"Ash (tenant)", dy:5, rn:450,dp:295, rv:null,nt:""},
+  {id:"t12",pid:"randolph", rm:"Whole", nm:"Adam & Emily", dy:2, rn:850,dp:595, rv:null,nt:""},
+  {id:"t13",pid:"henley", rm:"Whole", nm:"Beth", dy:4, rn:925,dp:null, rv:null,nt:"Rent increased from 900"},
+  {id:"t14",pid:"musgrave", rm:"Whole", nm:"Rhys & Amelia",dy:8, rn:875,dp:null, rv:null,nt:""},
+  {id:"t15",pid:"snowden", rm:"Whole", nm:"Declan", dy:4, rn:795,dp:null, rv:null,nt:""},
+  {id:"t16",pid:"churchhill",rm:"Whole", nm:"Sophie", dy:13,rn:975,dp:null, rv:null,nt:""},
+  {id:"t17",pid:"airedale", rm:"Whole", nm:"Chelsea", dy:10,rn:795,dp:null, rv:null,nt:""},
 ];
 const SEED_JOBS = [
-  {pid:"randolph",   desc:"Cut tree",                    cost:0, cont:"", cat:"", id:"j1775576974811", date:"2026-04-07", status:"open"},
-  {pid:"churchhill", desc:"Rubbish removal",             cost:0, cont:"", cat:"", id:"j1775581716840", date:"2026-04-07", status:"open"},
-  {pid:"henley",     desc:"Check roof",                  cost:0, cont:"", cat:"", id:"j1775581738500", date:"2026-04-07", status:"open"},
-  {pid:"churchhill", desc:"Sort gutters with neighbor",  cost:0, cont:"", cat:"", id:"j1775581759503", date:"2026-04-07", status:"open"},
-  {pid:"stanmore",   desc:"Order and fit new blind",     cost:0, cont:"", cat:"", id:"j1775636165494", date:"2026-04-08", status:"open"},
+  {pid:"randolph", desc:"Cut tree", cost:0, cont:"", cat:"", id:"j1775576974811", date:"2026-04-07", status:"open"},
+  {pid:"churchhill", desc:"Rubbish removal", cost:0, cont:"", cat:"", id:"j1775581716840", date:"2026-04-07", status:"open"},
+  {pid:"henley", desc:"Check roof", cost:0, cont:"", cat:"", id:"j1775581738500", date:"2026-04-07", status:"open"},
+  {pid:"churchhill", desc:"Sort gutters with neighbor", cost:0, cont:"", cat:"", id:"j1775581759503", date:"2026-04-07", status:"open"},
+  {pid:"stanmore", desc:"Order and fit new blind", cost:0, cont:"", cat:"", id:"j1775636165494", date:"2026-04-08", status:"open"},
 ];
 const SEED_RP = {
   "t1-2026-3":true, "t3-2026-3":true, "t5-2026-3":true,
@@ -125,6 +125,10 @@ const S = {
   gbg:"#dcfce7", gtx:"#15803d", rbg:"#fee2e2", rtx:"#b91c1c",
   abg:"#fef3c7", atx:"#b45309", bbg:"#dbeafe", btx:"#1d4ed8",
 };
+const G11={fontSize:11,color:S.gray};
+const FC={display:"flex",alignItems:"center"};
+const FB={display:"flex",justifyContent:"space-between"};
+const RW={display:"flex",justifyContent:"space-between",alignItems:"center"};
 const card   = { background:"#fff", borderRadius:15, border:"1px solid #e2e8f0", marginBottom:10, overflow:"hidden", boxShadow:"0 1px 3px rgba(0,0,0,0.04)" };
 const cardPad = { padding:14 };
 function Badge({ children, color="gray" }) {
@@ -132,7 +136,7 @@ function Badge({ children, color="gray" }) {
   return <span style={{ display:"inline-flex", alignItems:"center", padding:"3px 8px", borderRadius:99, fontSize:11, fontWeight:600, ...(map[color]||map.gray) }}>{children}</span>;
 }
 function Btn({ onClick, children, style={} }) {
-  return <button onClick={onClick} style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:8, padding:13, borderRadius:13, fontSize:14, fontWeight:600, border:"none", cursor:"pointer", width:"100%", marginBottom:10, background:S.dark, color:"#fff", fontFamily:"system-ui", ...style }}>{children}</button>;
+  return <button onClick={onClick} style={{ ...FC, justifyContent:"center", gap:8, padding:13, borderRadius:13, fontSize:14, fontWeight:600, border:"none", cursor:"pointer", width:"100%", marginBottom:10, background:S.dark, color:"#fff", fontFamily:"system-ui", ...style }}>{children}</button>;
 }
 function Inp({ style={}, ...p }) {
   return <input {...p} style={{ width:"100%", border:"1px solid #e2e8f0", borderRadius:10, padding:"10px 12px", fontSize:14, fontFamily:"system-ui", background:"#fff", color:S.dark, outline:"none", marginBottom:8, display:"block", ...style }} />;
@@ -178,6 +182,8 @@ function App() {
   const [more, setMore]     = useState(null);
   const [expMap, setExpMap] = useState({});
   const [wide, setWide]     = useState(window.innerWidth >= 600);
+  const [letterPrefill, setLetterPrefill] = useState(null);
+  const [quickLogOpen, setQuickLogOpen] = useState(false);
 
   useEffect(() => {
     const handler = () => setWide(window.innerWidth >= 600);
@@ -257,25 +263,25 @@ function App() {
   const toggleExp       = pid => setExpMap(e => ({ ...e, [pid]: !e[pid] }));
   const addPersonalOut = (yr, mo, item) => { const k = "p-"+mKey(yr,mo); upd(d => ({ personalOut: { ...d.personalOut, [k]: [...(d.personalOut[k]||[]), { id:"po"+Date.now(), ...item }] } })); };
   const deletePersonalOut = (yr, mo, id) => { const k = "p-"+mKey(yr,mo); upd(d => ({ personalOut: { ...d.personalOut, [k]: (d.personalOut[k]||[]).filter(x => x.id !== id) } })); };
-  const bag = { tenants, rp, jobs, comp, contractors, deals, notes, outgoings, generalNotes, fixedOutgoings, propPurchase, roomNotes, expMap, toggleRent, addJob, updateJob, deleteJob, updateComp, updateTenant, addTenant, addContractor, deleteContractor, addDeal, updateDeal, deleteDeal, setNote, toggleExp, addOutgoing, deleteOutgoing, setGeneralNotes, setFixedOutgoing, removeFixedOutgoing, setPropPurchase, setRoomNote, savings, setSavings, personalOut, addPersonalOut, deletePersonalOut, wide };
+  const bag = { tenants, rp, jobs, comp, contractors, deals, notes, outgoings, generalNotes, fixedOutgoings, propPurchase, roomNotes, expMap, toggleRent, addJob, updateJob, deleteJob, updateComp, updateTenant, addTenant, addContractor, deleteContractor, addDeal, updateDeal, deleteDeal, setNote, toggleExp, addOutgoing, deleteOutgoing, setGeneralNotes, setFixedOutgoing, removeFixedOutgoing, setPropPurchase, setRoomNote, savings, setSavings, personalOut, addPersonalOut, deletePersonalOut, wide, setTab, setMore, letterPrefill, setLetterPrefill, quickLogOpen, setQuickLogOpen };
   const moreLabels = { outgoings:"Outgoings", personal:"Personal Costs", compliance:"Compliance", tenants:"Tenants", ailetters:"AI Letter Writer", dealcheck:"Deal Analyser", financials:"Financials", tax:"Tax Summary", timeline:"Timeline", rentplanner:"Rent Planner", notes:"Notes", growth:"Portfolio Growth", contractors:"Contractors", deals:"Deal Pipeline", rentgap:"Rent Gap", performers:"Top & Bottom", equity:"Equity Release" };
   const maxW = wide ? 1100 : 480;
   return (
     <div style={{ fontFamily:"system-ui,-apple-system,sans-serif", background:"#f1f5f9", minHeight:"100vh", maxWidth:maxW, margin:"0 auto", overflowX:"hidden" }}>
  <div style={{ background:"linear-gradient(135deg,#1e293b,#0f172a)", color:"#fff", padding:"40px 16px 12px", position:"sticky", top:0, zIndex:50 }}>
  {tab === "more" && more ? (
- <div style={{ display:"flex", alignItems:"center", gap:10 }}>
+ <div style={{ ...FC, gap:10 }}>
   <button onClick={() => setMore(null)} style={{ background:"none", border:"none", color:"#fff", fontSize:22, cursor:"pointer" }}>&#8592;</button>
   <span style={{ fontSize:16, fontWeight:600 }}>{moreLabels[more]||more}</span>
  </div>
  ) : (
- <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-end" }}>
+ <div style={{ ...FB, alignItems:"flex-end" }}>
   <div>
-    <div style={{ fontSize:11, color:S.gray, marginBottom:2 }}>Good {greet}, Ash</div>
+    <div style={{ ...G11, marginBottom:2 }}>Good {greet}, Ash</div>
     <div style={{ fontSize:18, fontWeight:700 }}>Portfolio Manager</div>
     <div style={{ fontSize:11, color:"#94a3b8", fontStyle:"italic", marginTop:4 }}>{QUOTE.a?QUOTE.t+"—"+QUOTE.a:QUOTE.t}</div>
   </div>
-  <div style={{ display:"flex", alignItems:"center", gap:8 }}>
+  <div style={{ ...FC, gap:8 }}>
     <span style={{ fontSize:11, color:"#4ade80" }}>&#9679; Saved</span>
     {urgent > 0 && <span style={{ background:"#ef4444", color:"#fff", fontSize:11, fontWeight:700, padding:"3px 8px", borderRadius:99 }}>{urgent} urgent</span>}
   </div>
@@ -315,11 +321,11 @@ function App() {
  {!wide && (
  <nav style={{ position:"fixed", bottom:0, left:"50%", transform:"translateX(-50%)", width:"100%", maxWidth:480, background:"#fff", borderTop:"1px solid #e2e8f0", display:"flex", zIndex:50, boxShadow:"0 -2px 8px rgba(0,0,0,0.06)" }}>
  {[
-  {id:"dash",icon:"🏠",label:"Home",   badge:0},
-  {id:"rent",icon:"✓", label:"Rent",   badge:tenants.length - paidNow},
-  {id:"jobs",icon:"🔧",label:"Jobs",   badge:openJobs},
+  {id:"dash",icon:"🏠",label:"Home", badge:0},
+  {id:"rent",icon:"✓", label:"Rent", badge:tenants.length - paidNow},
+  {id:"jobs",icon:"🔧",label:"Jobs", badge:openJobs},
   {id:"mtgs",icon:"💳",label:"Mortgages",badge:urgent},
-  {id:"more",icon:"⋯", label:"More",  badge:0},
+  {id:"more",icon:"⋯", label:"More", badge:0},
  ].map(b => (
   <button key={b.id} onClick={() => { setTab(b.id); if (b.id !== "more") setMore(null); }}
     style={{ flex:1, display:"flex", flexDirection:"column", alignItems:"center", padding:"8px 4px 10px", background:"none", border:"none", cursor:"pointer", color:tab===b.id?S.dark:S.gray, fontSize:10, fontWeight:600, gap:2, position:"relative", fontFamily:"system-ui" }}>
@@ -358,7 +364,7 @@ function WideLayout({ tab, setTab, more, setMore, bag, alerts, paidNow, urgent }
  <div style={{ background:"#fff", borderRadius:15, border:"1px solid #e2e8f0", overflow:"hidden", marginBottom:10 }}>
  {navItems.map(b => (
   <button key={b.id} onClick={() => { setTab(b.id); if (b.id !== "more") setMore(null); }}
-    style={{ display:"flex", alignItems:"center", gap:10, width:"100%", padding:"12px 14px", background:tab===b.id&&!more?"#f1f5f9":"#fff", border:"none", borderBottom:"1px solid #f8fafc", cursor:"pointer", fontFamily:"system-ui", fontWeight:tab===b.id?700:400, color:S.dark, fontSize:14 }}>
+    style={{ ...FC, gap:10, width:"100%", padding:"12px 14px", background:tab===b.id&&!more?"#f1f5f9":"#fff", border:"none", borderBottom:"1px solid #f8fafc", cursor:"pointer", fontFamily:"system-ui", fontWeight:tab===b.id?700:400, color:S.dark, fontSize:14 }}>
     <span style={{ fontSize:18 }}>{b.icon}</span>{b.label}
   </button>
  ))}
@@ -367,7 +373,7 @@ function WideLayout({ tab, setTab, more, setMore, bag, alerts, paidNow, urgent }
  <div style={{ background:"#fff", borderRadius:15, border:"1px solid #e2e8f0", overflow:"hidden" }}>
   {moreItems.map(id => (
     <button key={id} onClick={() => setMore(id)}
- style={{ display:"flex", alignItems:"center", width:"100%", padding:"11px 14px", background:more===id?"#f1f5f9":"#fff", border:"none", borderBottom:"1px solid #f8fafc", cursor:"pointer", fontFamily:"system-ui", fontWeight:more===id?700:400, color:S.dark, fontSize:13 }}>
+ style={{ ...FC, width:"100%", padding:"11px 14px", background:more===id?"#f1f5f9":"#fff", border:"none", borderBottom:"1px solid #f8fafc", cursor:"pointer", fontFamily:"system-ui", fontWeight:more===id?700:400, color:S.dark, fontSize:13 }}>
  {moreLabels[id]}
     </button>
   ))}
@@ -433,7 +439,7 @@ function GoalTracker({tenants, savings, setSavings}) {
   const doSave = function() { if (setSavings) setSavings(parseFloat(sv) || 0); setEd(false); };
   return (
     <div style={{background:"linear-gradient(135deg,#1e293b,#0f172a)", borderRadius:16, padding:16, marginBottom:10, color:"#fff"}}>
- <div style={{display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:10}}>
+ <div style={{...RW, marginBottom:10}}>
  <div>
  <div style={{fontSize:10, color:"#64748b", fontWeight:600, marginBottom:3}}>MISSION: 50 UNITS BY FEB 2036</div>
  <div style={{fontSize:22, fontWeight:700}}>{PROPS.length} <span style={{color:"#64748b", fontSize:13}}>of 50</span></div>
@@ -446,7 +452,7 @@ function GoalTracker({tenants, savings, setSavings}) {
  </div>
  </div>
  <div style={{marginBottom:7}}>
- <div style={{display:"flex", justifyContent:"space-between", fontSize:10, color:"#64748b", marginBottom:2}}>
+ <div style={{...FB, fontSize:10, color:"#64748b", marginBottom:2}}>
  <span>Units {PROPS.length}/50</span><span>{Math.round(PROPS.length/50*100)}%</span>
  </div>
  <div style={{height:4, background:"#334155", borderRadius:99, overflow:"hidden"}}>
@@ -454,7 +460,7 @@ function GoalTracker({tenants, savings, setSavings}) {
  </div>
  </div>
  <div style={{marginBottom:10}}>
- <div style={{display:"flex", justifyContent:"space-between", fontSize:10, color:"#64748b", marginBottom:2}}>
+ <div style={{...FB, fontSize:10, color:"#64748b", marginBottom:2}}>
  <span>Income {ipct}%</span><span>{ipct}%</span>
  </div>
  <div style={{height:4, background:"#334155", borderRadius:99, overflow:"hidden"}}>
@@ -462,7 +468,7 @@ function GoalTracker({tenants, savings, setSavings}) {
  </div>
  </div>
  <div style={{background:"rgba(255,255,255,0.07)", borderRadius:10, padding:10}}>
- <div style={{display:"flex", justifyContent:"space-between", fontSize:10, color:"#94a3b8", marginBottom:5}}>
+ <div style={{...FB, fontSize:10, color:"#94a3b8", marginBottom:5}}>
  <span style={{fontWeight:600}}>Deposit pot</span>
  <span>~{mths} months</span>
  </div>
@@ -488,7 +494,7 @@ function GoalTracker({tenants, savings, setSavings}) {
     </div>
   );
 }
-function DashPage({ alerts, paidNow, tenants, rp, jobs, comp, outgoings, wide, savings, setSavings }) {
+function DashPage({ alerts, paidNow, tenants, rp, jobs, comp, outgoings, wide, savings, setSavings, setTab, setMore, setLetterPrefill, toggleRent, quickLogOpen, setQuickLogOpen }) {
   const [selYr,setSelYr]=useState(CYR);
   const [selMo,setSelMo]=useState(CMO);
   const [propView,setPropView]=useState(null);
@@ -519,11 +525,12 @@ function DashPage({ alerts, paidNow, tenants, rp, jobs, comp, outgoings, wide, s
   // Build smart action list
   const actions = [];
   // Unpaid rent due today or before
+  // Rent Radar — day counter, tappable to Letter Writer
   tenants.forEach(t => {
     const paid = !!rp[t.id+"-"+CYR+"-"+CMO];
     if (!paid) {
- const dueThisMonth = t.dy <= now.getDate();
- if (dueThisMonth) actions.push({ priority:"r", icon:"💷", msg: t.nm+" at "+PROPS.find(p=>p.id===t.pid)?.n+" — rent due, not paid", category:"Rent" });
+ const dl = now.getDate() - t.dy;
+ if (dl >= 0) { const pp = PROPS.find(p=>p.id===t.pid); actions.push({ priority: dl>=3?"r":"a", icon:"💷", msg: t.nm+" at "+(pp?pp.n:"")+" — "+(dl===0?"due today":dl+" day"+(dl===1?"":"s")+" late"), category:"Rent", act:{tid:t.id, typ:"late-rent"} }); }
     }
   });
   tenants.forEach(t=>{if(t.moveOut){const dO=Math.round((new Date(t.moveOut)-now)/86400000);if(dO>=0&&dO<=60){const pp=PROPS.find(x=>x.id===t.pid);actions.push({priority:dO<=14?"r":"a",icon:"📦",msg:t.nm+" at "+(pp?pp.n:"")+" moving out in "+dO+" days",category:"Void Risk"});}}});
@@ -562,14 +569,14 @@ function DashPage({ alerts, paidNow, tenants, rp, jobs, comp, outgoings, wide, s
  const pr2  = tenants.filter(t => t.pid === p.id).reduce((s, t) => s + t.rn, 0);
  const ncf2 = pr2 - p.mm;
  return (
- <div key={p.id} onClick={()=>setPropView(p.id)} style={{padding:"11px 14px",display:"flex",justifyContent:"space-between",alignItems:"center",borderBottom:"1px solid #f8fafc",cursor:"pointer"}}>
+ <div key={p.id} onClick={()=>setPropView(p.id)} style={{padding:"11px 14px",...RW,borderBottom:"1px solid #f8fafc",cursor:"pointer"}}>
   <div style={{display:"flex",alignItems:"flex-start",gap:10}}>
     <div style={{width:10,height:10,borderRadius:"50%",background:p.color||"#94a3b8",marginTop:3,flexShrink:0}} />
-    <div><div style={{fontSize:13,fontWeight:600}}>{p.n}</div><div style={{fontSize:11,color:S.gray}}>{p.town} &middot; {p.ty}</div></div>
+    <div><div style={{fontSize:13,fontWeight:600}}>{p.n}</div><div style={{...G11}}>{p.town} &middot; {p.ty}</div></div>
   </div>
   <div style={{textAlign:"right"}}>
     <div style={{fontSize:13,fontWeight:700,color:p.vc?S.amber:ncf2>0?S.green:S.red}}>{p.vc?"Vacant":gbp(ncf2)+"/mo"}</div>
-    <div style={{fontSize:11,color:S.gray}}>{p.vc?"Not let":gbp(pr2)+" rent"} &#8250;</div>
+    <div style={{...G11}}>{p.vc?"Not let":gbp(pr2)+" rent"} &#8250;</div>
   </div>
  </div>
  );
@@ -579,15 +586,15 @@ function DashPage({ alerts, paidNow, tenants, rp, jobs, comp, outgoings, wide, s
   const stats = (
     <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10, marginBottom:10 }}>
  {[
- {l:"Net Cash Flow",   v:(ncf>=0?"":"-")+gbp(Math.abs(ncf)), s:"This month",             g:ncf>0},
- {l:"Total Equity",    v:gbp(eq),  s:Math.round(eq/tv*100)+"% of value",                  g:true},
- {l:"Net Worth",       v:gbp(eq+161564), s:"portfolio + home equity",                     g:true},
- {l:"Open Jobs",       v:oj,       s:"Maintenance items",                                 g:false},
+ {l:"Net Cash Flow", v:(ncf>=0?"":"-")+gbp(Math.abs(ncf)), s:"This month", g:ncf>0},
+ {l:"Total Equity", v:gbp(eq), s:Math.round(eq/tv*100)+"% of value", g:true},
+ {l:"Net Worth", v:gbp(eq+161564), s:"portfolio + home equity", g:true},
+ {l:"Open Jobs", v:oj, s:"Maintenance items", g:false},
  ].map((k, i) => (
  <div key={i} style={{ background:"#fff", borderRadius:14, border:"1px solid #e2e8f0", padding:12 }}>
- <div style={{ fontSize:11, color:S.gray, marginBottom:3 }}>{k.l}</div>
+ <div style={{ ...G11, marginBottom:3 }}>{k.l}</div>
  <div style={{ fontSize:19, fontWeight:700, color:k.g?S.green:S.dark }}>{k.v}</div>
- <div style={{ fontSize:11, color:S.gray, marginTop:2 }}>{k.s}</div>
+ <div style={{ ...G11, marginTop:2 }}>{k.s}</div>
  </div>
  ))}
     </div>
@@ -603,11 +610,11 @@ function DashPage({ alerts, paidNow, tenants, rp, jobs, comp, outgoings, wide, s
     const pvComp=comp.filter(c=>c.pid===propView);
     return (
  <div>
- <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:14}}>
+ <div style={{...FC,gap:10,marginBottom:14}}>
  <button onClick={()=>setPropView(null)} style={{width:36,height:36,borderRadius:"50%",border:"1px solid #e2e8f0",background:"#fff",cursor:"pointer",fontSize:18}}>&#8249;</button>
- <div style={{display:"flex",alignItems:"center",gap:8}}>
+ <div style={{...FC,gap:8}}>
   <div style={{width:12,height:12,borderRadius:"50%",background:pv&&pv.color?pv.color:"#94a3b8"}} />
-  <div><div style={{fontSize:15,fontWeight:700}}>{pv&&pv.n}</div><div style={{fontSize:11,color:S.gray}}>{pv&&pv.town} &middot; {pv&&pv.ty}</div></div>
+  <div><div style={{fontSize:15,fontWeight:700}}>{pv&&pv.n}</div><div style={{...G11}}>{pv&&pv.town} &middot; {pv&&pv.ty}</div></div>
  </div>
  </div>
  <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:10}}>
@@ -615,14 +622,14 @@ function DashPage({ alerts, paidNow, tenants, rp, jobs, comp, outgoings, wide, s
  <div style={{background:pvN>=0?"#f0fdf4":"#fff5f5",borderRadius:12,padding:14}}><div style={{fontSize:11,color:pvN>=0?S.gtx:S.rtx,fontWeight:600}}>Net profit</div><div style={{fontSize:20,fontWeight:700,color:pvN>=0?S.green:S.red}}>{pvN>=0?"+":"-"}{gbp(Math.abs(pvN))}</div></div>
  </div>
  <div style={card}><div style={{padding:"11px 14px",background:"#f8fafc",borderBottom:"1px solid #f1f5f9",fontSize:13,fontWeight:600}}>Tenants</div>
- {pvt.map((t,i)=><div key={t.id} style={{padding:"10px 14px",borderBottom:i<pvt.length-1?"1px solid #f8fafc":"none",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-  <div><div style={{fontSize:13,fontWeight:600}}>{pv&&pv.ty==="HMO"?t.rm+" · ":""}{t.nm}</div><div style={{fontSize:11,color:S.gray}}>{gbp(t.rn)}/mo</div>{t.moveOut&&<div style={{fontSize:11,color:S.red,fontWeight:600}}>Moving out: {new Date(t.moveOut).toLocaleDateString("en-GB")}</div>}</div>
-  <div style={{width:32,height:32,borderRadius:"50%",background:rp[t.id+"-"+CYR+"-"+CMO]?"#22c55e":"#e2e8f0",display:"flex",alignItems:"center",justifyContent:"center",color:rp[t.id+"-"+CYR+"-"+CMO]?"#fff":S.gray}}>{rp[t.id+"-"+CYR+"-"+CMO]?"✓":"○"}</div>
+ {pvt.map((t,i)=><div key={t.id} style={{padding:"10px 14px",borderBottom:i<pvt.length-1?"1px solid #f8fafc":"none",...RW}}>
+  <div><div style={{fontSize:13,fontWeight:600}}>{pv&&pv.ty==="HMO"?t.rm+" · ":""}{t.nm}</div><div style={{...G11}}>{gbp(t.rn)}/mo</div>{t.moveOut&&<div style={{fontSize:11,color:S.red,fontWeight:600}}>Moving out: {new Date(t.moveOut).toLocaleDateString("en-GB")}</div>}</div>
+  <div style={{width:32,height:32,borderRadius:"50%",background:rp[t.id+"-"+CYR+"-"+CMO]?"#22c55e":"#e2e8f0",...FC,justifyContent:"center",color:rp[t.id+"-"+CYR+"-"+CMO]?"#fff":S.gray}}>{rp[t.id+"-"+CYR+"-"+CMO]?"✓":"○"}</div>
  </div>)}
  </div>
  {pvJobs.length>0&&<div style={{...card,marginTop:8}}><div style={{padding:"11px 14px",background:"#f8fafc",borderBottom:"1px solid #f1f5f9",fontSize:13,fontWeight:600}}>Open Jobs ({pvJobs.length})</div>{pvJobs.map((j,i)=><div key={j.id} style={{padding:"10px 14px",borderBottom:i<pvJobs.length-1?"1px solid #f8fafc":"none",fontSize:13}}>{j.desc}</div>)}</div>}
  <div style={{...card,marginTop:8}}><div style={{padding:"11px 14px",background:"#f8fafc",borderBottom:"1px solid #f1f5f9",fontSize:13,fontWeight:600}}>Compliance</div>
- {pvComp.map((c,i)=>{const ct=CTYPES.find(x=>x.k===c.type);const d2=c.next?Math.round((new Date(c.next)-now)/86400000):null;const col=!c.next?"amber":d2<=60?"red":d2<=180?"amber":"green";return(<div key={c.id} style={{padding:"10px 14px",borderBottom:i<pvComp.length-1?"1px solid #f8fafc":"none",display:"flex",justifyContent:"space-between",alignItems:"center"}}><div><div style={{fontSize:13}}>{ct?ct.l:c.type}</div><div style={{fontSize:11,color:S.gray}}>{c.next?new Date(c.next).toLocaleDateString("en-GB"):"Not set"}</div></div><Badge color={col}>{!c.next?"Unknown":d2<=0?"OVERDUE":d2+"d"}</Badge></div>);})}
+ {pvComp.map((c,i)=>{const ct=CTYPES.find(x=>x.k===c.type);const d2=c.next?Math.round((new Date(c.next)-now)/86400000):null;const col=!c.next?"amber":d2<=60?"red":d2<=180?"amber":"green";return(<div key={c.id} style={{padding:"10px 14px",borderBottom:i<pvComp.length-1?"1px solid #f8fafc":"none",...RW}}><div><div style={{fontSize:13}}>{ct?ct.l:c.type}</div><div style={{...G11}}>{c.next?new Date(c.next).toLocaleDateString("en-GB"):"Not set"}</div></div><Badge color={col}>{!c.next?"Unknown":d2<=0?"OVERDUE":d2+"d"}</Badge></div>);})}
  </div>
  {(function(){
   var months=[];for(var mi=5;mi>=0;mi--){var md=new Date(CYR,CMO-mi,1);var my=md.getFullYear();var mm=md.getMonth();var mk2=mKey(my,mm);var mRent=pvt.filter(function(t2){return rp[t2.id+"-"+my+"-"+mm];}).reduce(function(s2,t2){return s2+t2.rn;},0);var mCost=(pv?pv.mm:0)+jobs.filter(function(j2){return j2.status==="done"&&j2.pid===propView&&j2.date&&j2.date.startsWith(mk2);}).reduce(function(s2,j2){return s2+(j2.cost||0);},0)+(outgoings[propView+"-"+mk2]||[]).reduce(function(s2,o2){return s2+(o2.amount||0);},0);months.push({l:MSHORT[mm],rent:mRent,cost:mCost,net:mRent-mCost});}
@@ -640,8 +647,8 @@ function DashPage({ alerts, paidNow, tenants, rp, jobs, comp, outgoings, wide, s
     </div>);})}
    </div>
    <div style={{display:"flex",gap:12,justifyContent:"center",marginTop:8}}>
-    <div style={{display:"flex",alignItems:"center",gap:4}}><div style={{width:8,height:8,borderRadius:2,background:S.green}}/><span style={{fontSize:10,color:S.gray}}>Rent</span></div>
-    <div style={{display:"flex",alignItems:"center",gap:4}}><div style={{width:8,height:8,borderRadius:2,background:S.red}}/><span style={{fontSize:10,color:S.gray}}>Costs</span></div>
+    <div style={{...FC,gap:4}}><div style={{width:8,height:8,borderRadius:2,background:S.green}}/><span style={{fontSize:10,color:S.gray}}>Rent</span></div>
+    <div style={{...FC,gap:4}}><div style={{width:8,height:8,borderRadius:2,background:S.red}}/><span style={{fontSize:10,color:S.gray}}>Costs</span></div>
    </div>
   </div>);
  })()}
@@ -652,15 +659,15 @@ function DashPage({ alerts, paidNow, tenants, rp, jobs, comp, outgoings, wide, s
     <div>
  {actions.length > 0 && (
  <div style={{ ...card, marginBottom:10 }}>
- <div style={{ padding:"11px 14px", background:S.dark, borderRadius:"15px 15px 0 0", display:"flex", justifyContent:"space-between", alignItems:"center" }}>
+ <div style={{ padding:"11px 14px", background:S.dark, borderRadius:"15px 15px 0 0", ...RW }}>
   <span style={{ fontSize:13, fontWeight:600, color:"#fff" }}>Action needed</span>
   <span style={{ background:"#ef4444", color:"#fff", fontSize:11, fontWeight:700, padding:"2px 8px", borderRadius:99 }}>{actions.filter(a=>a.priority==="r").length} urgent</span>
  </div>
  {actions.map((a, i) => (
-  <div key={i} style={{ padding:"10px 14px", display:"flex", alignItems:"flex-start", gap:10, borderBottom:i<actions.length-1?"1px solid #f8fafc":"none", background:a.priority==="r"?"#fffafa":"#fffbeb" }}>
+  <div key={i} onClick={a.act?()=>{setLetterPrefill(a.act);setTab("more");setMore("ailetters");}:undefined} style={{ padding:"10px 14px", display:"flex", alignItems:"flex-start", gap:10, borderBottom:i<actions.length-1?"1px solid #f8fafc":"none", background:a.priority==="r"?"#fffafa":"#fffbeb", cursor:a.act?"pointer":"default" }}>
     <span style={{ fontSize:16, flexShrink:0 }}>{a.icon}</span>
     <div style={{ flex:1 }}>
- <div style={{ fontSize:12, fontWeight:600, color:a.priority==="r"?S.red:S.amber }}>{a.category}</div>
+ <div style={{ fontSize:12, fontWeight:600, color:a.priority==="r"?S.red:S.amber }}>{a.category}{a.act&&<span style={{fontSize:10,marginLeft:6,color:S.blue,fontWeight:600}}>✉ tap</span>}</div>
  <div style={{ fontSize:12, color:S.dark, lineHeight:1.4 }}>{a.msg}</div>
     </div>
   </div>
@@ -669,7 +676,7 @@ function DashPage({ alerts, paidNow, tenants, rp, jobs, comp, outgoings, wide, s
  )}
  <GoalTracker tenants={tenants} savings={savings} setSavings={setSavings} />
  {actions.length === 0 && (
- <div style={{ ...card, ...cardPad, background:"#f0fdf4", borderColor:"#bbf7d0", marginBottom:10, display:"flex", alignItems:"center", gap:10 }}>
+ <div style={{ ...card, ...cardPad, background:"#f0fdf4", borderColor:"#bbf7d0", marginBottom:10, ...FC, gap:10 }}>
  <span style={{ fontSize:20 }}>✅</span>
  <div>
   <div style={{ fontSize:13, fontWeight:600, color:S.green }}>All clear</div>
@@ -678,7 +685,7 @@ function DashPage({ alerts, paidNow, tenants, rp, jobs, comp, outgoings, wide, s
  </div>
  )}
  <div style={{ background:"linear-gradient(135deg,#0f172a,#1e293b)", borderRadius:15, padding:"14px 16px", marginBottom:12, color:"#fff" }}>
- <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center" }}>
+ <div style={{ ...RW }}>
  <div>
  <div style={{ fontSize:10, color:"#94a3b8", fontWeight:700, textTransform:"uppercase", letterSpacing:".5px" }}>Year to date · {CYR}</div>
  <div style={{ fontSize:24, fontWeight:700, color:ytdNet>=0?"#4ade80":"#f87171", marginTop:2 }}>{ytdNet>=0?"+":"-"}{gbp(Math.abs(ytdNet))}</div>
@@ -690,43 +697,44 @@ function DashPage({ alerts, paidNow, tenants, rp, jobs, comp, outgoings, wide, s
  </div>
  </div>
  </div>
- {(function(){var um=MTGS.map(function(m){return {l:m.l,ldr:m.ldr,r:m.r,d:du(m.e)};}).filter(function(m){return m.d!=null&&m.d>=0;}).sort(function(a,b){return a.d-b.d;});if(!um.length)return null;var n=um[0],c=n.d<=90?"#ef4444":"#f59e0b",bg=n.d<=90?"#fef2f2":"#fffbeb";return (<div style={{background:bg,border:"1px solid "+c+"40",borderRadius:15,padding:"12px 14px",marginBottom:12,display:"flex",justifyContent:"space-between",alignItems:"center"}}><div><div style={{fontSize:10,color:c,fontWeight:700,textTransform:"uppercase",letterSpacing:".5px"}}>Next mortgage expiry</div><div style={{fontSize:14,fontWeight:700,marginTop:2}}>{n.l}</div><div style={{fontSize:11,color:S.gray,marginTop:1}}>{n.ldr} &middot; {n.r}%</div></div><div style={{textAlign:"right"}}><div style={{fontSize:26,fontWeight:700,color:c,lineHeight:1}}>{n.d}</div><div style={{fontSize:10,color:S.gray,marginTop:2}}>days left</div></div></div>);})()}
- <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:10}}>
+ {(function(){var um=MTGS.map(function(m){return {l:m.l,ldr:m.ldr,r:m.r,d:du(m.e)};}).filter(function(m){return m.d!=null&&m.d>=0;}).sort(function(a,b){return a.d-b.d;});if(!um.length)return null;var n=um[0],c=n.d<=90?"#ef4444":"#f59e0b",bg=n.d<=90?"#fef2f2":"#fffbeb";return (<div style={{background:bg,border:"1px solid "+c+"40",borderRadius:15,padding:"12px 14px",marginBottom:12,...RW}}><div><div style={{fontSize:10,color:c,fontWeight:700,textTransform:"uppercase",letterSpacing:".5px"}}>Next mortgage expiry</div><div style={{fontSize:14,fontWeight:700,marginTop:2}}>{n.l}</div><div style={{...G11,marginTop:1}}>{n.ldr} &middot; {n.r}%</div></div><div style={{textAlign:"right"}}><div style={{fontSize:26,fontWeight:700,color:c,lineHeight:1}}>{n.d}</div><div style={{fontSize:10,color:S.gray,marginTop:2}}>days left</div></div></div>);})()}
+ <div style={{...RW,marginBottom:10}}>
  <button onClick={()=>{const d=new Date(selYr,selMo-1,1);setSelYr(d.getFullYear());setSelMo(d.getMonth());}} style={{width:36,height:36,borderRadius:"50%",border:"1px solid #e2e8f0",background:"#fff",cursor:"pointer",fontSize:18}}>&#8249;</button>
  <span style={{fontSize:15,fontWeight:700}}>{MFULL[selMo]} {selYr}</span>
  <button onClick={()=>{const d=new Date(selYr,selMo+1,1);if(d<=new Date(CYR,CMO,1)){setSelYr(d.getFullYear());setSelMo(d.getMonth());}}} disabled={isCur} style={{width:36,height:36,borderRadius:"50%",border:"1px solid #e2e8f0",background:isCur?"#f8fafc":"#fff",cursor:isCur?"default":"pointer",fontSize:18,color:isCur?S.gray:"inherit"}}>&#8250;</button>
  </div>
+ {isCur&&(function(){var un=tenants.filter(function(t){return !rp[t.id+"-"+CYR+"-"+CMO];});if(!un.length)return null;return(<div style={{marginBottom:10}}><button onClick={function(){setQuickLogOpen(!quickLogOpen);}} style={{width:"100%",padding:"10px 14px",borderRadius:12,border:"1px solid #e2e8f0",background:"#fff",cursor:"pointer",fontSize:13,fontWeight:600,...RW,fontFamily:"system-ui"}}><span>✓ Quick log rent ({un.length} unpaid)</span><span style={{color:S.gray}}>{quickLogOpen?"▲":"▼"}</span></button>{quickLogOpen&&(<div style={{background:"#fff",borderRadius:12,border:"1px solid #e2e8f0",marginTop:6,overflow:"hidden"}}>{un.map(function(t){var pp=PROPS.find(function(p){return p.id===t.pid;});return(<div key={t.id} style={{padding:"10px 14px",...RW,borderBottom:"1px solid #f8fafc"}}><div><div style={{fontSize:13,fontWeight:600}}>{t.nm}</div><div style={{...G11}}>{pp?pp.n:""} &middot; {gbp(t.rn)}</div></div><button onClick={function(){toggleRent(t.id,CYR,CMO);}} style={{padding:"6px 12px",borderRadius:8,border:"none",background:S.green,color:"#fff",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"system-ui"}}>✓ Paid</button></div>);})}</div>)}</div>);})()}
  <div style={{...card,...cardPad}}>
  <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:10}}>
  <div style={{background:"#f0fdf4",borderRadius:12,padding:12}}>
   <div style={{fontSize:11,color:S.gtx,fontWeight:600}}>Income</div>
   <div style={{fontSize:20,fontWeight:700,color:S.green}}>{gbp(pr)}</div>
-  <div style={{fontSize:11,color:S.gray}}>{tenants.filter(t=>rp[t.id+"-"+selYr+"-"+selMo]).length} of {tenants.length} paid</div>
+  <div style={{...G11}}>{tenants.filter(t=>rp[t.id+"-"+selYr+"-"+selMo]).length} of {tenants.length} paid</div>
  </div>
  <div style={{background:"#fff5f5",borderRadius:12,padding:12}}>
   <div style={{fontSize:11,color:S.rtx,fontWeight:600}}>Outgoings</div>
   <div style={{fontSize:20,fontWeight:700,color:S.red}}>{gbp(totalOut)}</div>
-  <div style={{fontSize:11,color:S.gray}}>mortgages + bills + jobs</div>
+  <div style={{...G11}}>mortgages + bills + jobs</div>
  </div>
  </div>
  <div style={{borderTop:"1px solid #f1f5f9",paddingTop:10}}>
  {[["Mortgages",gbp(tm)],["Bills",gbp(oc)],["Job costs",gbp(jc)]].map(([l,v])=>(
-  <div key={l} style={{display:"flex",justifyContent:"space-between",marginBottom:5}}>
+  <div key={l} style={{...FB,marginBottom:5}}>
     <span style={{fontSize:12,color:S.gray}}>{l}</span><span style={{fontSize:12,fontWeight:600}}>{v}</span>
   </div>
  ))}
- <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",background:ncf>=0?"#f0fdf4":"#fff5f5",borderRadius:10,padding:"10px 12px",marginTop:6}}>
+ <div style={{...RW,background:ncf>=0?"#f0fdf4":"#fff5f5",borderRadius:10,padding:"10px 12px",marginTop:6}}>
   <span style={{fontSize:13,fontWeight:700,color:ncf>=0?S.green:S.red}}>Net this month</span>
   <span style={{fontSize:16,fontWeight:700,color:ncf>=0?S.green:S.red}}>{ncf>=0?"+":"-"}{gbp(Math.abs(ncf))}</span>
  </div>
  </div>
  {isCur && (tr-pr>0 ? (
- <div style={{marginTop:10,background:"#fffbeb",borderRadius:12,padding:"12px 14px",display:"flex",justifyContent:"space-between",alignItems:"center",border:"1px solid #fde68a"}}>
+ <div style={{marginTop:10,background:"#fffbeb",borderRadius:12,padding:"12px 14px",...RW,border:"1px solid #fde68a"}}>
   <div><div style={{fontSize:14,fontWeight:700,color:S.amber}}>Rent still to collect</div><div style={{fontSize:11,color:S.atx}}>{tenants.length-tenants.filter(t=>rp[t.id+"-"+CYR+"-"+CMO]).length} tenants unpaid</div></div>
   <div style={{fontSize:22,fontWeight:700,color:S.amber}}>{gbp(tr-pr)}</div>
  </div>
  ) : (
- <div style={{marginTop:10,background:"#f0fdf4",borderRadius:12,padding:"12px 14px",display:"flex",justifyContent:"space-between",alignItems:"center",border:"1px solid #bbf7d0"}}>
+ <div style={{marginTop:10,background:"#f0fdf4",borderRadius:12,padding:"12px 14px",...RW,border:"1px solid #bbf7d0"}}>
   <div style={{fontSize:14,fontWeight:700,color:S.green}}>All rent collected</div>
   <div style={{fontSize:22,fontWeight:700,color:S.green}}>{gbp(pr)}</div>
  </div>
@@ -768,18 +776,18 @@ function RentPage({ tenants, rp, toggleRent, expMap, toggleExp, addTenant }) {
   const rentPct     = totalRent > 0 ? Math.round(paidRent / totalRent * 100) : 0;
   return (
     <div>
- <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:10, flexWrap:"wrap" }}>
+ <div style={{ ...FC, gap:8, marginBottom:10, flexWrap:"wrap" }}>
  <button onClick={() => { const d = new Date(selYr, selMo - 1, 1); setSelYr(d.getFullYear()); setSelMo(d.getMonth()); }} style={{ padding:"6px 12px", borderRadius:9, border:"1px solid #e2e8f0", background:"#fff", cursor:"pointer", fontSize:14 }}>‹</button>
  <span style={{ fontSize:14, fontWeight:600 }}>{MFULL[selMo]} {selYr}</span>
  <button onClick={() => { const d = new Date(selYr, selMo + 1, 1); if (d <= new Date(CYR, CMO, 1)) { setSelYr(d.getFullYear()); setSelMo(d.getMonth()); } }} style={{ padding:"6px 12px", borderRadius:9, border:"1px solid #e2e8f0", background:"#fff", cursor:"pointer", fontSize:14 }}>›</button>
  {(selYr !== CYR || selMo !== CMO) && <span style={{ fontSize:11, color:S.amber, fontWeight:600 }}>Editing past month</span>}
  </div>
  <div style={{ ...card, ...cardPad, marginBottom:10 }}>
- <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:8 }}>
+ <div style={{ ...FB, alignItems:"flex-start", marginBottom:8 }}>
  <div>
   <span style={{ fontSize:22, fontWeight:700 }}>{gbp(paidRent)}</span>
   <span style={{ color:S.gray, fontSize:13 }}> / {gbp(totalRent)}</span>
-  <div style={{ fontSize:11, color:S.gray, marginTop:3 }}>{paidCount} of {tenants.length} paid</div>
+  <div style={{ ...G11, marginTop:3 }}>{paidCount} of {tenants.length} paid</div>
  </div>
  <Badge color={stillDue === 0 ? "green" : "amber"}>{stillDue === 0 ? "All paid" : paidCount + " paid"}</Badge>
  </div>
@@ -787,7 +795,7 @@ function RentPage({ tenants, rp, toggleRent, expMap, toggleExp, addTenant }) {
  <div style={{ height:"100%", background:"#22c55e", borderRadius:99, width:rentPct+"%" }} />
  </div>
  {stillDue > 0 && (
- <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", background:"#fff5f5", borderRadius:10, padding:"8px 12px" }}>
+ <div style={{ ...RW, background:"#fff5f5", borderRadius:10, padding:"8px 12px" }}>
   <span style={{ fontSize:12, color:S.red, fontWeight:600 }}>Still to come in</span>
   <span style={{ fontSize:14, fontWeight:700, color:S.red }}>{gbp(stillDue)}</span>
  </div>
@@ -808,13 +816,13 @@ function RentPage({ tenants, rp, toggleRent, expMap, toggleExp, addTenant }) {
  const ip = !!rp[t.id + "-" + selYr + "-" + selMo];
  return (
   <div key={p.id} style={{ ...card, ...cardPad, ...(ip ? { background:"#f0fdf4", borderColor:"#bbf7d0" } : {}) }}>
-    <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center" }}>
+    <div style={{ ...RW }}>
  <div>
  <div style={{ fontSize:13, fontWeight:600 }}>{p.n}</div>
- <div style={{ fontSize:11, color:S.gray }}>{t.nm} · due {t.dy}{sx(t.dy)}</div>
- <div style={{ fontSize:11, color:S.gray }}>{gbp(t.rn)}/mo</div>
+ <div style={{ ...G11 }}>{t.nm} · due {t.dy}{sx(t.dy)}</div>
+ <div style={{ ...G11 }}>{gbp(t.rn)}/mo</div>
  </div>
- <button onClick={() => toggleRent(t.id, selYr, selMo)} style={{ width:50, height:50, borderRadius:"50%", border:"none", cursor:"pointer", background:ip?"#22c55e":"#e2e8f0", color:ip?"#fff":S.gray, fontSize:20, display:"flex", alignItems:"center", justifyContent:"center" }}>
+ <button onClick={() => toggleRent(t.id, selYr, selMo)} style={{ width:50, height:50, borderRadius:"50%", border:"none", cursor:"pointer", background:ip?"#22c55e":"#e2e8f0", color:ip?"#fff":S.gray, fontSize:20, ...FC, justifyContent:"center" }}>
  {ip ? "✓" : "○"}
  </button>
     </div>
@@ -824,12 +832,12 @@ function RentPage({ tenants, rp, toggleRent, expMap, toggleExp, addTenant }) {
  const open = expMap[p.id];
  return (
  <div key={p.id} style={{ ...card, ...(all ? { borderColor:"#bbf7d0" } : {}) }}>
-  <button onClick={() => toggleExp(p.id)} style={{ display:"flex", justifyContent:"space-between", alignItems:"center", padding:"13px 14px", cursor:"pointer", background:all?"#f0fdf4":"#fff", width:"100%", border:"none", textAlign:"left", fontFamily:"system-ui" }}>
+  <button onClick={() => toggleExp(p.id)} style={{ ...RW, padding:"13px 14px", cursor:"pointer", background:all?"#f0fdf4":"#fff", width:"100%", border:"none", textAlign:"left", fontFamily:"system-ui" }}>
     <div>
- <div style={{ fontSize:13, fontWeight:600 }}>{p.n} <span style={{ fontSize:11, color:S.gray, fontWeight:400 }}>HMO</span></div>
- <div style={{ fontSize:11, color:S.gray }}>{paid.length}/{pt.length} paid · {gbp(pt.reduce((s, t) => s + t.rn, 0))}/mo</div>
+ <div style={{ fontSize:13, fontWeight:600 }}>{p.n} <span style={{ ...G11, fontWeight:400 }}>HMO</span></div>
+ <div style={{ ...G11 }}>{paid.length}/{pt.length} paid · {gbp(pt.reduce((s, t) => s + t.rn, 0))}/mo</div>
     </div>
-    <div style={{ display:"flex", alignItems:"center", gap:8 }}>
+    <div style={{ ...FC, gap:8 }}>
  <Badge color={all?"green":paid.length>0?"amber":"gray"}>{all?"All paid":(pt.length-paid.length)+" unpaid"}</Badge>
  <span style={{ color:"#cbd5e1", fontSize:16, display:"inline-block", transform:open?"rotate(90deg)":"none", transition:"transform .2s" }}>›</span>
     </div>
@@ -839,12 +847,12 @@ function RentPage({ tenants, rp, toggleRent, expMap, toggleExp, addTenant }) {
  {pt.map(t => {
  const ip = !!rp[t.id + "-" + selYr + "-" + selMo];
  return (
- <div key={t.id} style={{ padding:"11px 14px", display:"flex", justifyContent:"space-between", alignItems:"center", borderBottom:"1px solid #f8fafc", background:ip?"#f0fdf4":"#fff" }}>
+ <div key={t.id} style={{ padding:"11px 14px", ...RW, borderBottom:"1px solid #f8fafc", background:ip?"#f0fdf4":"#fff" }}>
    <div>
      <div style={{ fontSize:13 }}>{t.rm} · <span style={{ fontWeight:600 }}>{t.nm}</span></div>
-     <div style={{ fontSize:11, color:S.gray }}>{gbp(t.rn)}/mo · due {t.dy}{sx(t.dy)}</div>
+     <div style={{ ...G11 }}>{gbp(t.rn)}/mo · due {t.dy}{sx(t.dy)}</div>
    </div>
-   <button onClick={() => toggleRent(t.id, selYr, selMo)} style={{ width:40, height:40, borderRadius:"50%", border:"none", cursor:"pointer", background:ip?"#22c55e":"#e2e8f0", color:ip?"#fff":S.gray, fontSize:16, display:"flex", alignItems:"center", justifyContent:"center" }}>
+   <button onClick={() => toggleRent(t.id, selYr, selMo)} style={{ width:40, height:40, borderRadius:"50%", border:"none", cursor:"pointer", background:ip?"#22c55e":"#e2e8f0", color:ip?"#fff":S.gray, fontSize:16, ...FC, justifyContent:"center" }}>
      {ip ? "✓" : "○"}
    </button>
  </div>
@@ -864,7 +872,7 @@ function RentPage({ tenants, rp, toggleRent, expMap, toggleExp, addTenant }) {
    </div>
  </div>
  ) : (
- <button onClick={() => setAddingTo(p.id)} style={{ fontSize:12, color:S.mid, fontWeight:600, background:"none", border:"none", cursor:"pointer", display:"flex", alignItems:"center", gap:4, padding:"4px 0", fontFamily:"system-ui" }}>+ Add room</button>
+ <button onClick={() => setAddingTo(p.id)} style={{ fontSize:12, color:S.mid, fontWeight:600, background:"none", border:"none", cursor:"pointer", ...FC, gap:4, padding:"4px 0", fontFamily:"system-ui" }}>+ Add room</button>
  )}
  </div>
     </div>
@@ -919,12 +927,12 @@ function JobsPage({ jobs, addJob, updateJob, deleteJob, wide }) {
  <div style={{ display:"flex", alignItems:"flex-start", gap:8 }}>
   <div style={{ flex:1 }}>
     <div style={{ fontSize:13, fontWeight:600, color:j.status==="done"?S.gray:S.dark, textDecoration:j.status==="done"?"line-through":"none" }}>{j.desc}</div>
-    {p && <div style={{ fontSize:11, color:S.gray }}>{p.n}</div>}
+    {p && <div style={{ ...G11 }}>{p.n}</div>}
     <div style={{ display:"flex", flexWrap:"wrap", gap:6, marginTop:6 }}>
  {j.cat  && <Badge color="gray">{j.cat}</Badge>}
  {j.cost > 0 && <span style={{ fontSize:12, fontWeight:600 }}>{gbp(j.cost)}</span>}
  {!j.cost && j.status === "open" && <span style={{ fontSize:11, color:S.amber }}>No cost yet — edit to add</span>}
- {j.cont && <span style={{ fontSize:11, color:S.gray }}>{j.cont}</span>}
+ {j.cont && <span style={{ ...G11 }}>{j.cont}</span>}
  <span style={{ fontSize:11, color:"#cbd5e1" }}>{j.date}</span>
     </div>
   </div>
@@ -944,7 +952,7 @@ function JobsPage({ jobs, addJob, updateJob, deleteJob, wide }) {
  <Btn onClick={() => setShow(true)}>+ Log Maintenance Job</Btn>
  {show && (
  <div style={{ ...card, ...cardPad }}>
- <div style={{ display:"flex", justifyContent:"space-between", marginBottom:10 }}>
+ <div style={{ ...FB, marginBottom:10 }}>
   <span style={{ fontWeight:600 }}>New Job</span>
   <button onClick={() => setShow(false)} style={{ background:"none", border:"none", fontSize:18, cursor:"pointer" }}>✕</button>
  </div>
@@ -960,7 +968,7 @@ function JobsPage({ jobs, addJob, updateJob, deleteJob, wide }) {
     {JCATS.map(c => <option key={c}>{c}</option>)}
   </Sel>
  </div>
- <div style={{ fontSize:11, color:S.gray, margin:"6px 0 10px" }}>💡 Log the job now — add the cost afterwards when you know it</div>
+ <div style={{ ...G11, margin:"6px 0 10px" }}>💡 Log the job now — add the cost afterwards when you know it</div>
  <div style={{ display:"flex", gap:8 }}>
   <Btn onClick={submit} style={{ flex:1, padding:10, marginBottom:0 }}>Save Job</Btn>
   <button onClick={() => setShow(false)} style={{ padding:"10px 14px", borderRadius:10, background:S.light, border:"none", cursor:"pointer", fontFamily:"system-ui", fontWeight:600 }}>Cancel</button>
@@ -999,21 +1007,21 @@ function MtgsPage() {
     <div>
  <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10, marginBottom:10 }}>
  <div style={{ background:"#fff", borderRadius:14, border:"1px solid #e2e8f0", padding:12 }}>
- <div style={{ fontSize:11, color:S.gray, marginBottom:3 }}>Total Debt</div>
+ <div style={{ ...G11, marginBottom:3 }}>Total Debt</div>
  <div style={{ fontSize:19, fontWeight:700 }}>{gbp(MTGS.reduce((s, m) => s + m.b, 0))}</div>
  </div>
  <div style={{ background:"#fff", borderRadius:14, border:"1px solid #e2e8f0", padding:12 }}>
- <div style={{ fontSize:11, color:S.gray, marginBottom:3 }}>Monthly</div>
+ <div style={{ ...G11, marginBottom:3 }}>Monthly</div>
  <div style={{ fontSize:19, fontWeight:700 }}>{gbp(MTGS.reduce((s, m) => s + m.m, 0))}</div>
  </div>
  </div>
  <div style={{ ...card, ...cardPad, marginBottom:10, background:"linear-gradient(135deg,#f8fafc,#fff)" }}>
  <div style={{ fontSize:12, fontWeight:700, color:S.mid, marginBottom:4 }}>🧮 Rate scenario</div>
- <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:6 }}>
+ <div style={{ ...FC, gap:10, marginBottom:6 }}>
  <input type="range" min="2" max="9" step="0.1" value={testRate} onChange={e=>setTestRate(parseFloat(e.target.value))} style={{ flex:1 }} />
  <span style={{ fontSize:17, fontWeight:700, minWidth:48 }}>{testRate.toFixed(1)}%</span>
  </div>
- <div style={{ fontSize:11, color:S.gray }}>
+ <div style={{ ...G11 }}>
   At {testRate.toFixed(1)}%: <span style={{ fontWeight:700, color:S.dark }}>{gbp(newBtlTotal)}/mo</span>
   {Math.abs(rateDiff)>=5 && <span style={{ color:rateDiff>0?S.red:S.green, fontWeight:600 }}>
    {" "}({rateDiff>0?"+":""}{gbp(Math.abs(rateDiff))}/mo {rateDiff>0?"more":"less"})
@@ -1026,22 +1034,22 @@ function MtgsPage() {
  const bg = d != null && d <= 180 ? "#fff5f5" : d != null && d <= 365 ? "#fffbeb" : "#fff";
  return (
  <div key={i} style={{ ...card, ...cardPad, background:bg }}>
-  <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:10 }}>
+  <div style={{ ...FB, alignItems:"flex-start", marginBottom:10 }}>
     <div style={{ flex:1, paddingRight:8 }}>
  <div style={{ fontSize:13, fontWeight:600 }}>{m.l}</div>
- <div style={{ fontSize:11, color:S.gray }}>{m.ldr}{m.ac ? " · " + m.ac : ""}</div>
+ <div style={{ ...G11 }}>{m.ldr}{m.ac ? " · " + m.ac : ""}</div>
     </div>
     <Badge color={color}>{label}</Badge>
   </div>
   <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr 1fr", gap:7 }}>
     {[["Balance",gbp(m.b)],["Rate",m.r!=null?m.r+"%":"Unknown"],["/month",gbp(m.m)]].map(([l2,v]) => (
  <div key={l2} style={{ background:"#f8fafc", borderRadius:9, padding:9 }}>
- <div style={{ fontSize:11, color:S.gray }}>{l2}</div>
+ <div style={{ ...G11 }}>{l2}</div>
  <div style={{ fontSize:12, fontWeight:700, color:l2==="Rate"&&m.r>5.5?S.red:S.dark }}>{v}</div>
  </div>
     ))}
   </div>
-  {m.e && <div style={{ fontSize:11, color:S.gray, marginTop:8 }}>Expires: {new Date(m.e).toLocaleDateString("en-GB", { day:"numeric", month:"long", year:"numeric" })}{d&&d>0?" ("+d+" days)":""}</div>}
+  {m.e && <div style={{ ...G11, marginTop:8 }}>Expires: {new Date(m.e).toLocaleDateString("en-GB", { day:"numeric", month:"long", year:"numeric" })}{d&&d>0?" ("+d+" days)":""}</div>}
  </div>
  );
  })}
@@ -1060,35 +1068,35 @@ function MoreMenu({ tenants, contractors, deals, setMore, data }) {
     <div>
  {[
  {g:"Money"},
- {id:"outgoings",   icon:"💸", label:"Outgoings",        sub:"Bills & expenses per property"},
- {id:"personal",    icon:"🏠", label:"Personal Costs",   sub:"Home mortgage, car, bills"},
- {id:"financials",  icon:"📊", label:"Financials",        sub:"Monthly & per-property breakdown"},
- {id:"performers",  icon:"🏆", label:"Top & Bottom",      sub:"Best & worst performing properties"},
- {id:"equity",      icon:"💰", label:"Equity Release",    sub:"What you can pull out at 75% LTV"},
- {id:"tax",         icon:"🧾", label:"Tax Summary",       sub:"Annual P&L for self assessment"},
+ {id:"outgoings", icon:"💸", label:"Outgoings", sub:"Bills & expenses per property"},
+ {id:"personal", icon:"🏠", label:"Personal Costs", sub:"Home mortgage, car, bills"},
+ {id:"financials", icon:"📊", label:"Financials", sub:"Monthly & per-property breakdown"},
+ {id:"performers", icon:"🏆", label:"Top & Bottom", sub:"Best & worst performing properties"},
+ {id:"equity", icon:"💰", label:"Equity Release", sub:"What you can pull out at 75% LTV"},
+ {id:"tax", icon:"🧾", label:"Tax Summary", sub:"Annual P&L for self assessment"},
  {g:"Properties"},
- {id:"compliance",  icon:"🛡", label:"Compliance",        sub:"Gas, EICR, EPC, HMO licence"},
- {id:"tenants",     icon:"👥", label:"Tenants",           sub:tenants.length+" tenants · "+PROPS.length+" properties"},
- {id:"rentgap",     icon:"📊", label:"Rent Gap",          sub:"Where you're leaving money on the table"},
- {id:"rentplanner", icon:"🔖", label:"Rent Planner",      sub:"Plan rent increases"},
- {id:"contractors", icon:"📞", label:"Contractors",       sub:contractors.length+" contacts saved"},
+ {id:"compliance", icon:"🛡", label:"Compliance", sub:"Gas, EICR, EPC, HMO licence"},
+ {id:"tenants", icon:"👥", label:"Tenants", sub:tenants.length+" tenants · "+PROPS.length+" properties"},
+ {id:"rentgap", icon:"📊", label:"Rent Gap", sub:"Where you're leaving money on the table"},
+ {id:"rentplanner", icon:"🔖", label:"Rent Planner", sub:"Plan rent increases"},
+ {id:"contractors", icon:"📞", label:"Contractors", sub:contractors.length+" contacts saved"},
  {g:"AI Tools"},
- {id:"ailetters",   icon:"✉️", label:"AI Letter Writer",   sub:"Draft personalised letters"},
- {id:"dealcheck",   icon:"🔍", label:"Deal Analyser",      sub:"Check if a deal stacks up"},
+ {id:"ailetters", icon:"✉️", label:"AI Letter Writer", sub:"Draft personalised letters"},
+ {id:"dealcheck", icon:"🔍", label:"Deal Analyser", sub:"Check if a deal stacks up"},
  {g:"Planning"},
- {id:"growth",      icon:"📈", label:"Portfolio Growth",  sub:"Equity & value over time"},
- {id:"deals",       icon:"🎯", label:"Deal Pipeline",     sub:deals.length+" deals tracked"},
- {id:"timeline",    icon:"📅", label:"Timeline",          sub:"Upcoming dates & events"},
- {id:"notes",       icon:"📝", label:"Notes",             sub:"General notepad"},
+ {id:"growth", icon:"📈", label:"Portfolio Growth", sub:"Equity & value over time"},
+ {id:"deals", icon:"🎯", label:"Deal Pipeline", sub:deals.length+" deals tracked"},
+ {id:"timeline", icon:"📅", label:"Timeline", sub:"Upcoming dates & events"},
+ {id:"notes", icon:"📝", label:"Notes", sub:"General notepad"},
  ].map(function(item,i) { return item.g ? (
  <div key={i} style={{ fontSize:10, fontWeight:700, color:S.mid, padding:"16px 4px 6px", textTransform:"uppercase", letterSpacing:1.2, borderBottom:"1px solid #e2e8f0", marginBottom:8, marginTop:i===0?0:4 }}>{item.g}</div>
  ) : (
- <button key={item.id} onClick={() => setMore(item.id)} style={{ background:"#fff", border:"1px solid #e2e8f0", borderRadius:13, padding:"13px 14px", display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:8, cursor:"pointer", width:"100%", textAlign:"left", fontFamily:"system-ui" }}>
- <div style={{ display:"flex", alignItems:"center", flex:1 }}>
-  <div style={{ width:38, height:38, background:S.light, borderRadius:10, display:"flex", alignItems:"center", justifyContent:"center", fontSize:17, marginRight:11, flexShrink:0 }}>{item.icon}</div>
+ <button key={item.id} onClick={() => setMore(item.id)} style={{ background:"#fff", border:"1px solid #e2e8f0", borderRadius:13, padding:"13px 14px", ...RW, marginBottom:8, cursor:"pointer", width:"100%", textAlign:"left", fontFamily:"system-ui" }}>
+ <div style={{ ...FC, flex:1 }}>
+  <div style={{ width:38, height:38, background:S.light, borderRadius:10, ...FC, justifyContent:"center", fontSize:17, marginRight:11, flexShrink:0 }}>{item.icon}</div>
   <div>
     <div style={{ fontSize:14, fontWeight:600 }}>{item.label}</div>
-    <div style={{ fontSize:11, color:S.gray, marginTop:2 }}>{item.sub}</div>
+    <div style={{ ...G11, marginTop:2 }}>{item.sub}</div>
   </div>
  </div>
  <span style={{ color:"#cbd5e1", fontSize:18 }}>›</span>
@@ -1096,7 +1104,7 @@ function MoreMenu({ tenants, contractors, deals, setMore, data }) {
  ); })}
  <div style={{ marginTop:8, padding:14, background:"#fff", border:"1px solid #e2e8f0", borderRadius:13 }}>
  <div style={{ fontSize:13, fontWeight:600, marginBottom:4 }}>💾 Backup your data</div>
- <div style={{ fontSize:11, color:S.gray, marginBottom:10 }}>Download a backup file and save it to Google Drive. Restore it any time if something goes wrong.</div>
+ <div style={{ ...G11, marginBottom:10 }}>Download a backup file and save it to Google Drive. Restore it any time if something goes wrong.</div>
  <button onClick={exportBackup} style={{ width:"100%", padding:"10px", borderRadius:10, background:S.dark, color:"#fff", border:"none", cursor:"pointer", fontFamily:"system-ui", fontWeight:600, fontSize:13 }}>Download Backup</button>
  </div>
     </div>
@@ -1118,11 +1126,11 @@ function CompPage({ comp, updateComp, wide }) {
     <div>
  <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10, marginBottom:10 }}>
  <div style={{ background:urg>0?S.rbg:"#f0fdf4", borderRadius:14, border:"1px solid #e2e8f0", padding:12 }}>
- <div style={{ fontSize:11, color:S.gray, marginBottom:3 }}>Due / Overdue</div>
+ <div style={{ ...G11, marginBottom:3 }}>Due / Overdue</div>
  <div style={{ fontSize:24, fontWeight:700, color:urg>0?S.red:S.green }}>{urg}</div>
  </div>
  <div style={{ background:unk>0?S.abg:"#f0fdf4", borderRadius:14, border:"1px solid #e2e8f0", padding:12 }}>
- <div style={{ fontSize:11, color:S.gray, marginBottom:3 }}>Unknown</div>
+ <div style={{ ...G11, marginBottom:3 }}>Unknown</div>
  <div style={{ fontSize:24, fontWeight:700, color:unk>0?S.amber:S.green }}>{unk}</div>
  </div>
  </div>
@@ -1134,27 +1142,27 @@ function CompPage({ comp, updateComp, wide }) {
   <div key={p.id} style={card}>
     <div style={{ padding:"11px 14px", background:"#f8fafc", borderBottom:"1px solid #f1f5f9" }}>
  <div style={{ fontSize:13, fontWeight:600 }}>{p.n}</div>
- <div style={{ fontSize:11, color:S.gray }}>{p.town} · {p.ty}</div>
+ <div style={{ ...G11 }}>{p.town} · {p.ty}</div>
     </div>
     {items.map((item, i) => {
  const { color, label } = cSt(item);
  const ct = CTYPES.find(x => x.k === item.type);
  return (
  <div key={item.id} style={{ padding:"11px 14px", borderBottom:i<items.length-1?"1px solid #f8fafc":"none" }}>
- <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:7 }}>
+ <div style={{ ...RW, marginBottom:7 }}>
    <div>
      <div style={{ fontSize:13, fontWeight:600 }}>{ct ? ct.l : item.type}</div>
-     <div style={{ fontSize:11, color:S.gray }}>{ct ? ct.n : ""} · {item.next ? "Due: "+new Date(item.next).toLocaleDateString("en-GB") : "Add dates below"}</div>
+     <div style={{ ...G11 }}>{ct ? ct.n : ""} · {item.next ? "Due: "+new Date(item.next).toLocaleDateString("en-GB") : "Add dates below"}</div>
    </div>
    <Badge color={color}>{label}</Badge>
  </div>
  <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:7, marginBottom:7 }}>
    <div>
-     <div style={{ fontSize:11, color:S.gray, marginBottom:3 }}>Last cert</div>
+     <div style={{ ...G11, marginBottom:3 }}>Last cert</div>
      <input type="date" value={item.last||""} onChange={e => updateComp(item.id, { last:e.target.value })} style={{ width:"100%", border:"1px solid #e2e8f0", borderRadius:9, padding:"6px 8px", fontSize:12, fontFamily:"system-ui" }} />
    </div>
    <div>
-     <div style={{ fontSize:11, color:S.gray, marginBottom:3 }}>Next due</div>
+     <div style={{ ...G11, marginBottom:3 }}>Next due</div>
      <input type="date" value={item.next||""} onChange={e => updateComp(item.id, { next:e.target.value })} style={{ width:"100%", border:"1px solid #e2e8f0", borderRadius:9, padding:"6px 8px", fontSize:12, fontFamily:"system-ui" }} />
    </div>
  </div>
@@ -1182,14 +1190,14 @@ function TenantsPage({ tenants, updateTenant, notes, setNote, wide }) {
  const note = notes[p.id] || "";
  return (
  <div key={p.id} style={card}>
-  <div style={{ padding:"11px 14px", background:"#f8fafc", borderBottom:"1px solid #f1f5f9", display:"flex", justifyContent:"space-between" }}>
+  <div style={{ padding:"11px 14px", background:"#f8fafc", borderBottom:"1px solid #f1f5f9", ...FB }}>
     <div>
  <div style={{ fontSize:13, fontWeight:600 }}>{p.n}</div>
- <div style={{ fontSize:11, color:S.gray }}>{p.town} · {p.ty}</div>
+ <div style={{ ...G11 }}>{p.town} · {p.ty}</div>
     </div>
     <div style={{ textAlign:"right" }}>
  <div style={{ fontSize:13, fontWeight:700 }}>{gbp(pt.reduce((s,t)=>s+t.rn,0))}/mo</div>
- <div style={{ fontSize:11, color:S.gray }}>{pt.length} tenant{pt.length!==1?"s":""}</div>
+ <div style={{ ...G11 }}>{pt.length} tenant{pt.length!==1?"s":""}</div>
     </div>
   </div>
   {!pt.length && <div style={{ padding:"11px 14px", fontSize:12, color:S.amber }}>Vacant</div>}
@@ -1203,36 +1211,36 @@ function TenantsPage({ tenants, updateTenant, notes, setNote, wide }) {
    <Inp placeholder="Name" value={ef.nm} onChange={e=>setEf(f=>({...f,nm:e.target.value}))} />
    <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:8 }}>
      <div>
-  <div style={{ fontSize:11, color:S.gray, marginBottom:3 }}>Rent (£/mo)</div>
+  <div style={{ ...G11, marginBottom:3 }}>Rent (£/mo)</div>
   <Inp type="number" value={ef.rn} onChange={e=>setEf(f=>({...f,rn:e.target.value}))} style={{marginBottom:0}} />
      </div>
      <div>
-  <div style={{ fontSize:11, color:S.gray, marginBottom:3 }}>Pay day</div>
+  <div style={{ ...G11, marginBottom:3 }}>Pay day</div>
   <Inp type="number" value={ef.dy} onChange={e=>setEf(f=>({...f,dy:e.target.value}))} style={{marginBottom:0}} />
      </div>
    </div>
    <div style={{ marginTop:8 }}>
-     <div style={{ fontSize:11, color:S.gray, marginBottom:3 }}>Deposit (£)</div>
+     <div style={{ ...G11, marginBottom:3 }}>Deposit (£)</div>
      <Inp type="number" value={ef.dp} onChange={e=>setEf(f=>({...f,dp:e.target.value}))} style={{marginBottom:0}} />
    </div>
    <div style={{ marginTop:8 }}>
-     <div style={{ fontSize:11, color:S.gray, marginBottom:3 }}>Notes</div>
+     <div style={{ ...G11, marginBottom:3 }}>Notes</div>
      <Inp value={ef.nt} onChange={e=>setEf(f=>({...f,nt:e.target.value}))} style={{marginBottom:0}} />
    </div>
-   <div style={{marginTop:8}}><div style={{fontSize:11,color:S.gray,marginBottom:3}}>Move-out date</div><input type="date" value={ef.mo||""} onChange={e=>setEf(f=>({...f,mo:e.target.value}))} style={{width:"100%",border:"1px solid #e2e8f0",borderRadius:10,padding:"10px 12px",fontSize:14,fontFamily:"system-ui",outline:"none",marginBottom:8}} /></div>
-   <div style={{marginTop:0}}><div style={{fontSize:11,color:S.gray,marginBottom:3}}>Tenancy start date</div><input type="date" value={ef.sd||""} onChange={e=>setEf(f=>({...f,sd:e.target.value}))} style={{width:"100%",border:"1px solid #e2e8f0",borderRadius:10,padding:"10px 12px",fontSize:14,fontFamily:"system-ui",outline:"none",marginBottom:8}} /></div>
+   <div style={{marginTop:8}}><div style={{...G11,marginBottom:3}}>Move-out date</div><input type="date" value={ef.mo||""} onChange={e=>setEf(f=>({...f,mo:e.target.value}))} style={{width:"100%",border:"1px solid #e2e8f0",borderRadius:10,padding:"10px 12px",fontSize:14,fontFamily:"system-ui",outline:"none",marginBottom:8}} /></div>
+   <div style={{marginTop:0}}><div style={{...G11,marginBottom:3}}>Tenancy start date</div><input type="date" value={ef.sd||""} onChange={e=>setEf(f=>({...f,sd:e.target.value}))} style={{width:"100%",border:"1px solid #e2e8f0",borderRadius:10,padding:"10px 12px",fontSize:14,fontFamily:"system-ui",outline:"none",marginBottom:8}} /></div>
    <div style={{ display:"flex", gap:8, marginTop:12 }}>
      <Btn onClick={() => saveEdit(t.id)} style={{ flex:1, padding:10, marginBottom:0 }}>Save Changes</Btn>
      <button onClick={() => setEditing(null)} style={{ padding:"10px 14px", borderRadius:10, background:S.light, border:"none", cursor:"pointer", fontFamily:"system-ui", fontWeight:600 }}>Cancel</button>
    </div>
  </div>
  ) : (
- <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start" }}>
+ <div style={{ ...FB, alignItems:"flex-start" }}>
    <div style={{ flex:1 }}>
      <div style={{ fontSize:13, fontWeight:600, marginBottom:2 }}>{p.ty==="HMO"?t.rm+" · ":""}{t.nm}</div>
-     <div style={{ fontSize:11, color:S.gray }}>Pays on {t.dy}{sx(t.dy)} · {gbp(t.rn)}/mo</div>
-     {t.dp != null && <div style={{ fontSize:11, color:S.gray }}>Deposit: {gbp(t.dp)}</div>}
-     {t.startDate && <div style={{ fontSize:11, color:S.gray }}>Started: {new Date(t.startDate).toLocaleDateString("en-GB")}{(() => { const m2 = Math.round((now - new Date(t.startDate))/(30.44*86400000)); return m2 >= 12 ? " · "+Math.floor(m2/12)+"yr"+(m2%12>0?" "+m2%12+"mo":"") : m2>0?" · "+m2+"mo":""; })()}</div>}
+     <div style={{ ...G11 }}>Pays on {t.dy}{sx(t.dy)} · {gbp(t.rn)}/mo</div>
+     {t.dp != null && <div style={{ ...G11 }}>Deposit: {gbp(t.dp)}</div>}
+     {t.startDate && <div style={{ ...G11 }}>Started: {new Date(t.startDate).toLocaleDateString("en-GB")}{(() => { const m2 = Math.round((now - new Date(t.startDate))/(30.44*86400000)); return m2 >= 12 ? " · "+Math.floor(m2/12)+"yr"+(m2%12>0?" "+m2%12+"mo":"") : m2>0?" · "+m2+"mo":""; })()}</div>}
      {t.nt && <div style={{ fontSize:11, color:S.amber, marginTop:3 }}>{t.nt}</div>}
      {t.moveOut && <div style={{ fontSize:11, color:S.red, fontWeight:600 }}>Moving out: {new Date(t.moveOut).toLocaleDateString("en-GB")}</div>}
    </div>
@@ -1246,7 +1254,7 @@ function TenantsPage({ tenants, updateTenant, notes, setNote, wide }) {
     );
   })}
   <div style={{ padding:"10px 14px", borderTop:"1px solid #f8fafc" }}>
-    <div style={{ fontSize:11, color:S.gray, marginBottom:4 }}>Property notes</div>
+    <div style={{ ...G11, marginBottom:4 }}>Property notes</div>
     <textarea placeholder="Access codes, parking, ongoing issues..." value={note} onChange={e => setNote(p.id, e.target.value)} style={{ width:"100%", border:"1px solid #e2e8f0", borderRadius:9, padding:8, fontSize:12, fontFamily:"system-ui", resize:"none", height:54 }} />
   </div>
  </div>
@@ -1306,20 +1314,20 @@ function FinPage({ tenants, jobs, rp, outgoings, wide }) {
  <div>
  <div style={{ display:"grid", gridTemplateColumns:wide?"repeat(4,1fr)":"1fr 1fr", gap:10, marginBottom:12 }}>
   {[
-    {l:"Portfolio Value",   v:gbp(tv),  s:PROPS.length+" properties",                    g:false},
-    {l:"Total Equity",      v:gbp(eq),  s:Math.round(eq/tv*100)+"% of value",g:true},
-    {l:"Total Debt",        v:gbp(td),  s:Math.round(td/tv*100)+"% LTV",     g:false},
-    {l:"Gross Yield",       v:gy+"%",   s:"Annual rent / value",             g:true},
-    {l:"Monthly Rent",      v:gbp(tr),  s:"Gross income",                    g:true},
-    {l:"Monthly Mortgages", v:gbp(tm),  s:"All properties",                  g:false},
-    {l:"Monthly Outgoings", v:gbp(oc),  s:"Bills & expenses",                g:false},
-    {l:"This Month Net",    v:(ncf>=0?"":"-")+gbp(Math.abs(ncf)), s:"After all costs", g:ncf>0},
-    {l:"Annual Income",     v:gbp(tr*12),s:"Gross",                          g:true},
+    {l:"Portfolio Value", v:gbp(tv), s:PROPS.length+" properties", g:false},
+    {l:"Total Equity", v:gbp(eq), s:Math.round(eq/tv*100)+"% of value",g:true},
+    {l:"Total Debt", v:gbp(td), s:Math.round(td/tv*100)+"% LTV", g:false},
+    {l:"Gross Yield", v:gy+"%", s:"Annual rent / value", g:true},
+    {l:"Monthly Rent", v:gbp(tr), s:"Gross income", g:true},
+    {l:"Monthly Mortgages", v:gbp(tm), s:"All properties", g:false},
+    {l:"Monthly Outgoings", v:gbp(oc), s:"Bills & expenses", g:false},
+    {l:"This Month Net", v:(ncf>=0?"":"-")+gbp(Math.abs(ncf)), s:"After all costs", g:ncf>0},
+    {l:"Annual Income", v:gbp(tr*12),s:"Gross", g:true},
   ].map((k, i) => (
     <div key={i} style={{ background:"#fff", borderRadius:14, border:"1px solid #e2e8f0", padding:12 }}>
- <div style={{ fontSize:11, color:S.gray, marginBottom:3 }}>{k.l}</div>
+ <div style={{ ...G11, marginBottom:3 }}>{k.l}</div>
  <div style={{ fontSize:18, fontWeight:700, color:k.g?S.green:S.dark }}>{k.v}</div>
- <div style={{ fontSize:11, color:S.gray, marginTop:2 }}>{k.s}</div>
+ <div style={{ ...G11, marginTop:2 }}>{k.s}</div>
     </div>
   ))}
  </div>
@@ -1366,14 +1374,14 @@ function FinPage({ tenants, jobs, rp, outgoings, wide }) {
  </div>
  <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10, marginBottom:12 }}>
   {[
-    {l:"YTD Rent",      v:gbp(ytdRent), g:true},
-    {l:"YTD Mortgage",  v:gbp(ytdMtg),  g:false},
-    {l:"YTD Costs",     v:gbp(ytdCosts),g:false},
-    {l:"YTD Outgoings", v:gbp(ytdOut),  g:false},
-    {l:"YTD Net",       v:(ytdNet>=0?"":"-")+gbp(Math.abs(ytdNet)), g:ytdNet>0},
+    {l:"YTD Rent", v:gbp(ytdRent), g:true},
+    {l:"YTD Mortgage", v:gbp(ytdMtg), g:false},
+    {l:"YTD Costs", v:gbp(ytdCosts),g:false},
+    {l:"YTD Outgoings", v:gbp(ytdOut), g:false},
+    {l:"YTD Net", v:(ytdNet>=0?"":"-")+gbp(Math.abs(ytdNet)), g:ytdNet>0},
   ].map((k, i) => (
     <div key={i} style={{ background:"#fff", borderRadius:14, border:"1px solid #e2e8f0", padding:12 }}>
- <div style={{ fontSize:11, color:S.gray, marginBottom:3 }}>{k.l}</div>
+ <div style={{ ...G11, marginBottom:3 }}>{k.l}</div>
  <div style={{ fontSize:18, fontWeight:700, color:k.g?S.green:S.dark }}>{k.v}</div>
     </div>
   ))}
@@ -1440,8 +1448,8 @@ function FinCharts({ tenants, jobs, rp, outgoings }) {
  <div style={{ ...card, ...cardPad }}>
  <div style={{ fontSize:13, fontWeight:600, marginBottom:4 }}>Rent vs Mortgage — {MSHORT[CMO]}</div>
  <div style={{ display:"flex", gap:12, marginBottom:10 }}>
- <div style={{ display:"flex", alignItems:"center", gap:4 }}><div style={{ width:10, height:10, borderRadius:2, background:"#22c55e" }}/><span style={{ fontSize:11, color:S.gray }}>Rent collected</span></div>
- <div style={{ display:"flex", alignItems:"center", gap:4 }}><div style={{ width:10, height:10, borderRadius:2, background:"#ef4444" }}/><span style={{ fontSize:11, color:S.gray }}>Mortgage</span></div>
+ <div style={{ ...FC, gap:4 }}><div style={{ width:10, height:10, borderRadius:2, background:"#22c55e" }}/><span style={{ ...G11 }}>Rent collected</span></div>
+ <div style={{ ...FC, gap:4 }}><div style={{ width:10, height:10, borderRadius:2, background:"#ef4444" }}/><span style={{ ...G11 }}>Mortgage</span></div>
  </div>
  <div style={{ display:"flex", alignItems:"flex-end", gap:4, height:barH, overflowX:"auto" }}>
  {propData.map((d, i) => (
@@ -1470,7 +1478,7 @@ function FinCharts({ tenants, jobs, rp, outgoings }) {
   );
  })}
  </div>
- <div style={{ fontSize:11, color:S.gray, marginTop:8 }}>Net = rent collected minus mortgages, job costs and bills</div>
+ <div style={{ ...G11, marginTop:8 }}>Net = rent collected minus mortgages, job costs and bills</div>
  </div>
  <div style={{ ...card, ...cardPad }}>
  <div style={{ fontSize:13, fontWeight:600, marginBottom:4 }}>Outgoings by Category — {MSHORT[CMO]}</div>
@@ -1480,7 +1488,7 @@ function FinCharts({ tenants, jobs, rp, outgoings }) {
  <div>
   {outEntries.map(([label, amt], i) => (
     <div key={label} style={{ marginBottom:8 }}>
- <div style={{ display:"flex", justifyContent:"space-between", marginBottom:3 }}>
+ <div style={{ ...FB, marginBottom:3 }}>
  <span style={{ fontSize:12 }}>{label}</span>
  <span style={{ fontSize:12, fontWeight:600, color:S.red }}>{gbp(amt)}</span>
  </div>
@@ -1527,7 +1535,7 @@ function OutgoingsPage({ outgoings, addOutgoing, deleteOutgoing, fixedOutgoings,
   const grid = wide ? { display:"grid", gridTemplateColumns:"1fr 1fr", gap:16 } : {};
   return (
     <div>
- <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:14, flexWrap:"wrap" }}>
+ <div style={{ ...FC, gap:8, marginBottom:14, flexWrap:"wrap" }}>
  <button onClick={() => { const d = new Date(selYr, selMo-1, 1); setSelYr(d.getFullYear()); setSelMo(d.getMonth()); }} style={{ padding:"6px 12px", borderRadius:9, border:"1px solid #e2e8f0", background:"#fff", cursor:"pointer", fontSize:14 }}>‹</button>
  <span style={{ fontSize:14, fontWeight:600 }}>{MFULL[selMo]} {selYr}</span>
  <button onClick={() => { const d = new Date(selYr, selMo+1, 1); if(d <= new Date(CYR, CMO, 1)){ setSelYr(d.getFullYear()); setSelMo(d.getMonth()); }}} style={{ padding:"6px 12px", borderRadius:9, border:"1px solid #e2e8f0", background:"#fff", cursor:"pointer", fontSize:14 }}>›</button>
@@ -1549,23 +1557,23 @@ function OutgoingsPage({ outgoings, addOutgoing, deleteOutgoing, fixedOutgoings,
  const unrepeat = prev.filter(po => !items.find(i => i.label === po.label) && !autoSug.find(a => a.label === po.label));
  return (
   <div key={p.id} style={card}>
-    <div style={{ padding:"11px 14px", background:"#f8fafc", borderBottom:"1px solid #f1f5f9", display:"flex", justifyContent:"space-between", alignItems:"center" }}>
+    <div style={{ padding:"11px 14px", background:"#f8fafc", borderBottom:"1px solid #f1f5f9", ...RW }}>
  <div>
  <div style={{ fontSize:13, fontWeight:600 }}>{p.n}</div>
- <div style={{ fontSize:11, color:S.gray }}>{p.town} · {p.ty}</div>
+ <div style={{ ...G11 }}>{p.town} · {p.ty}</div>
  </div>
  <div style={{ textAlign:"right" }}>
  <div style={{ fontSize:13, fontWeight:700, color:total>0?S.red:S.gray }}>{gbp(total)}</div>
  <div style={{ fontSize:10, color:S.gray }}>total this month</div>
  </div>
     </div>
-    <div style={{ padding:"7px 14px", borderBottom:"1px solid #f1f5f9", display:"flex", justifyContent:"space-between", alignItems:"center", background:"#f8fafc" }}>
- <span style={{ fontSize:11, color:S.gray }}>💳 Mortgage</span>
+    <div style={{ padding:"7px 14px", borderBottom:"1px solid #f1f5f9", ...RW, background:"#f8fafc" }}>
+ <span style={{ ...G11 }}>💳 Mortgage</span>
  <span style={{ fontSize:11, fontWeight:600, color:S.mid }}>{gbp(p.mm)}/mo</span>
     </div>
     {pJobs.map(j => (
- <div key={j.id} style={{ padding:"9px 14px", borderBottom:"1px solid #f8fafc", display:"flex", justifyContent:"space-between", alignItems:"center", background:"#fffbeb" }}>
- <div style={{ display:"flex", alignItems:"center", gap:6 }}>
+ <div key={j.id} style={{ padding:"9px 14px", borderBottom:"1px solid #f8fafc", ...RW, background:"#fffbeb" }}>
+ <div style={{ ...FC, gap:6 }}>
  <span style={{ fontSize:12 }}>🔧</span>
  <span style={{ fontSize:12, color:S.atx }}>{j.desc}</span>
  </div>
@@ -1612,12 +1620,12 @@ function OutgoingsPage({ outgoings, addOutgoing, deleteOutgoing, fixedOutgoings,
    </div>
  </div>
  ):(
- <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+ <div style={{...RW}}>
    <div>
      <span style={{fontSize:13}}>{o.label}</span>
      {fixedItems(p.id).find(f2=>f2.label===o.label) && <span style={{fontSize:10,color:S.gtx,fontWeight:600,marginLeft:6}}>📌 fixed</span>}
    </div>
-   <div style={{display:"flex",alignItems:"center",gap:8}}>
+   <div style={{...FC,gap:8}}>
      <span style={{fontSize:13,fontWeight:600,color:S.red}}>{gbp(o.amount)}</span>
      <button onClick={()=>{setEditingItem(o.id);setEditForm({label:o.label,amount:String(o.amount)});}} style={{width:28,height:28,borderRadius:"50%",border:"none",cursor:"pointer",background:S.light,fontSize:12}}>✏️</button>
      <button onClick={()=>deleteOutgoing(p.id,selYr,selMo,o.id)} style={{width:28,height:28,borderRadius:"50%",border:"none",cursor:"pointer",background:S.rbg,fontSize:12}}>✕</button>
@@ -1631,7 +1639,7 @@ function OutgoingsPage({ outgoings, addOutgoing, deleteOutgoing, fixedOutgoings,
  <div>
  <Inp placeholder={isHMO ? "e.g. Energy, Water, Council Tax..." : "e.g. Insurance..."} value={form.label} onChange={e => setForm(f => ({ ...f, label:e.target.value }))} />
  <Inp placeholder="Amount (£)" type="number" value={form.amount} onChange={e => setForm(f => ({ ...f, amount:e.target.value }))} />
- <label style={{ display:"flex", alignItems:"center", gap:8, fontSize:12, color:S.dark, marginBottom:10, cursor:"pointer" }}>
+ <label style={{ ...FC, gap:8, fontSize:12, color:S.dark, marginBottom:10, cursor:"pointer" }}>
    <input type="checkbox" checked={form.fixed} onChange={e=>setForm(f=>({...f,fixed:e.target.checked}))} />
    Mark as fixed bill (auto-suggest every month)
  </label>
@@ -1641,7 +1649,7 @@ function OutgoingsPage({ outgoings, addOutgoing, deleteOutgoing, fixedOutgoings,
  </div>
  </div>
  ) : (
- <button onClick={() => setAddingTo(p.id)} style={{ fontSize:12, color:S.mid, fontWeight:600, background:"none", border:"none", cursor:"pointer", display:"flex", alignItems:"center", gap:4, padding:"4px 0", fontFamily:"system-ui" }}>+ Add outgoing</button>
+ <button onClick={() => setAddingTo(p.id)} style={{ fontSize:12, color:S.mid, fontWeight:600, background:"none", border:"none", cursor:"pointer", ...FC, gap:4, padding:"4px 0", fontFamily:"system-ui" }}>+ Add outgoing</button>
  )}
     </div>
   </div>
@@ -1667,7 +1675,7 @@ function ContractorsPage({ contractors, addContractor, deleteContractor, wide })
  <Btn onClick={() => setShow(true)}>+ Add Contractor</Btn>
  {show && (
  <div style={{ ...card, ...cardPad }}>
- <div style={{ display:"flex", justifyContent:"space-between", marginBottom:10 }}>
+ <div style={{ ...FB, marginBottom:10 }}>
   <span style={{ fontWeight:600 }}>New Contractor</span>
   <button onClick={() => setShow(false)} style={{ background:"none", border:"none", fontSize:18, cursor:"pointer" }}>✕</button>
  </div>
@@ -1688,14 +1696,14 @@ function ContractorsPage({ contractors, addContractor, deleteContractor, wide })
  <div style={grid}>
  {contractors.map(c => (
  <div key={c.id} style={{ ...card, ...cardPad }}>
-  <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start" }}>
+  <div style={{ ...FB, alignItems:"flex-start" }}>
     <div style={{ flex:1 }}>
- <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:4 }}>
+ <div style={{ ...FC, gap:8, marginBottom:4 }}>
  <span style={{ fontSize:13, fontWeight:600 }}>{c.name}</span>
  {c.trade && <Badge color={TC[c.trade]||"gray"}>{c.trade}</Badge>}
  </div>
  <a href={"tel:"+c.phone} style={{ color:S.blue, fontWeight:600, fontSize:13 }}>{c.phone}</a>
- {c.notes && <div style={{ fontSize:11, color:S.gray, marginTop:4 }}>{c.notes}</div>}
+ {c.notes && <div style={{ ...G11, marginTop:4 }}>{c.notes}</div>}
     </div>
     <button onClick={() => deleteContractor(c.id)} style={{ width:32, height:32, borderRadius:"50%", border:"none", cursor:"pointer", background:S.rbg, fontSize:13, marginLeft:8 }}>✕</button>
   </div>
@@ -1723,7 +1731,7 @@ function DealsPage({ deals, addDeal, updateDeal, deleteDeal, wide }) {
  <Btn onClick={() => setShow(true)}>+ Add Deal</Btn>
  {show && (
  <div style={{ ...card, ...cardPad }}>
- <div style={{ display:"flex", justifyContent:"space-between", marginBottom:10 }}>
+ <div style={{ ...FB, marginBottom:10 }}>
   <span style={{ fontWeight:600 }}>New Deal</span>
   <button onClick={() => setShow(false)} style={{ background:"none", border:"none", fontSize:18, cursor:"pointer" }}>✕</button>
  </div>
@@ -1743,17 +1751,17 @@ function DealsPage({ deals, addDeal, updateDeal, deleteDeal, wide }) {
  <div style={grid}>
  {active.map(d => (
  <div key={d.id} style={{ ...card, ...cardPad }}>
-  <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:8 }}>
+  <div style={{ ...FB, alignItems:"flex-start", marginBottom:8 }}>
     <div style={{ flex:1 }}>
  <div style={{ fontSize:13, fontWeight:600 }}>{d.addr}</div>
- <div style={{ fontSize:11, color:S.gray }}>{d.type}</div>
+ <div style={{ ...G11 }}>{d.type}</div>
     </div>
-    <div style={{ display:"flex", alignItems:"center", gap:8 }}>
+    <div style={{ ...FC, gap:8 }}>
  <Badge color={DC[d.status]||"gray"}>{d.status}</Badge>
  <button onClick={() => deleteDeal(d.id)} style={{ width:28, height:28, borderRadius:"50%", border:"none", cursor:"pointer", background:S.rbg, fontSize:12 }}>✕</button>
     </div>
   </div>
-  {d.notes && <div style={{ fontSize:11, color:S.gray, marginBottom:8 }}>{d.notes}</div>}
+  {d.notes && <div style={{ ...G11, marginBottom:8 }}>{d.notes}</div>}
   <div style={{ display:"flex", gap:6, flexWrap:"wrap" }}>
     {DEALST.filter(s => s !== d.status && s !== "Dead").map(s => (
  <button key={s} onClick={() => updateDeal(d.id, { status:s })} style={{ background:S.light, color:S.mid, padding:"4px 10px", borderRadius:8, border:"none", cursor:"pointer", fontSize:12, fontWeight:600, fontFamily:"system-ui" }}>{s}</button>
@@ -1768,9 +1776,9 @@ function DealsPage({ deals, addDeal, updateDeal, deleteDeal, wide }) {
  <div style={{ fontSize:11, fontWeight:700, color:S.gray, textTransform:"uppercase", letterSpacing:".5px", margin:"8px 0" }}>Archive ({arch.length})</div>
  {arch.map(d => (
   <div key={d.id} style={{ ...card, ...cardPad, opacity:.6 }}>
-    <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center" }}>
- <div><div style={{ fontSize:13, fontWeight:600 }}>{d.addr}</div><div style={{ fontSize:11, color:S.gray }}>{d.type}</div></div>
- <div style={{ display:"flex", alignItems:"center", gap:8 }}>
+    <div style={{ ...RW }}>
+ <div><div style={{ fontSize:13, fontWeight:600 }}>{d.addr}</div><div style={{ ...G11 }}>{d.type}</div></div>
+ <div style={{ ...FC, gap:8 }}>
  <Badge color={DC[d.status]||"gray"}>{d.status}</Badge>
  <button onClick={() => deleteDeal(d.id)} style={{ width:28, height:28, borderRadius:"50%", border:"none", cursor:"pointer", background:S.rbg, fontSize:12 }}>✕</button>
  </div>
@@ -1788,7 +1796,7 @@ function GrowthProjector({tv}) {
   return (
     <div style={{background:"#fff", borderRadius:14, border:"1px solid #e2e8f0", padding:14, marginBottom:12}}>
  <div style={{fontSize:13, fontWeight:600, marginBottom:8}}>Portfolio Growth Projector</div>
- <div style={{display:"flex", alignItems:"center", gap:10, marginBottom:10}}>
+ <div style={{...FC, gap:10, marginBottom:10}}>
  <input type="range" min="1" max="10" step="0.5" value={gr}
  onChange={function(e){setGr(parseFloat(e.target.value));}}
  style={{flex:1}} />
@@ -1839,25 +1847,25 @@ function GrowthPage({ tenants, propPurchase, setPropPurchase }) {
  </div>
  <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10, marginBottom:12 }}>
  {[
- {l:"Total Value",   v:gbp(tv), s:"All properties",                    g:false},
- {l:"Total Equity",  v:gbp(eq), s:Math.round(eq/tv*100)+"% of portfolio", g:true},
- {l:"Total Debt",    v:gbp(td), s:ltv+"% LTV overall",                 g:false},
- {l:"Gross Yield",   v:gy+"%",  s:"Annual rent vs value",              g:true},
- {l:"Annual Rent",   v:gbp(tr*12), s:"Gross before costs",             g:true},
- {l:"Avg LTV",       v:ltv+"%", s:"Across portfolio",                  g:ltv<60},
+ {l:"Total Value", v:gbp(tv), s:"All properties", g:false},
+ {l:"Total Equity", v:gbp(eq), s:Math.round(eq/tv*100)+"% of portfolio", g:true},
+ {l:"Total Debt", v:gbp(td), s:ltv+"% LTV overall", g:false},
+ {l:"Gross Yield", v:gy+"%", s:"Annual rent vs value", g:true},
+ {l:"Annual Rent", v:gbp(tr*12), s:"Gross before costs", g:true},
+ {l:"Avg LTV", v:ltv+"%", s:"Across portfolio", g:ltv<60},
  ].map((k,i) => (
  <div key={i} style={{ background:"#fff", borderRadius:14, border:"1px solid #e2e8f0", padding:12 }}>
-  <div style={{ fontSize:11, color:S.gray, marginBottom:3 }}>{k.l}</div>
+  <div style={{ ...G11, marginBottom:3 }}>{k.l}</div>
   <div style={{ fontSize:18, fontWeight:700, color:k.g?S.green:S.dark }}>{k.v}</div>
-  <div style={{ fontSize:11, color:S.gray, marginTop:2 }}>{k.s}</div>
+  <div style={{ ...G11, marginTop:2 }}>{k.s}</div>
  </div>
  ))}
  </div>
  <div style={{ ...card, ...cardPad, marginBottom:12 }}>
  <div style={{ fontSize:13, fontWeight:600, marginBottom:4 }}>Equity vs Debt — per property</div>
  <div style={{ display:"flex", gap:12, marginBottom:10 }}>
- <div style={{ display:"flex", alignItems:"center", gap:4 }}><div style={{ width:10, height:10, borderRadius:2, background:"#22c55e" }}/><span style={{ fontSize:11, color:S.gray }}>Equity</span></div>
- <div style={{ display:"flex", alignItems:"center", gap:4 }}><div style={{ width:10, height:10, borderRadius:2, background:"#ef4444" }}/><span style={{ fontSize:11, color:S.gray }}>Mortgage</span></div>
+ <div style={{ ...FC, gap:4 }}><div style={{ width:10, height:10, borderRadius:2, background:"#22c55e" }}/><span style={{ ...G11 }}>Equity</span></div>
+ <div style={{ ...FC, gap:4 }}><div style={{ width:10, height:10, borderRadius:2, background:"#ef4444" }}/><span style={{ ...G11 }}>Mortgage</span></div>
  </div>
  <div style={{ display:"flex", alignItems:"flex-end", gap:6, height:160, padding:"10px 0" }}>
  {PROPS.map(function(p) {
@@ -1891,10 +1899,10 @@ function GrowthPage({ tenants, propPurchase, setPropPurchase }) {
  const roi     = totalIn > 0 ? ((capGain / totalIn) * 100).toFixed(1) : null;
  return (
  <div key={p.id} style={card}>
-  <div style={{ padding:"11px 14px", background:"#f8fafc", borderBottom:"1px solid #f1f5f9", display:"flex", justifyContent:"space-between", alignItems:"center" }}>
+  <div style={{ padding:"11px 14px", background:"#f8fafc", borderBottom:"1px solid #f1f5f9", ...RW }}>
     <div>
  <div style={{ fontSize:13, fontWeight:600 }}>{p.n}</div>
- <div style={{ fontSize:11, color:S.gray }}>{p.town} · {p.ty}</div>
+ <div style={{ ...G11 }}>{p.town} · {p.ty}</div>
     </div>
     <button onClick={() => {
  setEditing(isEd?null:p.id);
@@ -1917,17 +1925,17 @@ function GrowthPage({ tenants, propPurchase, setPropPurchase }) {
  {editTab==="values" ? (
  <div>
  <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:8 }}>
-   <div><div style={{ fontSize:11, color:S.gray, marginBottom:3 }}>Current Value (£)</div><Inp type="number" value={ef.v} onChange={e=>setEf(f=>({...f,v:e.target.value}))} style={{marginBottom:0}} /></div>
-   <div><div style={{ fontSize:11, color:S.gray, marginBottom:3 }}>Mortgage Balance (£)</div><Inp type="number" value={ef.mtg} onChange={e=>setEf(f=>({...f,mtg:e.target.value}))} style={{marginBottom:0}} /></div>
+   <div><div style={{ ...G11, marginBottom:3 }}>Current Value (£)</div><Inp type="number" value={ef.v} onChange={e=>setEf(f=>({...f,v:e.target.value}))} style={{marginBottom:0}} /></div>
+   <div><div style={{ ...G11, marginBottom:3 }}>Mortgage Balance (£)</div><Inp type="number" value={ef.mtg} onChange={e=>setEf(f=>({...f,mtg:e.target.value}))} style={{marginBottom:0}} /></div>
  </div>
  <Btn onClick={() => saveVals(p.id, ef.v, ef.mtg)} style={{ marginTop:10, marginBottom:0 }}>Save Values</Btn>
  </div>
  ) : (
  <div>
- <div style={{ fontSize:11, color:S.gray, marginBottom:8 }}>Enter your original purchase figures to calculate true ROI</div>
- <div><div style={{ fontSize:11, color:S.gray, marginBottom:3 }}>Purchase Price (£)</div><Inp type="number" value={pf.price} onChange={e=>setPf(f=>({...f,price:e.target.value}))} /></div>
- <div><div style={{ fontSize:11, color:S.gray, marginBottom:3 }}>Buying Costs — stamp duty, legal fees (£)</div><Inp type="number" value={pf.costs} onChange={e=>setPf(f=>({...f,costs:e.target.value}))} /></div>
- <div><div style={{ fontSize:11, color:S.gray, marginBottom:3 }}>Renovation / Works (£)</div><Inp type="number" value={pf.reno} onChange={e=>setPf(f=>({...f,reno:e.target.value}))} /></div>
+ <div style={{ ...G11, marginBottom:8 }}>Enter your original purchase figures to calculate true ROI</div>
+ <div><div style={{ ...G11, marginBottom:3 }}>Purchase Price (£)</div><Inp type="number" value={pf.price} onChange={e=>setPf(f=>({...f,price:e.target.value}))} /></div>
+ <div><div style={{ ...G11, marginBottom:3 }}>Buying Costs — stamp duty, legal fees (£)</div><Inp type="number" value={pf.costs} onChange={e=>setPf(f=>({...f,costs:e.target.value}))} /></div>
+ <div><div style={{ ...G11, marginBottom:3 }}>Renovation / Works (£)</div><Inp type="number" value={pf.reno} onChange={e=>setPf(f=>({...f,reno:e.target.value}))} /></div>
  <Btn onClick={() => { setPropPurchase(p.id, pf); setEditing(null); }} style={{ marginBottom:0 }}>Save ROI Data</Btn>
  </div>
  )}
@@ -2017,7 +2025,7 @@ function TaxPage({ tenants, jobs, rp, outgoings, wide }) {
   };
   return (
     <div>
- <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:14 }}>
+ <div style={{ ...FC, gap:8, marginBottom:14 }}>
  <span style={{ fontSize:13, fontWeight:600 }}>Tax year</span>
  <Sel value={selTaxYr} onChange={e => setSelTaxYr(parseInt(e.target.value))} style={{ marginBottom:0, width:"auto" }}>
  {[currentTaxYr-1, currentTaxYr].map(y => <option key={y} value={y}>{y}/{y+1}</option>)}
@@ -2028,17 +2036,17 @@ function TaxPage({ tenants, jobs, rp, outgoings, wide }) {
  </div>
  <div style={{ display:"grid", gridTemplateColumns:wide?"1fr 1fr 1fr":"1fr 1fr", gap:10, marginBottom:12 }}>
  {[
- {l:"Rental Income",     v:gbp(totalRent),          s:"Gross rent collected",        g:true},
- {l:"Maintenance",       v:gbp(totalMaintenance),   s:"Jobs & repairs",              g:false},
- {l:"Bills & Outgoings", v:gbp(totalBills),         s:"Energy, insurance etc",       g:false},
- {l:"Total Expenses",    v:gbp(totalExpenses),      s:"All allowable costs",         g:false},
- {l:"Net Profit",        v:gbp(netProfit),          s:"Before tax",                  g:netProfit>0},
- {l:"Est. Tax (20%)",    v:gbp(taxEstimate),        s:"After mortgage interest credit",g:false},
+ {l:"Rental Income", v:gbp(totalRent), s:"Gross rent collected", g:true},
+ {l:"Maintenance", v:gbp(totalMaintenance), s:"Jobs & repairs", g:false},
+ {l:"Bills & Outgoings", v:gbp(totalBills), s:"Energy, insurance etc", g:false},
+ {l:"Total Expenses", v:gbp(totalExpenses), s:"All allowable costs", g:false},
+ {l:"Net Profit", v:gbp(netProfit), s:"Before tax", g:netProfit>0},
+ {l:"Est. Tax (20%)", v:gbp(taxEstimate), s:"After mortgage interest credit",g:false},
  ].map((k,i) => (
  <div key={i} style={{ background:"#fff", borderRadius:14, border:"1px solid #e2e8f0", padding:12 }}>
-  <div style={{ fontSize:11, color:S.gray, marginBottom:3 }}>{k.l}</div>
+  <div style={{ ...G11, marginBottom:3 }}>{k.l}</div>
   <div style={{ fontSize:18, fontWeight:700, color:k.g?S.green:S.dark }}>{k.v}</div>
-  <div style={{ fontSize:11, color:S.gray, marginTop:2 }}>{k.s}</div>
+  <div style={{ ...G11, marginTop:2 }}>{k.s}</div>
  </div>
  ))}
  </div>
@@ -2082,7 +2090,7 @@ function NotesPage({ generalNotes, setGeneralNotes, notes, setNote, wide }) {
     <div>
  <div style={{ ...card, ...cardPad, marginBottom:14 }}>
  <div style={{ fontSize:13, fontWeight:600, marginBottom:8 }}>📝 General Notes</div>
- <div style={{ fontSize:11, color:S.gray, marginBottom:8 }}>Jot down anything — ideas, reminders, things to follow up on.</div>
+ <div style={{ ...G11, marginBottom:8 }}>Jot down anything — ideas, reminders, things to follow up on.</div>
  <textarea
  value={generalNotes || ""}
  onChange={e => setGeneralNotes(e.target.value)}
@@ -2096,7 +2104,7 @@ function NotesPage({ generalNotes, setGeneralNotes, notes, setNote, wide }) {
  <div key={p.id} style={card}>
   <div style={{ padding:"11px 14px", background:"#f8fafc", borderBottom:"1px solid #f1f5f9" }}>
     <div style={{ fontSize:13, fontWeight:600 }}>{p.n}</div>
-    <div style={{ fontSize:11, color:S.gray }}>{p.town} · {p.ty}</div>
+    <div style={{ ...G11 }}>{p.town} · {p.ty}</div>
   </div>
   <div style={{ padding:"10px 14px" }}>
     <textarea
@@ -2145,7 +2153,7 @@ function TimelinePage({ tenants, comp, wide }) {
   const daysUntilEv=d=>Math.round((new Date(d.getFullYear(),d.getMonth(),d.getDate())-t0)/86400000);
   return (
     <div>
- <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:14 }}>
+ <div style={{ ...FC, gap:8, marginBottom:14 }}>
  <span style={{ fontSize:13, fontWeight:600 }}>Show next</span>
  {[30,60,90].map(d => (
  <button key={d} onClick={()=>setDays(d)} style={{ padding:"6px 14px", borderRadius:9, border:"1px solid #e2e8f0", background:days===d?S.dark:"#fff", color:days===d?"#fff":S.dark, fontWeight:600, fontSize:13, cursor:"pointer", fontFamily:"system-ui" }}>
@@ -2163,17 +2171,17 @@ function TimelinePage({ tenants, comp, wide }) {
  const dUntil = daysUntilEv(ev.date);
  return (
  <div key={i} style={{ ...card, ...cardPad, borderLeft:"3px solid "+ev.color }}>
-  <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start" }}>
+  <div style={{ ...FB, alignItems:"flex-start" }}>
     <div style={{ display:"flex", gap:10, alignItems:"flex-start" }}>
  <span style={{ fontSize:20, flexShrink:0 }}>{ev.icon}</span>
  <div>
  <div style={{ fontSize:13, fontWeight:600 }}>{ev.label}</div>
- <div style={{ fontSize:11, color:S.gray }}>{ev.sub}</div>
+ <div style={{ ...G11 }}>{ev.sub}</div>
  </div>
     </div>
     <div style={{ textAlign:"right", flexShrink:0, marginLeft:8 }}>
  <div style={{ fontSize:13, fontWeight:700, color:ev.color }}>{dUntil === 0 ? "Today" : dUntil === 1 ? "Tomorrow" : "in "+dUntil+"d"}</div>
- <div style={{ fontSize:11, color:S.gray }}>{formatDate(ev.date)}</div>
+ <div style={{ ...G11 }}>{formatDate(ev.date)}</div>
     </div>
   </div>
  </div>
@@ -2198,17 +2206,17 @@ function RentPlannerPage({ tenants, updateTenant, wide }) {
     <div>
  <div style={{ ...card, ...cardPad, marginBottom:12 }}>
  <div style={{ fontSize:13, fontWeight:600, marginBottom:4 }}>Increase rate</div>
- <div style={{ display:"flex", alignItems:"center", gap:12, marginBottom:8 }}>
+ <div style={{ ...FC, gap:12, marginBottom:8 }}>
  <input type="range" min="1" max="20" step="0.5" value={sv} onChange={e=>setSv(parseFloat(e.target.value))} onMouseUp={e=>setRate(parseFloat(e.target.value))} onTouchEnd={e=>setRate(parseFloat(e.target.value))} style={{ flex:1 }} />
  <span style={{ fontSize:18, fontWeight:700, minWidth:50 }}>{sv}%</span>
  </div>
  <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10 }}>
  <div style={{ background:S.light, borderRadius:10, padding:10 }}>
-  <div style={{ fontSize:11, color:S.gray }}>Current total rent</div>
+  <div style={{ ...G11 }}>Current total rent</div>
   <div style={{ fontSize:16, fontWeight:700 }}>{gbp(total)}/mo</div>
  </div>
  <div style={{ background:"#f0fdf4", borderRadius:10, padding:10 }}>
-  <div style={{ fontSize:11, color:S.gray }}>After {rate}% increase</div>
+  <div style={{ ...G11 }}>After {rate}% increase</div>
   <div style={{ fontSize:16, fontWeight:700, color:S.green }}>{gbp(newTotal)}/mo</div>
  </div>
  </div>
@@ -2224,23 +2232,23 @@ function RentPlannerPage({ tenants, updateTenant, wide }) {
  const propNew   = Math.round(propTotal * (1+rate/100));
  return (
   <div key={p.id} style={card}>
-    <div style={{ padding:"11px 14px", background:"#f8fafc", borderBottom:"1px solid #f1f5f9", display:"flex", justifyContent:"space-between" }}>
+    <div style={{ padding:"11px 14px", background:"#f8fafc", borderBottom:"1px solid #f1f5f9", ...FB }}>
  <div>
  <div style={{ fontSize:13, fontWeight:600 }}>{p.n}</div>
- <div style={{ fontSize:11, color:S.gray }}>{p.town}</div>
+ <div style={{ ...G11 }}>{p.town}</div>
  </div>
  <div style={{ textAlign:"right" }}>
- <div style={{ fontSize:11, color:S.gray }}>{gbp(propTotal)} → <span style={{ color:S.green, fontWeight:700 }}>{gbp(propNew)}</span></div>
+ <div style={{ ...G11 }}>{gbp(propTotal)} → <span style={{ color:S.green, fontWeight:700 }}>{gbp(propNew)}</span></div>
  <div style={{ fontSize:11, color:S.green }}>+{gbp(propNew-propTotal)}/mo</div>
  </div>
     </div>
     {pt.map((t,i) => {
  const newRent = Math.round(t.rn * (1+rate/100));
  return (
- <div key={t.id} style={{ padding:"10px 14px", borderBottom:i<pt.length-1?"1px solid #f8fafc":"none", display:"flex", justifyContent:"space-between", alignItems:"center" }}>
+ <div key={t.id} style={{ padding:"10px 14px", borderBottom:i<pt.length-1?"1px solid #f8fafc":"none", ...RW }}>
  <div>
    <div style={{ fontSize:13, fontWeight:600 }}>{p.ty==="HMO"?t.rm+" · ":""}{t.nm}</div>
-   <div style={{ fontSize:11, color:S.gray }}>{gbp(t.rn)}/mo → <span style={{ color:S.green, fontWeight:600 }}>{gbp(newRent)}/mo</span></div>
+   <div style={{ ...G11 }}>{gbp(t.rn)}/mo → <span style={{ color:S.green, fontWeight:600 }}>{gbp(newRent)}/mo</span></div>
  </div>
  <button onClick={() => applyRent(t, newRent)}
    style={{ background: confirmed===t.id ? S.green : S.dark, color:"#fff", border:"none", borderRadius:8, padding:"6px 12px", fontSize:12, fontWeight:600, cursor:"pointer", fontFamily:"system-ui", transition:"background .3s" }}>
@@ -2256,7 +2264,7 @@ function RentPlannerPage({ tenants, updateTenant, wide }) {
     </div>
   );
 }
-function AILettersPage({ tenants, wide }) {
+function AILettersPage({ tenants, wide, letterPrefill, setLetterPrefill }) {
   const [type, setType]         = useState("rent-increase");
   const [selTenant, setSelTenant] = useState(tenants[0]?.id || "");
   const [customRate, setCustomRate] = useState(5);
@@ -2267,6 +2275,7 @@ function AILettersPage({ tenants, wide }) {
   const [apiKey, setApiKey]     = useState(function(){return localStorage.getItem("ash-api-key")||"";});
   const [editKey, setEditKey]   = useState(false);
   const [keyInput, setKeyInput] = useState("");
+  useEffect(()=>{ if(letterPrefill){ setSelTenant(letterPrefill.tid); setType(letterPrefill.typ); setLetterPrefill(null); }}, [letterPrefill]);
   const t = tenants.find(x=>x.id===selTenant);
   const p = t ? PROPS.find(x=>x.id===t.pid) : null;
   const newRent = t ? Math.round(t.rn * (1 + customRate/100)) : 0;
@@ -2328,9 +2337,9 @@ Property: ${p?.n || "the property"}
   return (
     <div>
  <div style={{ ...card, ...cardPad, marginBottom:10 }}>
- <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center" }}>
+ <div style={{ ...RW }}>
  <div>
-  <div style={{ fontSize:11, color:S.gray }}>API Key</div>
+  <div style={{ ...G11 }}>API Key</div>
   <div style={{ fontSize:12, fontWeight:600, color:apiKey?S.green:S.red }}>{apiKey ? "✓ Key saved ("+apiKey.slice(-6)+")" : "✕ No key set"}</div>
  </div>
  <button onClick={() => { setEditKey(!editKey); setKeyInput(""); }} style={{ padding:"6px 12px", borderRadius:8, border:"1px solid #e2e8f0", background:S.light, fontSize:12, fontWeight:600, cursor:"pointer", fontFamily:"system-ui" }}>
@@ -2351,11 +2360,11 @@ Property: ${p?.n || "the property"}
  ✉️ Pick the type of message, select a tenant and tap Generate. The AI writes a personal letter in your voice — not robotic. Edit it before sending.
  </div>
  <div style={{ ...card, ...cardPad }}>
- <div style={{ fontSize:11, color:S.gray, marginBottom:4 }}>Message type</div>
+ <div style={{ ...G11, marginBottom:4 }}>Message type</div>
  <Sel value={type} onChange={e=>setType(e.target.value)}>
  {LETTER_TYPES.map(l=><option key={l.id} value={l.id}>{l.label}</option>)}
  </Sel>
- <div style={{ fontSize:11, color:S.gray, marginBottom:4 }}>Tenant</div>
+ <div style={{ ...G11, marginBottom:4 }}>Tenant</div>
  <Sel value={selTenant} onChange={e=>setSelTenant(e.target.value)}>
  {tenants.map(t2=>{
   const p2=PROPS.find(x=>x.id===t2.pid);
@@ -2364,17 +2373,17 @@ Property: ${p?.n || "the property"}
  </Sel>
  {type === "rent-increase" && (
  <div style={{ marginBottom:8 }}>
-  <div style={{ fontSize:11, color:S.gray, marginBottom:4 }}>Increase rate: {customRate}%</div>
-  <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:4 }}>
+  <div style={{ ...G11, marginBottom:4 }}>Increase rate: {customRate}%</div>
+  <div style={{ ...FC, gap:10, marginBottom:4 }}>
     <input type="range" min="1" max="20" step="0.5" value={customRate} onChange={e=>setCustomRate(parseFloat(e.target.value))} style={{ flex:1 }} />
     <span style={{ fontSize:14, fontWeight:700 }}>{customRate}%</span>
   </div>
-  {t && <div style={{ fontSize:11, color:S.gray }}>{gbp(t.rn)}/mo → <span style={{ color:S.green, fontWeight:700 }}>{gbp(newRent)}/mo</span></div>}
+  {t && <div style={{ ...G11 }}>{gbp(t.rn)}/mo → <span style={{ color:S.green, fontWeight:700 }}>{gbp(newRent)}/mo</span></div>}
  </div>
  )}
  {type === "custom" && (
  <div style={{ marginBottom:8 }}>
-  <div style={{ fontSize:11, color:S.gray, marginBottom:4 }}>Describe what you need</div>
+  <div style={{ ...G11, marginBottom:4 }}>Describe what you need</div>
   <textarea value={customMsg} onChange={e=>setCustomMsg(e.target.value)} placeholder="e.g. I need to arrange an inspection next week..." style={{ width:"100%", border:"1px solid #e2e8f0", borderRadius:10, padding:"10px 12px", fontSize:14, fontFamily:"system-ui", resize:"none", height:70, outline:"none" }} />
  </div>
  )}
@@ -2384,14 +2393,14 @@ Property: ${p?.n || "the property"}
  </div>
  {result && (
  <div style={{ ...card, ...cardPad, marginTop:10 }}>
- <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:10 }}>
+ <div style={{ ...RW, marginBottom:10 }}>
   <div style={{ fontSize:13, fontWeight:600 }}>Generated message</div>
   <button onClick={copy} style={{ background:copied?S.green:S.light, color:copied?"#fff":S.dark, border:"none", borderRadius:8, padding:"5px 12px", fontSize:12, fontWeight:600, cursor:"pointer", fontFamily:"system-ui" }}>
     {copied ? "✓ Copied!" : "Copy"}
   </button>
  </div>
  <div style={{ fontSize:13, lineHeight:1.8, color:S.dark, whiteSpace:"pre-wrap" }}>{result}</div>
- <div style={{ fontSize:11, color:S.gray, marginTop:10 }}>✏️ Review and edit before sending. This is a starting point, not a final draft.</div>
+ <div style={{ ...G11, marginTop:10 }}>✏️ Review and edit before sending. This is a starting point, not a final draft.</div>
  </div>
  )}
     </div>
@@ -2430,31 +2439,31 @@ function DealCheckPage({ wide }) {
  </div>
  <div style={{ ...card, ...cardPad }}>
  <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:8 }}>
- <div><div style={{ fontSize:11, color:S.gray, marginBottom:3 }}>Asking price (£)</div><Inp type="number" value={f.price} onChange={e=>setF(x=>({...x,price:e.target.value}))} placeholder="e.g. 150000" style={{marginBottom:0}} /></div>
- <div><div style={{ fontSize:11, color:S.gray, marginBottom:3 }}>Expected rent/mo (£)</div><Inp type="number" value={f.rent} onChange={e=>setF(x=>({...x,rent:e.target.value}))} placeholder="e.g. 850" style={{marginBottom:0}} /></div>
+ <div><div style={{ ...G11, marginBottom:3 }}>Asking price (£)</div><Inp type="number" value={f.price} onChange={e=>setF(x=>({...x,price:e.target.value}))} placeholder="e.g. 150000" style={{marginBottom:0}} /></div>
+ <div><div style={{ ...G11, marginBottom:3 }}>Expected rent/mo (£)</div><Inp type="number" value={f.rent} onChange={e=>setF(x=>({...x,rent:e.target.value}))} placeholder="e.g. 850" style={{marginBottom:0}} /></div>
  </div>
  <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr 1fr", gap:8, marginTop:8 }}>
- <div><div style={{ fontSize:11, color:S.gray, marginBottom:3 }}>Area/town</div><Inp value={f.area} onChange={e=>setF(x=>({...x,area:e.target.value}))} placeholder="e.g. Bramley" style={{marginBottom:0}} /></div>
- <div><div style={{ fontSize:11, color:S.gray, marginBottom:3 }}>Postcode</div><Inp value={f.postcode} onChange={e=>setF(x=>({...x,postcode:e.target.value}))} placeholder="e.g. LS13" style={{marginBottom:0}} /></div>
- <div><div style={{ fontSize:11, color:S.gray, marginBottom:3 }}>Beds</div><Inp type="number" value={f.beds} onChange={e=>setF(x=>({...x,beds:e.target.value}))} placeholder="e.g. 3" style={{marginBottom:0}} /></div>
+ <div><div style={{ ...G11, marginBottom:3 }}>Area/town</div><Inp value={f.area} onChange={e=>setF(x=>({...x,area:e.target.value}))} placeholder="e.g. Bramley" style={{marginBottom:0}} /></div>
+ <div><div style={{ ...G11, marginBottom:3 }}>Postcode</div><Inp value={f.postcode} onChange={e=>setF(x=>({...x,postcode:e.target.value}))} placeholder="e.g. LS13" style={{marginBottom:0}} /></div>
+ <div><div style={{ ...G11, marginBottom:3 }}>Beds</div><Inp type="number" value={f.beds} onChange={e=>setF(x=>({...x,beds:e.target.value}))} placeholder="e.g. 3" style={{marginBottom:0}} /></div>
  </div>
  <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:8, marginTop:8 }}>
- <div><div style={{ fontSize:11, color:S.gray, marginBottom:3 }}>Type</div><Sel value={f.ptype} onChange={e=>setF(x=>({...x,ptype:e.target.value}))} style={{marginBottom:0}}><option>BTL</option><option>HMO</option><option>Flip</option></Sel></div>
- <div><div style={{ fontSize:11, color:S.gray, marginBottom:3 }}>Condition</div><Sel value={f.condition} onChange={e=>setF(x=>({...x,condition:e.target.value}))} style={{marginBottom:0}}><option>Good</option><option>Needs cosmetic work</option><option>Needs full refurb</option><option>Uninhabitable</option></Sel></div>
+ <div><div style={{ ...G11, marginBottom:3 }}>Type</div><Sel value={f.ptype} onChange={e=>setF(x=>({...x,ptype:e.target.value}))} style={{marginBottom:0}}><option>BTL</option><option>HMO</option><option>Flip</option></Sel></div>
+ <div><div style={{ ...G11, marginBottom:3 }}>Condition</div><Sel value={f.condition} onChange={e=>setF(x=>({...x,condition:e.target.value}))} style={{marginBottom:0}}><option>Good</option><option>Needs cosmetic work</option><option>Needs full refurb</option><option>Uninhabitable</option></Sel></div>
  </div>
  <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:8, marginTop:8 }}>
  <div>
-  <div style={{ fontSize:11, color:S.gray, marginBottom:3 }}>Mortgage rate: {f.rate}%</div>
+  <div style={{ ...G11, marginBottom:3 }}>Mortgage rate: {f.rate}%</div>
   <input type="range" min="3" max="9" step="0.1" value={f.rate} onChange={e=>setF(x=>({...x,rate:e.target.value}))} style={{ width:"100%" }} />
  </div>
  <div>
-  <div style={{ fontSize:11, color:S.gray, marginBottom:3 }}>Deposit: {f.deposit}%</div>
+  <div style={{ ...G11, marginBottom:3 }}>Deposit: {f.deposit}%</div>
   <input type="range" min="20" max="40" step="5" value={f.deposit} onChange={e=>setF(x=>({...x,deposit:e.target.value}))} style={{ width:"100%" }} />
  </div>
  </div>
  <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:8, marginTop:8 }}>
- <div><div style={{ fontSize:11, color:S.gray, marginBottom:3 }}>Buying costs (£)</div><Inp type="number" value={f.costs} onChange={e=>setF(x=>({...x,costs:e.target.value}))} placeholder="Auto if blank" style={{marginBottom:0}} />{f.price&&!f.costs&&<div style={{fontSize:10,color:S.gtx,marginTop:2}}>Auto: {gbp(calcSDLT(parseFloat(f.price)||0))} SDLT + {gbp(1500)} legal</div>}</div>
- <div><div style={{ fontSize:11, color:S.gray, marginBottom:3 }}>Renovation (£)</div><Inp type="number" value={f.reno} onChange={e=>setF(x=>({...x,reno:e.target.value}))} placeholder="Works needed" style={{marginBottom:0}} /></div>
+ <div><div style={{ ...G11, marginBottom:3 }}>Buying costs (£)</div><Inp type="number" value={f.costs} onChange={e=>setF(x=>({...x,costs:e.target.value}))} placeholder="Auto if blank" style={{marginBottom:0}} />{f.price&&!f.costs&&<div style={{fontSize:10,color:S.gtx,marginTop:2}}>Auto: {gbp(calcSDLT(parseFloat(f.price)||0))} SDLT + {gbp(1500)} legal</div>}</div>
+ <div><div style={{ ...G11, marginBottom:3 }}>Renovation (£)</div><Inp type="number" value={f.reno} onChange={e=>setF(x=>({...x,reno:e.target.value}))} placeholder="Works needed" style={{marginBottom:0}} /></div>
  </div>
  <Btn onClick={analyse} style={{ marginTop:12, marginBottom:0 }}>Analyse This Deal</Btn>
  </div>
@@ -2473,21 +2482,21 @@ function DealCheckPage({ wide }) {
  </div>
  <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10, marginTop:10 }}>
   {[
-    {l:"Gross yield",       v:result.grossYield+"%",           g:parseFloat(result.grossYield)>=6},
-    {l:"Monthly mortgage",  v:gbp(result.monthlyInterest)+"/mo",g:false},
-    {l:"Net cash flow",     v:(result.ncf>=0?"":"-")+gbp(Math.abs(result.ncf))+"/mo", g:result.ncf>0},
-    {l:"Total cash in",     v:gbp(result.totalIn),             g:false},
-    {l:"Cash-on-cash ROI",  v:result.cashROI+"%",              g:parseFloat(result.cashROI)>=8},
-    {l:"Stamp duty",        v:gbp(result.sdlt),                g:false},
-    {l:"Mortgage",          v:gbp(result.mortgage),            g:false},
+    {l:"Gross yield", v:result.grossYield+"%", g:parseFloat(result.grossYield)>=6},
+    {l:"Monthly mortgage", v:gbp(result.monthlyInterest)+"/mo",g:false},
+    {l:"Net cash flow", v:(result.ncf>=0?"":"-")+gbp(Math.abs(result.ncf))+"/mo", g:result.ncf>0},
+    {l:"Total cash in", v:gbp(result.totalIn), g:false},
+    {l:"Cash-on-cash ROI", v:result.cashROI+"%", g:parseFloat(result.cashROI)>=8},
+    {l:"Stamp duty", v:gbp(result.sdlt), g:false},
+    {l:"Mortgage", v:gbp(result.mortgage), g:false},
   ].map((k,i)=>(
     <div key={i} style={{ background:"#fff", borderRadius:14, border:"1px solid #e2e8f0", padding:12 }}>
- <div style={{ fontSize:11, color:S.gray, marginBottom:3 }}>{k.l}</div>
+ <div style={{ ...G11, marginBottom:3 }}>{k.l}</div>
  <div style={{ fontSize:16, fontWeight:700, color:k.g?S.green:S.dark }}>{k.v}</div>
     </div>
   ))}
  </div>
- <div style={{ fontSize:11, color:S.gray, marginTop:8, lineHeight:1.6 }}>
+ <div style={{ ...G11, marginTop:8, lineHeight:1.6 }}>
   Note: SDLT auto-calculated using additional property rates (5% surcharge). Remember to factor in management time, void periods and maintenance reserves.
  </div>
  <button onClick={() => {
@@ -2532,7 +2541,7 @@ function PersonalOutPage({ tenants, rp, jobs, outgoings, personalOut, addPersona
   const unrepeat = prevItems.filter(po => !items.find(i => i.label === po.label));
   return (
     <div>
- <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:14 }}>
+ <div style={{ ...FC, gap:8, marginBottom:14 }}>
  <button onClick={() => { const d = new Date(selYr, selMo-1, 1); setSelYr(d.getFullYear()); setSelMo(d.getMonth()); }} style={{ padding:"6px 12px", borderRadius:9, border:"1px solid #e2e8f0", background:"#fff", cursor:"pointer", fontSize:14 }}>‹</button>
  <span style={{ fontSize:14, fontWeight:600 }}>{MFULL[selMo]} {selYr}</span>
  <button onClick={() => { const d = new Date(selYr, selMo+1, 1); if(d <= new Date(CYR, CMO, 1)){ setSelYr(d.getFullYear()); setSelMo(d.getMonth()); }}} style={{ padding:"6px 12px", borderRadius:9, border:"1px solid #e2e8f0", background:"#fff", cursor:"pointer", fontSize:14 }}>›</button>
@@ -2555,9 +2564,9 @@ function PersonalOutPage({ tenants, rp, jobs, outgoings, personalOut, addPersona
  </div>
  )}
  {items.map(o => (
- <div key={o.id} style={{ padding:"9px 14px", borderBottom:"1px solid #f8fafc", display:"flex", justifyContent:"space-between", alignItems:"center" }}>
+ <div key={o.id} style={{ padding:"9px 14px", borderBottom:"1px solid #f8fafc", ...RW }}>
   <span style={{ fontSize:13 }}>{o.label}</span>
-  <div style={{ display:"flex", alignItems:"center", gap:8 }}>
+  <div style={{ ...FC, gap:8 }}>
     <span style={{ fontSize:13, fontWeight:600, color:S.red }}>{gbp(o.amount)}</span>
     <button onClick={() => deletePersonalOut(selYr, selMo, o.id)} style={{ width:28, height:28, borderRadius:"50%", border:"none", cursor:"pointer", background:S.rbg, fontSize:12 }}>✕</button>
   </div>
@@ -2575,7 +2584,7 @@ function PersonalOutPage({ tenants, rp, jobs, outgoings, personalOut, addPersona
     </div>
   </div>
  ) : (
-  <button onClick={() => setAdding(true)} style={{ fontSize:12, color:S.mid, fontWeight:600, background:"none", border:"none", cursor:"pointer", display:"flex", alignItems:"center", gap:4, padding:"4px 0", fontFamily:"system-ui" }}>+ Add expense</button>
+  <button onClick={() => setAdding(true)} style={{ fontSize:12, color:S.mid, fontWeight:600, background:"none", border:"none", cursor:"pointer", ...FC, gap:4, padding:"4px 0", fontFamily:"system-ui" }}>+ Add expense</button>
  )}
  </div>
  </div>
@@ -2627,10 +2636,10 @@ function RentGapPage({ tenants, updateTenant }) {
  )}
  {displayed.sort((a,b) => (b.monthsSince||0) - (a.monthsSince||0)).map(t => (
  <div key={t.id} style={{ ...card, ...cardPad, borderLeft:t.status==="red"?"4px solid "+S.red:t.status==="amber"?"4px solid "+S.amber:t.status==="unknown"?"4px solid "+S.gray:"4px solid "+S.green }}>
- <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:6 }}>
+ <div style={{ ...FB, alignItems:"flex-start", marginBottom:6 }}>
   <div style={{ flex:1 }}>
   <div style={{ fontSize:14, fontWeight:700 }}>{t.nm}</div>
-  <div style={{ fontSize:11, color:S.gray }}>{t.propName}</div>
+  <div style={{ ...G11 }}>{t.propName}</div>
   </div>
   <Badge color={t.status==="red"?"red":t.status==="amber"?"amber":t.status==="unknown"?"gray":"green"}>{t.label}</Badge>
  </div>
@@ -2708,19 +2717,19 @@ function PerformersPage({ tenants, jobs, outgoings, rp }) {
  ))}
  </div>
  {sorted.map((p, i) => (
- <div key={p.id} style={{ ...card, ...cardPad, display:"flex", alignItems:"center", gap:12 }}>
- <div style={{ width:32, height:32, borderRadius:"50%", background:i===0?"#dcfce7":i===sorted.length-1?"#fee2e2":S.light, display:"flex", alignItems:"center", justifyContent:"center", fontSize:14, fontWeight:700, color:i===0?S.gtx:i===sorted.length-1?S.rtx:S.mid, flexShrink:0 }}>{i+1}</div>
+ <div key={p.id} style={{ ...card, ...cardPad, ...FC, gap:12 }}>
+ <div style={{ width:32, height:32, borderRadius:"50%", background:i===0?"#dcfce7":i===sorted.length-1?"#fee2e2":S.light, ...FC, justifyContent:"center", fontSize:14, fontWeight:700, color:i===0?S.gtx:i===sorted.length-1?S.rtx:S.mid, flexShrink:0 }}>{i+1}</div>
  <div style={{ flex:1, minWidth:0 }}>
   <div style={{ fontSize:13, fontWeight:600, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{p.n}</div>
-  <div style={{ fontSize:11, color:S.gray }}>{p.ty} · {p.town}</div>
+  <div style={{ ...G11 }}>{p.ty} · {p.town}</div>
  </div>
  <div style={{ textAlign:"right", flexShrink:0 }}>
   <div style={{ fontSize:13, fontWeight:700, color:p.avgMonthlyNet>=0?S.green:S.red }}>{p.avgMonthlyNet>=0?"+":""}{gbp(p.avgMonthlyNet)}/mo</div>
-  <div style={{ fontSize:11, color:S.gray }}>{p.grossYield.toFixed(1)}% yield · {Math.round(p.ltv)}% LTV</div>
+  <div style={{ ...G11 }}>{p.grossYield.toFixed(1)}% yield · {Math.round(p.ltv)}% LTV</div>
  </div>
  </div>
  ))}
- <div style={{ fontSize:11, color:S.gray, textAlign:"center", marginTop:8, lineHeight:1.5 }}>Net profit = 6-month average (rent – mortgage – jobs – bills)</div>
+ <div style={{ ...G11, textAlign:"center", marginTop:8, lineHeight:1.5 }}>Net profit = 6-month average (rent – mortgage – jobs – bills)</div>
     </div>
   );
 }
@@ -2751,21 +2760,21 @@ function EquityPage({ tenants }) {
  </div>
  <div style={{ ...card, ...cardPad, marginBottom:12 }}>
  <div style={{ fontSize:12, fontWeight:600, marginBottom:6 }}>Target LTV: {ltvTarget}%</div>
- <div style={{ display:"flex", alignItems:"center", gap:10 }}>
+ <div style={{ ...FC, gap:10 }}>
  <input type="range" min="60" max="80" step="1" value={ltvTarget} onChange={e=>setLtvTarget(parseInt(e.target.value))} style={{ flex:1 }} />
  <span style={{ fontSize:13, fontWeight:700, color:ltvTarget>=75?S.amber:S.dark, minWidth:34 }}>{ltvTarget}%</span>
  </div>
- <div style={{ fontSize:11, color:S.gray, marginTop:6 }}>Most BTL lenders go up to 75%. Above that is stretched and harder to place.</div>
+ <div style={{ ...G11, marginTop:6 }}>Most BTL lenders go up to 75%. Above that is stretched and harder to place.</div>
  </div>
  {sortable.map(p => {
  const pct = p.v > 0 ? (p.mtg / p.v * 100) : 0;
  const canRelease = p.releasable > 0;
  return (
  <div key={p.id} style={{ ...card, ...cardPad, opacity:canRelease?1:.55 }}>
- <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:8 }}>
+ <div style={{ ...FB, alignItems:"flex-start", marginBottom:8 }}>
  <div>
   <div style={{ fontSize:14, fontWeight:700 }}>{p.n}</div>
-  <div style={{ fontSize:11, color:S.gray }}>{p.ty} · currently {Math.round(pct)}% LTV</div>
+  <div style={{ ...G11 }}>{p.ty} · currently {Math.round(pct)}% LTV</div>
  </div>
  <div style={{ textAlign:"right" }}>
   <div style={{ fontSize:18, fontWeight:700, color:canRelease?S.green:S.gray }}>{gbp(p.releasable)}</div>
@@ -2783,12 +2792,12 @@ function EquityPage({ tenants }) {
  <div><div style={{ color:S.gray }}>New net</div><div style={{ fontWeight:700, color:p.newNet>=0?S.green:S.red }}>{p.newNet>=0?"":"-"}{gbp(Math.abs(p.newNet))}/mo</div></div>
  </div>
  ) : (
- <div style={{ fontSize:11, color:S.gray, fontWeight:600 }}>Already at or above target LTV — no equity to release</div>
+ <div style={{ ...G11, fontWeight:600 }}>Already at or above target LTV — no equity to release</div>
  )}
  </div>
  );
  })}
- <div style={{ fontSize:11, color:S.gray, textAlign:"center", marginTop:8, lineHeight:1.5 }}>Calculations assume interest-only at current rate on file (or 5.5% if unknown). Actual lender offers will vary.</div>
+ <div style={{ ...G11, textAlign:"center", marginTop:8, lineHeight:1.5 }}>Calculations assume interest-only at current rate on file (or 5.5% if unknown). Actual lender offers will vary.</div>
     </div>
   );
 }
