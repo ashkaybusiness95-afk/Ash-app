@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
   <title>Ash Property Portfolio</title>
-  <style>*{box-sizing:border-box;margin:0;padding:0}body{background:#f1f5f9}</style>
+  <style>*{box-sizing:border-box;margin:0;padding:0}body{background:#f1f5f9}@media print{nav,.np{display:none!important}body{background:#fff}}</style>
 </head>
 <body>
   <div id="root"></div>
@@ -110,7 +110,7 @@ const seedComp = () => PROPS.flatMap(p =>
     id: p.id + "-" + c.k, pid: p.id, type: c.k, last: "", next: "", notes: ""
   }))
 );
-const SEED = { tenants: SEED_T, rp: SEED_RP, jobs: SEED_JOBS, comp: seedComp(), contractors: [], deals: [], notes: {}, outgoings: SEED_OUTGOINGS, generalNotes: "", fixedOutgoings: {}, propPurchase: {}, roomNotes: {}, personalOut: {} };
+const SEED = { tenants: SEED_T, rp: SEED_RP, jobs: SEED_JOBS, comp: seedComp(), contractors: [], deals: [], notes: {}, outgoings: SEED_OUTGOINGS, generalNotes: "", fixedOutgoings: {}, propPurchase: {}, roomNotes: {}, personalOut: {}, portfolioOut: {} };
 const now = new Date();
 const CYR = now.getFullYear();
 const CMO = now.getMonth();
@@ -129,20 +129,33 @@ const G11={fontSize:11,color:S.gray};
 const FC={display:"flex",alignItems:"center"};
 const FB={display:"flex",justifyContent:"space-between"};
 const RW={display:"flex",justifyContent:"space-between",alignItems:"center"};
-const card   = { background:"#fff", borderRadius:15, border:"1px solid #e2e8f0", marginBottom:10, overflow:"hidden", boxShadow:"0 1px 3px rgba(0,0,0,0.04)" };
+const BD={border:"1px solid #e2e8f0"};
+const FF={fontFamily:"system-ui"};
+const CP={cursor:"pointer"};
+const BW={background:"#fff"};
+const TR={textAlign:"right"};
+const TC={textAlign:"center"};
+const BN={border:"none"};
+const F6={fontWeight:600};
+const F7={fontWeight:700};
+const MB10={marginBottom:10};
+const R10={borderRadius:10};
+const S13={fontSize:13};
+const S12={fontSize:12};
+const card   = { ...BW, borderRadius:15, ...BD, ...MB10, overflow:"hidden", boxShadow:"0 1px 3px rgba(0,0,0,0.04)" };
 const cardPad = { padding:14 };
 function Badge({ children, color="gray" }) {
   const map = { green:{background:S.gbg,color:S.gtx}, red:{background:S.rbg,color:S.rtx}, amber:{background:S.abg,color:S.atx}, blue:{background:S.bbg,color:S.btx}, gray:{background:S.light,color:S.mid} };
-  return <span style={{ display:"inline-flex", alignItems:"center", padding:"3px 8px", borderRadius:99, fontSize:11, fontWeight:600, ...(map[color]||map.gray) }}>{children}</span>;
+  return <span style={{ display:"inline-flex", alignItems:"center", padding:"4px 10px", borderRadius:99, ...S12, ...F6, ...(map[color]||map.gray) }}>{children}</span>;
 }
 function Btn({ onClick, children, style={} }) {
-  return <button onClick={onClick} style={{ ...FC, justifyContent:"center", gap:8, padding:13, borderRadius:13, fontSize:14, fontWeight:600, border:"none", cursor:"pointer", width:"100%", marginBottom:10, background:S.dark, color:"#fff", fontFamily:"system-ui", ...style }}>{children}</button>;
+  return <button onClick={onClick} style={{ ...FC, justifyContent:"center", gap:8, padding:13, borderRadius:13, fontSize:14, ...F6, ...BN, ...CP, width:"100%", ...MB10, background:S.dark, color:"#fff", ...FF, ...style }}>{children}</button>;
 }
 function Inp({ style={}, ...p }) {
-  return <input {...p} style={{ width:"100%", border:"1px solid #e2e8f0", borderRadius:10, padding:"10px 12px", fontSize:14, fontFamily:"system-ui", background:"#fff", color:S.dark, outline:"none", marginBottom:8, display:"block", ...style }} />;
+  return <input {...p} style={{ width:"100%", ...BD, ...R10, padding:"10px 12px", fontSize:14, ...FF, ...BW, color:S.dark, outline:"none", marginBottom:8, display:"block", ...style }} />;
 }
 function Sel({ children, style={}, ...p }) {
-  return <select {...p} style={{ width:"100%", border:"1px solid #e2e8f0", borderRadius:10, padding:"10px 12px", fontSize:14, fontFamily:"system-ui", background:"#fff", color:S.dark, outline:"none", marginBottom:8, display:"block", ...style }}>{children}</select>;
+  return <select {...p} style={{ width:"100%", ...BD, ...R10, padding:"10px 12px", fontSize:14, ...FF, ...BW, color:S.dark, outline:"none", marginBottom:8, display:"block", ...style }}>{children}</select>;
 }
 function LoginScreen({ onLogin }) {
   const [pw, setPw] = useState("");
@@ -156,17 +169,17 @@ function LoginScreen({ onLogin }) {
   return (
     <div style={{ minHeight:"100vh", background:S.dark, display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", padding:32 }}>
  <div style={{ fontSize:52 }}>🏠</div>
- <div style={{ color:"#fff", fontSize:22, fontWeight:700, margin:"16px 0 4px" }}>Portfolio Manager</div>
- <div style={{ color:S.gray, fontSize:13, marginBottom:28 }}>Enter your password to continue</div>
+ <div style={{ color:"#fff", fontSize:22, ...F7, margin:"16px 0 4px" }}>Portfolio Manager</div>
+ <div style={{ color:S.gray, ...S13, marginBottom:28 }}>Enter your password to continue</div>
  <input type="password" value={pw} placeholder="Password"
  onChange={e => { setPw(e.target.value); setErr(false); }}
  onKeyDown={e => e.key === "Enter" && attempt()}
- style={{ width:"100%", maxWidth:300, padding:"14px 16px", borderRadius:12, border:"1.5px solid #334155", background:"#0f172a", color:"#fff", fontSize:16, marginBottom:12, outline:"none", fontFamily:"system-ui" }}
+ style={{ width:"100%", maxWidth:300, padding:"14px 16px", borderRadius:12, border:"1.5px solid #334155", background:"#0f172a", color:"#fff", fontSize:16, marginBottom:12, outline:"none", ...FF }}
  />
- <button onClick={attempt} style={{ width:"100%", maxWidth:300, padding:14, borderRadius:12, background:"#3b82f6", color:"#fff", fontSize:15, fontWeight:600, border:"none", cursor:"pointer", fontFamily:"system-ui" }}>
+ <button onClick={attempt} style={{ width:"100%", maxWidth:300, padding:14, borderRadius:12, background:"#3b82f6", color:"#fff", fontSize:15, ...F6, ...BN, ...CP, ...FF }}>
  Log In
  </button>
- {err && <div style={{ color:"#f87171", fontSize:13, marginTop:10 }}>Incorrect password. Try again.</div>}
+ {err && <div style={{ color:"#f87171", ...S13, marginTop:10 }}>Incorrect password. Try again.</div>}
     </div>
   );
 }
@@ -206,6 +219,7 @@ function App() {
  if(!d.propPurchase)d.propPurchase={};
  if(!d.roomNotes)d.roomNotes={};
  if(!d.personalOut)d.personalOut={};
+ if(!d.portfolioOut)d.portfolioOut={};
  if(d.savings===undefined)d.savings=0;
  if(!d.tenants.find(t=>t.id==="t17"))d.tenants.push({id:"t17",pid:"airedale",rm:"Whole",nm:"Chelsea",dy:10,rn:795,dp:null,rv:null,nt:""});
  setData(d);
@@ -222,8 +236,8 @@ function App() {
   }, [data]);
   const upd = fn => setData(p => ({ ...p, ...fn(p) }));
   if (!loggedIn) return <LoginScreen onLogin={() => setLoggedIn(true)} />;
-  if (!data) return <div style={{display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",height:"100vh",background:S.dark}}><div style={{fontSize:40}}>&#127968;</div><div style={{color:"#fff",fontWeight:700,marginTop:12}}>Loading...</div></div>;
-  const { tenants, rp, jobs, comp, contractors, deals, notes, outgoings, generalNotes, fixedOutgoings, propPurchase, roomNotes, savings, personalOut } = data;
+  if (!data) return <div style={{display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",height:"100vh",background:S.dark}}><div style={{fontSize:40}}>&#127968;</div><div style={{color:"#fff",...F7,marginTop:12}}>Loading...</div></div>;
+  const { tenants, rp, jobs, comp, contractors, deals, notes, outgoings, generalNotes, fixedOutgoings, propPurchase, roomNotes, savings, personalOut, portfolioOut } = data;
   // Check if outgoings entered this month for any property
   const outgoingsMissing = PROPS.some(p => {
     const k = p.id + "-" + mKey(CYR, CMO);
@@ -263,27 +277,29 @@ function App() {
   const toggleExp       = pid => setExpMap(e => ({ ...e, [pid]: !e[pid] }));
   const addPersonalOut = (yr, mo, item) => { const k = "p-"+mKey(yr,mo); upd(d => ({ personalOut: { ...d.personalOut, [k]: [...(d.personalOut[k]||[]), { id:"po"+Date.now(), ...item }] } })); };
   const deletePersonalOut = (yr, mo, id) => { const k = "p-"+mKey(yr,mo); upd(d => ({ personalOut: { ...d.personalOut, [k]: (d.personalOut[k]||[]).filter(x => x.id !== id) } })); };
-  const bag = { tenants, rp, jobs, comp, contractors, deals, notes, outgoings, generalNotes, fixedOutgoings, propPurchase, roomNotes, expMap, toggleRent, addJob, updateJob, deleteJob, updateComp, updateTenant, addTenant, addContractor, deleteContractor, addDeal, updateDeal, deleteDeal, setNote, toggleExp, addOutgoing, deleteOutgoing, setGeneralNotes, setFixedOutgoing, removeFixedOutgoing, setPropPurchase, setRoomNote, savings, setSavings, personalOut, addPersonalOut, deletePersonalOut, wide, setTab, setMore, letterPrefill, setLetterPrefill, quickLogOpen, setQuickLogOpen };
-  const moreLabels = { outgoings:"Outgoings", personal:"Personal Costs", compliance:"Compliance", tenants:"Tenants", ailetters:"AI Letter Writer", dealcheck:"Deal Analyser", financials:"Financials", tax:"Tax Summary", timeline:"Timeline", rentplanner:"Rent Planner", notes:"Notes", growth:"Portfolio Growth", contractors:"Contractors", deals:"Deal Pipeline", rentgap:"Rent Gap", performers:"Top & Bottom", equity:"Equity Release" };
+  const addPortfolioOut = (yr, mo, item) => { const k = mKey(yr,mo); upd(d => ({ portfolioOut: { ...d.portfolioOut, [k]: [...(d.portfolioOut[k]||[]), { id:"po"+Date.now(), ...item }] } })); };
+  const deletePortfolioOut = (yr, mo, id) => { const k = mKey(yr,mo); upd(d => ({ portfolioOut: { ...d.portfolioOut, [k]: (d.portfolioOut[k]||[]).filter(x => x.id !== id) } })); };
+  const bag = { tenants, rp, jobs, comp, contractors, deals, notes, outgoings, generalNotes, fixedOutgoings, propPurchase, roomNotes, expMap, toggleRent, addJob, updateJob, deleteJob, updateComp, updateTenant, addTenant, addContractor, deleteContractor, addDeal, updateDeal, deleteDeal, setNote, toggleExp, addOutgoing, deleteOutgoing, setGeneralNotes, setFixedOutgoing, removeFixedOutgoing, setPropPurchase, setRoomNote, savings, setSavings, personalOut, addPersonalOut, deletePersonalOut, portfolioOut, addPortfolioOut, deletePortfolioOut, wide, setTab, setMore, letterPrefill, setLetterPrefill, quickLogOpen, setQuickLogOpen };
+  const moreLabels = { outgoings:"Outgoings", personal:"Personal Costs", portout:"Portfolio Costs", compliance:"Compliance", tenants:"Tenants", ailetters:"AI Letter Writer", dealcheck:"Deal Analyser", financials:"Financials", tax:"Tax Summary", timeline:"Timeline", rentplanner:"Rent Planner", notes:"Notes", growth:"Portfolio Growth", contractors:"Contractors", deals:"Deal Pipeline", rentgap:"Rent Gap", performers:"Top & Bottom", equity:"Equity Release" };
   const maxW = wide ? 1100 : 480;
   return (
     <div style={{ fontFamily:"system-ui,-apple-system,sans-serif", background:"#f1f5f9", minHeight:"100vh", maxWidth:maxW, margin:"0 auto", overflowX:"hidden" }}>
  <div style={{ background:"linear-gradient(135deg,#1e293b,#0f172a)", color:"#fff", padding:"40px 16px 12px", position:"sticky", top:0, zIndex:50 }}>
  {tab === "more" && more ? (
  <div style={{ ...FC, gap:10 }}>
-  <button onClick={() => setMore(null)} style={{ background:"none", border:"none", color:"#fff", fontSize:22, cursor:"pointer" }}>&#8592;</button>
-  <span style={{ fontSize:16, fontWeight:600 }}>{moreLabels[more]||more}</span>
+  <button onClick={() => setMore(null)} style={{ background:"none", ...BN, color:"#fff", fontSize:22, ...CP }}>&#8592;</button>
+  <span style={{ fontSize:16, ...F6 }}>{moreLabels[more]||more}</span>
  </div>
  ) : (
  <div style={{ ...FB, alignItems:"flex-end" }}>
   <div>
     <div style={{ ...G11, marginBottom:2 }}>Good {greet}, Ash</div>
-    <div style={{ fontSize:18, fontWeight:700 }}>Portfolio Manager</div>
+    <div style={{ fontSize:18, ...F7 }}>Portfolio Manager</div>
     <div style={{ fontSize:11, color:"#94a3b8", fontStyle:"italic", marginTop:4 }}>{QUOTE.a?QUOTE.t+"—"+QUOTE.a:QUOTE.t}</div>
   </div>
   <div style={{ ...FC, gap:8 }}>
     <span style={{ fontSize:11, color:"#4ade80" }}>&#9679; Saved</span>
-    {urgent > 0 && <span style={{ background:"#ef4444", color:"#fff", fontSize:11, fontWeight:700, padding:"3px 8px", borderRadius:99 }}>{urgent} urgent</span>}
+    {urgent > 0 && <span style={{ background:"#ef4444", color:"#fff", fontSize:11, ...F7, padding:"3px 8px", borderRadius:99 }}>{urgent} urgent</span>}
   </div>
  </div>
  )}
@@ -300,6 +316,7 @@ function App() {
   {tab === "more"  && !more && <MoreMenu {...bag} setMore={setMore} data={data} />}
   {tab === "more"  && more === "outgoings"   && <OutgoingsPage {...bag} />}
   {tab === "more"  && more === "personal"    && <PersonalOutPage {...bag} />}
+  {tab === "more"  && more === "portout"     && <PortfolioOutPage {...bag} />}
   {tab === "more"  && more === "compliance"  && <CompPage {...bag} />}
   {tab === "more"  && more === "tenants"     && <TenantsPage {...bag} />}
   {tab === "more"  && more === "ailetters"   && <AILettersPage {...bag} />}
@@ -319,7 +336,7 @@ function App() {
  )}
  </div>
  {!wide && (
- <nav style={{ position:"fixed", bottom:0, left:"50%", transform:"translateX(-50%)", width:"100%", maxWidth:480, background:"#fff", borderTop:"1px solid #e2e8f0", display:"flex", zIndex:50, boxShadow:"0 -2px 8px rgba(0,0,0,0.06)" }}>
+ <nav style={{ position:"fixed", bottom:0, left:"50%", transform:"translateX(-50%)", width:"100%", maxWidth:480, ...BW, borderTop:"1px solid #e2e8f0", display:"flex", zIndex:50, boxShadow:"0 -2px 8px rgba(0,0,0,0.06)" }}>
  {[
   {id:"dash",icon:"🏠",label:"Home", badge:0},
   {id:"rent",icon:"✓", label:"Rent", badge:tenants.length - paidNow},
@@ -328,8 +345,8 @@ function App() {
   {id:"more",icon:"⋯", label:"More", badge:0},
  ].map(b => (
   <button key={b.id} onClick={() => { setTab(b.id); if (b.id !== "more") setMore(null); }}
-    style={{ flex:1, display:"flex", flexDirection:"column", alignItems:"center", padding:"8px 4px 10px", background:"none", border:"none", cursor:"pointer", color:tab===b.id?S.dark:S.gray, fontSize:10, fontWeight:600, gap:2, position:"relative", fontFamily:"system-ui" }}>
-    {b.badge > 0 && <span style={{ position:"absolute", top:5, right:"22%", background:"#ef4444", color:"#fff", fontSize:9, fontWeight:700, padding:"1px 4px", borderRadius:99 }}>{b.badge}</span>}
+    style={{ flex:1, display:"flex", flexDirection:"column", alignItems:"center", padding:"8px 4px 10px", background:"none", ...BN, ...CP, color:tab===b.id?S.dark:S.gray, fontSize:10, ...F6, gap:2, position:"relative", ...FF }}>
+    {b.badge > 0 && <span style={{ position:"absolute", top:5, right:"22%", background:"#ef4444", color:"#fff", fontSize:9, ...F7, padding:"1px 4px", borderRadius:99 }}>{b.badge}</span>}
     <span style={{ fontSize:18, lineHeight:1 }}>{b.icon}</span>
     <span>{b.label}</span>
     {tab === b.id && <span style={{ position:"absolute", bottom:0, left:"20%", right:"20%", height:2, background:S.dark, borderRadius:2 }} />}
@@ -348,32 +365,32 @@ function WideLayout({ tab, setTab, more, setMore, bag, alerts, paidNow, urgent }
     {id:"mtgs",icon:"💳",label:"Mortgages"},
     {id:"more",icon:"⋯", label:"More"},
   ];
-  const moreItems = ["outgoings","personal","compliance","tenants","ailetters","dealcheck","financials","tax","timeline","rentplanner","notes","growth","contractors","deals","rentgap","performers","equity"];
-  const moreLabels = { outgoings:"Outgoings", personal:"Personal Costs", compliance:"Compliance", tenants:"Tenants", ailetters:"AI Letter Writer", dealcheck:"Deal Analyser", financials:"Financials", tax:"Tax Summary", timeline:"Timeline", rentplanner:"Rent Planner", notes:"Notes", growth:"Portfolio Growth", contractors:"Contractors", deals:"Deal Pipeline", rentgap:"Rent Gap", performers:"Top & Bottom", equity:"Equity Release" };
+  const moreItems = ["outgoings","personal","portout","compliance","tenants","ailetters","dealcheck","financials","tax","timeline","rentplanner","notes","growth","contractors","deals","rentgap","performers","equity"];
+  const moreLabels = { outgoings:"Outgoings", personal:"Personal Costs", portout:"Portfolio Costs", compliance:"Compliance", tenants:"Tenants", ailetters:"AI Letter Writer", dealcheck:"Deal Analyser", financials:"Financials", tax:"Tax Summary", timeline:"Timeline", rentplanner:"Rent Planner", notes:"Notes", growth:"Portfolio Growth", contractors:"Contractors", deals:"Deal Pipeline", rentgap:"Rent Gap", performers:"Top & Bottom", equity:"Equity Release" };
   return (
     <div style={{ display:"grid", gridTemplateColumns:"200px 1fr", gap:16 }}>
  <div>
- <div style={{ background:"linear-gradient(135deg,#1e293b,#0f172a)", borderRadius:15, padding:14, marginBottom:10, color:"#fff", textAlign:"center" }}>
-  <div onClick={function(){var u=prompt("Paste image URL for your profile photo:");if(u){localStorage.setItem("ash-photo",u);location.reload();}}} style={{ cursor:"pointer", marginBottom:6 }}>
+ <div style={{ background:"linear-gradient(135deg,#1e293b,#0f172a)", borderRadius:15, padding:14, ...MB10, color:"#fff", ...TC }}>
+  <div onClick={function(){var u=prompt("Paste image URL for your profile photo:");if(u){localStorage.setItem("ash-photo",u);location.reload();}}} style={{ ...CP, marginBottom:6 }}>
    {localStorage.getItem("ash-photo")?<img src={localStorage.getItem("ash-photo")} style={{width:50,height:50,borderRadius:"50%",objectFit:"cover"}}/>:<div style={{fontSize:32}}>🏠</div>}
   </div>
-  <div style={{ fontSize:14, fontWeight:700 }}>Ash</div>
+  <div style={{ fontSize:14, ...F7 }}>Ash</div>
   <div style={{ fontSize:10, color:"#64748b" }}>{PROPS.length} units · {gbp(bag.tenants.reduce(function(s,t){return s+t.rn;},0))}/mo</div>
   <div style={{ fontSize:10, color:"#4ade80", marginTop:3 }}>Target: 50 by 2036</div>
  </div>
- <div style={{ background:"#fff", borderRadius:15, border:"1px solid #e2e8f0", overflow:"hidden", marginBottom:10 }}>
+ <div style={{ ...BW, borderRadius:15, ...BD, overflow:"hidden", ...MB10 }}>
  {navItems.map(b => (
   <button key={b.id} onClick={() => { setTab(b.id); if (b.id !== "more") setMore(null); }}
-    style={{ ...FC, gap:10, width:"100%", padding:"12px 14px", background:tab===b.id&&!more?"#f1f5f9":"#fff", border:"none", borderBottom:"1px solid #f8fafc", cursor:"pointer", fontFamily:"system-ui", fontWeight:tab===b.id?700:400, color:S.dark, fontSize:14 }}>
+    style={{ ...FC, gap:10, width:"100%", padding:"12px 14px", background:tab===b.id&&!more?"#f1f5f9":"#fff", ...BN, borderBottom:"1px solid #f8fafc", ...CP, ...FF, fontWeight:tab===b.id?700:400, color:S.dark, fontSize:14 }}>
     <span style={{ fontSize:18 }}>{b.icon}</span>{b.label}
   </button>
  ))}
  </div>
  {tab === "more" && (
- <div style={{ background:"#fff", borderRadius:15, border:"1px solid #e2e8f0", overflow:"hidden" }}>
+ <div style={{ ...BW, borderRadius:15, ...BD, overflow:"hidden" }}>
   {moreItems.map(id => (
     <button key={id} onClick={() => setMore(id)}
- style={{ ...FC, width:"100%", padding:"11px 14px", background:more===id?"#f1f5f9":"#fff", border:"none", borderBottom:"1px solid #f8fafc", cursor:"pointer", fontFamily:"system-ui", fontWeight:more===id?700:400, color:S.dark, fontSize:13 }}>
+ style={{ ...FC, width:"100%", padding:"11px 14px", background:more===id?"#f1f5f9":"#fff", ...BN, borderBottom:"1px solid #f8fafc", ...CP, ...FF, fontWeight:more===id?700:400, color:S.dark, ...S13 }}>
  {moreLabels[id]}
     </button>
   ))}
@@ -388,6 +405,7 @@ function WideLayout({ tab, setTab, more, setMore, bag, alerts, paidNow, urgent }
  {tab === "more"  && !more && <MoreMenu {...bag} setMore={setMore} data={bag} />}
  {tab === "more"  && more === "outgoings"   && <OutgoingsPage {...bag} />}
  {tab === "more"  && more === "personal"    && <PersonalOutPage {...bag} />}
+ {tab === "more"  && more === "portout"     && <PortfolioOutPage {...bag} />}
  {tab === "more"  && more === "compliance"  && <CompPage {...bag} />}
  {tab === "more"  && more === "tenants"     && <TenantsPage {...bag} />}
  {tab === "more"  && more === "ailetters"   && <AILettersPage {...bag} />}
@@ -438,16 +456,16 @@ function GoalTracker({tenants, savings, setSavings}) {
   const mths = net > 0 ? Math.ceil(Math.max(0, 40000 - pot) / net) : "?";
   const doSave = function() { if (setSavings) setSavings(parseFloat(sv) || 0); setEd(false); };
   return (
-    <div style={{background:"linear-gradient(135deg,#1e293b,#0f172a)", borderRadius:16, padding:16, marginBottom:10, color:"#fff"}}>
- <div style={{...RW, marginBottom:10}}>
+    <div style={{background:"linear-gradient(135deg,#1e293b,#0f172a)", borderRadius:16, padding:16, ...MB10, color:"#fff"}}>
+ <div style={{...RW, ...MB10}}>
  <div>
- <div style={{fontSize:10, color:"#64748b", fontWeight:600, marginBottom:3}}>MISSION: 50 UNITS BY FEB 2036</div>
- <div style={{fontSize:22, fontWeight:700}}>{PROPS.length} <span style={{color:"#64748b", fontSize:13}}>of 50</span></div>
+ <div style={{fontSize:10, color:"#64748b", ...F6, marginBottom:3}}>MISSION: 50 UNITS BY FEB 2036</div>
+ <div style={{fontSize:22, ...F7}}>{PROPS.length} <span style={{color:"#64748b", ...S13}}>of 50</span></div>
  <div style={{fontSize:10, color:"#4ade80"}}>Sale pending</div>
  </div>
- <div style={{textAlign:"right"}}>
+ <div style={{...TR}}>
  <div style={{fontSize:10, color:"#64748b"}}>Rent income</div>
- <div style={{fontSize:17, fontWeight:700, color:"#4ade80"}}>{gbp(inc)}</div>
+ <div style={{fontSize:17, ...F7, color:"#4ade80"}}>{gbp(inc)}</div>
  <div style={{fontSize:10, color:"#64748b"}}>target {gbp(24500)}</div>
  </div>
  </div>
@@ -459,7 +477,7 @@ function GoalTracker({tenants, savings, setSavings}) {
  <div style={{height:"100%", background:"#3b82f6", width:Math.round(PROPS.length/50*100)+"%"}} />
  </div>
  </div>
- <div style={{marginBottom:10}}>
+ <div style={{...MB10}}>
  <div style={{...FB, fontSize:10, color:"#64748b", marginBottom:2}}>
  <span>Income {ipct}%</span><span>{ipct}%</span>
  </div>
@@ -467,9 +485,9 @@ function GoalTracker({tenants, savings, setSavings}) {
  <div style={{height:"100%", background:"#22c55e", width:ipct+"%"}} />
  </div>
  </div>
- <div style={{background:"rgba(255,255,255,0.07)", borderRadius:10, padding:10}}>
+ <div style={{background:"rgba(255,255,255,0.07)", ...R10, padding:10}}>
  <div style={{...FB, fontSize:10, color:"#94a3b8", marginBottom:5}}>
- <span style={{fontWeight:600}}>Deposit pot</span>
+ <span style={{...F6}}>Deposit pot</span>
  <span>~{mths} months</span>
  </div>
  {ed ? (
@@ -477,13 +495,13 @@ function GoalTracker({tenants, savings, setSavings}) {
   <input autoFocus type="number" value={sv}
     onChange={function(e){setSv(e.target.value);}}
     onKeyDown={function(e){if(e.key==="Enter")doSave();}}
-    style={{flex:1, background:"#0f172a", border:"1px solid #334155", borderRadius:7, padding:"5px 8px", color:"#fff", fontSize:13, fontFamily:"system-ui", outline:"none"}} />
-  <button onClick={doSave} style={{background:"#22c55e", color:"#fff", border:"none", borderRadius:7, padding:"5px 12px", fontWeight:700, cursor:"pointer", fontFamily:"system-ui"}}>Save</button>
-  <button onClick={function(){setEd(false);}} style={{background:"#334155", color:"#94a3b8", border:"none", borderRadius:7, padding:"5px 8px", cursor:"pointer", fontFamily:"system-ui"}}>x</button>
+    style={{flex:1, background:"#0f172a", border:"1px solid #334155", borderRadius:7, padding:"5px 8px", color:"#fff", ...S13, ...FF, outline:"none"}} />
+  <button onClick={doSave} style={{background:"#22c55e", color:"#fff", ...BN, borderRadius:7, padding:"5px 12px", ...F7, ...CP, ...FF}}>Save</button>
+  <button onClick={function(){setEd(false);}} style={{background:"#334155", color:"#94a3b8", ...BN, borderRadius:7, padding:"5px 8px", ...CP, ...FF}}>x</button>
  </div>
  ) : (
- <div onClick={function(){setEd(true);}} style={{cursor:"pointer", marginBottom:5}}>
-  <span style={{fontSize:16, fontWeight:700}}>{gbp(pot)}</span>
+ <div onClick={function(){setEd(true);}} style={{...CP, marginBottom:5}}>
+  <span style={{fontSize:16, ...F7}}>{gbp(pot)}</span>
   <span style={{fontSize:10, color:"#64748b"}}> of {gbp(40000)} - tap to update</span>
  </div>
  )}
@@ -494,7 +512,7 @@ function GoalTracker({tenants, savings, setSavings}) {
     </div>
   );
 }
-function DashPage({ alerts, paidNow, tenants, rp, jobs, comp, outgoings, wide, savings, setSavings, setTab, setMore, setLetterPrefill, toggleRent, quickLogOpen, setQuickLogOpen }) {
+function DashPage({ alerts, paidNow, tenants, rp, jobs, comp, outgoings, portfolioOut, wide, savings, setSavings, setTab, setMore, setLetterPrefill, toggleRent, quickLogOpen, setQuickLogOpen }) {
   const [selYr,setSelYr]=useState(CYR);
   const [selMo,setSelMo]=useState(CMO);
   const [propView,setPropView]=useState(null);
@@ -505,7 +523,9 @@ function DashPage({ alerts, paidNow, tenants, rp, jobs, comp, outgoings, wide, s
   const tm=PROPS.reduce((s,p)=>s+p.mm,0);
   const jc=jobs.filter(j=>j.status==="done"&&j.date&&j.date.startsWith(ms)).reduce((s,j)=>s+(j.cost||0),0);
   const oc=PROPS.reduce((s,p)=>s+(outgoings[p.id+"-"+ms]||[]).reduce((x,o)=>x+(o.amount||0),0),0);
-  const totalOut=tm+jc+oc;
+  const pomk=mKey(selYr,selMo);
+  const pmo=(portfolioOut[pomk]||[]).reduce((x,o)=>x+(o.amount||0),0);
+  const totalOut=tm+jc+oc+pmo;
   const ncf=pr-totalOut;
   // YTD figures (Jan of current tax year = April 6 previous year for UK but using calendar year for simplicity)
   let ytdRent = 0, ytdCosts = 0;
@@ -515,6 +535,7 @@ function DashPage({ alerts, paidNow, tenants, rp, jobs, comp, outgoings, wide, s
     ytdCosts += PROPS.reduce((s,p) => s + p.mm, 0);
     ytdCosts += jobs.filter(j => j.status==="done" && j.date && j.date.startsWith(mk)).reduce((s,j) => s + (j.cost||0), 0);
     ytdCosts += PROPS.reduce((s,p) => s + (outgoings[p.id+"-"+mk]||[]).reduce((x,o) => x+(o.amount||0), 0), 0);
+    ytdCosts += (portfolioOut[mk]||[]).reduce((x,o) => x+(o.amount||0), 0);
   }
   const ytdNet = ytdRent - ytdCosts;
   const tv  = PROPS.reduce((s, p) => s + p.v, 0);
@@ -564,18 +585,17 @@ function DashPage({ alerts, paidNow, tenants, rp, jobs, comp, outgoings, wide, s
   actions.sort((a,b) => a.priority==="r"&&b.priority!=="r"?-1:1);
   const propList = (
     <div style={card}>
- <div style={{ padding:"11px 14px", borderBottom:"1px solid #f1f5f9", fontSize:13, fontWeight:600 }}>Properties</div>
+ <div style={{ padding:"11px 14px", borderBottom:"1px solid #f1f5f9", ...S13, ...F6 }}>Properties</div>
  {PROPS.map(p => {
  const pr2  = tenants.filter(t => t.pid === p.id).reduce((s, t) => s + t.rn, 0);
  const ncf2 = pr2 - p.mm;
  return (
- <div key={p.id} onClick={()=>setPropView(p.id)} style={{padding:"11px 14px",...RW,borderBottom:"1px solid #f8fafc",cursor:"pointer"}}>
-  <div style={{display:"flex",alignItems:"flex-start",gap:10}}>
-    <div style={{width:10,height:10,borderRadius:"50%",background:p.color||"#94a3b8",marginTop:3,flexShrink:0}} />
-    <div><div style={{fontSize:13,fontWeight:600}}>{p.n}</div><div style={{...G11}}>{p.town} &middot; {p.ty}</div></div>
+ <div key={p.id} onClick={()=>setPropView(p.id)} style={{padding:"11px 14px",...RW,borderBottom:"1px solid #f8fafc",...CP,borderLeft:"4px solid "+(p.color||"#94a3b8")}}>
+  <div>
+    <div><div style={{...S13,...F6}}>{p.n}</div><div style={{...G11}}>{p.town} &middot; {p.ty}</div></div>
   </div>
-  <div style={{textAlign:"right"}}>
-    <div style={{fontSize:13,fontWeight:700,color:p.vc?S.amber:ncf2>0?S.green:S.red}}>{p.vc?"Vacant":gbp(ncf2)+"/mo"}</div>
+  <div style={{...TR}}>
+    <div style={{...S13,...F7,color:p.vc?S.amber:ncf2>0?S.green:S.red}}>{p.vc?"Vacant":gbp(ncf2)+"/mo"}</div>
     <div style={{...G11}}>{p.vc?"Not let":gbp(pr2)+" rent"} &#8250;</div>
   </div>
  </div>
@@ -584,16 +604,16 @@ function DashPage({ alerts, paidNow, tenants, rp, jobs, comp, outgoings, wide, s
     </div>
   );
   const stats = (
-    <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10, marginBottom:10 }}>
+    <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10, ...MB10 }}>
  {[
  {l:"Net Cash Flow", v:(ncf>=0?"":"-")+gbp(Math.abs(ncf)), s:"This month", g:ncf>0},
  {l:"Total Equity", v:gbp(eq), s:Math.round(eq/tv*100)+"% of value", g:true},
  {l:"Net Worth", v:gbp(eq+161564), s:"portfolio + home equity", g:true},
  {l:"Open Jobs", v:oj, s:"Maintenance items", g:false},
  ].map((k, i) => (
- <div key={i} style={{ background:"#fff", borderRadius:14, border:"1px solid #e2e8f0", padding:12 }}>
+ <div key={i} style={{ ...BW, borderRadius:14, ...BD, padding:12 }}>
  <div style={{ ...G11, marginBottom:3 }}>{k.l}</div>
- <div style={{ fontSize:19, fontWeight:700, color:k.g?S.green:S.dark }}>{k.v}</div>
+ <div style={{ fontSize:19, ...F7, color:k.g?S.green:S.dark }}>{k.v}</div>
  <div style={{ ...G11, marginTop:2 }}>{k.s}</div>
  </div>
  ))}
@@ -611,39 +631,39 @@ function DashPage({ alerts, paidNow, tenants, rp, jobs, comp, outgoings, wide, s
     return (
  <div>
  <div style={{...FC,gap:10,marginBottom:14}}>
- <button onClick={()=>setPropView(null)} style={{width:36,height:36,borderRadius:"50%",border:"1px solid #e2e8f0",background:"#fff",cursor:"pointer",fontSize:18}}>&#8249;</button>
+ <button onClick={()=>setPropView(null)} style={{width:36,height:36,borderRadius:"50%",...BD,...BW,...CP,fontSize:18}}>&#8249;</button>
  <div style={{...FC,gap:8}}>
   <div style={{width:12,height:12,borderRadius:"50%",background:pv&&pv.color?pv.color:"#94a3b8"}} />
-  <div><div style={{fontSize:15,fontWeight:700}}>{pv&&pv.n}</div><div style={{...G11}}>{pv&&pv.town} &middot; {pv&&pv.ty}</div></div>
+  <div><div style={{fontSize:15,...F7}}>{pv&&pv.n}</div><div style={{...G11}}>{pv&&pv.town} &middot; {pv&&pv.ty}</div></div>
  </div>
  </div>
- <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:10}}>
- <div style={{background:"#f0fdf4",borderRadius:12,padding:14}}><div style={{fontSize:11,color:S.gtx,fontWeight:600}}>Rent collected</div><div style={{fontSize:20,fontWeight:700,color:S.green}}>{gbp(pvR)}</div></div>
- <div style={{background:pvN>=0?"#f0fdf4":"#fff5f5",borderRadius:12,padding:14}}><div style={{fontSize:11,color:pvN>=0?S.gtx:S.rtx,fontWeight:600}}>Net profit</div><div style={{fontSize:20,fontWeight:700,color:pvN>=0?S.green:S.red}}>{pvN>=0?"+":"-"}{gbp(Math.abs(pvN))}</div></div>
+ <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,...MB10}}>
+ <div style={{background:"#f0fdf4",borderRadius:12,padding:14}}><div style={{fontSize:11,color:S.gtx,...F6}}>Rent collected</div><div style={{fontSize:20,...F7,color:S.green}}>{gbp(pvR)}</div></div>
+ <div style={{background:pvN>=0?"#f0fdf4":"#fff5f5",borderRadius:12,padding:14}}><div style={{fontSize:11,color:pvN>=0?S.gtx:S.rtx,...F6}}>Net profit</div><div style={{fontSize:20,...F7,color:pvN>=0?S.green:S.red}}>{pvN>=0?"+":"-"}{gbp(Math.abs(pvN))}</div></div>
  </div>
- <div style={card}><div style={{padding:"11px 14px",background:"#f8fafc",borderBottom:"1px solid #f1f5f9",fontSize:13,fontWeight:600}}>Tenants</div>
+ <div style={card}><div style={{padding:"11px 14px",background:"#f8fafc",borderBottom:"1px solid #f1f5f9",...S13,...F6}}>Tenants</div>
  {pvt.map((t,i)=><div key={t.id} style={{padding:"10px 14px",borderBottom:i<pvt.length-1?"1px solid #f8fafc":"none",...RW}}>
-  <div><div style={{fontSize:13,fontWeight:600}}>{pv&&pv.ty==="HMO"?t.rm+" · ":""}{t.nm}</div><div style={{...G11}}>{gbp(t.rn)}/mo</div>{t.moveOut&&<div style={{fontSize:11,color:S.red,fontWeight:600}}>Moving out: {new Date(t.moveOut).toLocaleDateString("en-GB")}</div>}</div>
+  <div><div style={{...S13,...F6}}>{pv&&pv.ty==="HMO"?t.rm+" · ":""}{t.nm}</div><div style={{...G11}}>{gbp(t.rn)}/mo</div>{t.moveOut&&<div style={{fontSize:11,color:S.red,...F6}}>Moving out: {new Date(t.moveOut).toLocaleDateString("en-GB")}</div>}</div>
   <div style={{width:32,height:32,borderRadius:"50%",background:rp[t.id+"-"+CYR+"-"+CMO]?"#22c55e":"#e2e8f0",...FC,justifyContent:"center",color:rp[t.id+"-"+CYR+"-"+CMO]?"#fff":S.gray}}>{rp[t.id+"-"+CYR+"-"+CMO]?"✓":"○"}</div>
  </div>)}
  </div>
- {pvJobs.length>0&&<div style={{...card,marginTop:8}}><div style={{padding:"11px 14px",background:"#f8fafc",borderBottom:"1px solid #f1f5f9",fontSize:13,fontWeight:600}}>Open Jobs ({pvJobs.length})</div>{pvJobs.map((j,i)=><div key={j.id} style={{padding:"10px 14px",borderBottom:i<pvJobs.length-1?"1px solid #f8fafc":"none",fontSize:13}}>{j.desc}</div>)}</div>}
- <div style={{...card,marginTop:8}}><div style={{padding:"11px 14px",background:"#f8fafc",borderBottom:"1px solid #f1f5f9",fontSize:13,fontWeight:600}}>Compliance</div>
- {pvComp.map((c,i)=>{const ct=CTYPES.find(x=>x.k===c.type);const d2=c.next?Math.round((new Date(c.next)-now)/86400000):null;const col=!c.next?"amber":d2<=60?"red":d2<=180?"amber":"green";return(<div key={c.id} style={{padding:"10px 14px",borderBottom:i<pvComp.length-1?"1px solid #f8fafc":"none",...RW}}><div><div style={{fontSize:13}}>{ct?ct.l:c.type}</div><div style={{...G11}}>{c.next?new Date(c.next).toLocaleDateString("en-GB"):"Not set"}</div></div><Badge color={col}>{!c.next?"Unknown":d2<=0?"OVERDUE":d2+"d"}</Badge></div>);})}
+ {pvJobs.length>0&&<div style={{...card,marginTop:8}}><div style={{padding:"11px 14px",background:"#f8fafc",borderBottom:"1px solid #f1f5f9",...S13,...F6}}>Open Jobs ({pvJobs.length})</div>{pvJobs.map((j,i)=><div key={j.id} style={{padding:"10px 14px",borderBottom:i<pvJobs.length-1?"1px solid #f8fafc":"none",...S13}}>{j.desc}</div>)}</div>}
+ <div style={{...card,marginTop:8}}><div style={{padding:"11px 14px",background:"#f8fafc",borderBottom:"1px solid #f1f5f9",...S13,...F6}}>Compliance</div>
+ {pvComp.map((c,i)=>{const ct=CTYPES.find(x=>x.k===c.type);const d2=c.next?Math.round((new Date(c.next)-now)/86400000):null;const col=!c.next?"amber":d2<=60?"red":d2<=180?"amber":"green";return(<div key={c.id} style={{padding:"10px 14px",borderBottom:i<pvComp.length-1?"1px solid #f8fafc":"none",...RW}}><div><div style={{...S13}}>{ct?ct.l:c.type}</div><div style={{...G11}}>{c.next?new Date(c.next).toLocaleDateString("en-GB"):"Not set"}</div></div><Badge color={col}>{!c.next?"Unknown":d2<=0?"OVERDUE":d2+"d"}</Badge></div>);})}
  </div>
  {(function(){
   var months=[];for(var mi=5;mi>=0;mi--){var md=new Date(CYR,CMO-mi,1);var my=md.getFullYear();var mm=md.getMonth();var mk2=mKey(my,mm);var mRent=pvt.filter(function(t2){return rp[t2.id+"-"+my+"-"+mm];}).reduce(function(s2,t2){return s2+t2.rn;},0);var mCost=(pv?pv.mm:0)+jobs.filter(function(j2){return j2.status==="done"&&j2.pid===propView&&j2.date&&j2.date.startsWith(mk2);}).reduce(function(s2,j2){return s2+(j2.cost||0);},0)+(outgoings[propView+"-"+mk2]||[]).reduce(function(s2,o2){return s2+(o2.amount||0);},0);months.push({l:MSHORT[mm],rent:mRent,cost:mCost,net:mRent-mCost});}
   var maxVal=Math.max.apply(null,months.map(function(m2){return Math.max(m2.rent,m2.cost,1);}));
   return (<div style={{...card,...cardPad,marginTop:8}}>
-   <div style={{fontSize:13,fontWeight:600,marginBottom:10}}>6 Month P&L</div>
+   <div style={{...S13,...F6,...MB10}}>6 Month P&L</div>
    <div style={{display:"flex",gap:4,alignItems:"flex-end",height:100}}>
-    {months.map(function(m2,i){return(<div key={i} style={{flex:1,textAlign:"center"}}>
+    {months.map(function(m2,i){return(<div key={i} style={{flex:1,...TC}}>
      <div style={{display:"flex",gap:1,justifyContent:"center",alignItems:"flex-end",height:80}}>
       <div style={{width:"40%",background:S.green,borderRadius:"3px 3px 0 0",height:Math.max(2,m2.rent/maxVal*80)}} title={"Rent: "+gbp(m2.rent)}/>
       <div style={{width:"40%",background:S.red,borderRadius:"3px 3px 0 0",height:Math.max(2,m2.cost/maxVal*80)}} title={"Cost: "+gbp(m2.cost)}/>
      </div>
      <div style={{fontSize:9,color:S.gray,marginTop:3}}>{m2.l}</div>
-     <div style={{fontSize:9,fontWeight:600,color:m2.net>=0?S.green:S.red}}>{m2.net>=0?"+":""}{gbp(m2.net)}</div>
+     <div style={{fontSize:9,...F6,color:m2.net>=0?S.green:S.red}}>{m2.net>=0?"+":""}{gbp(m2.net)}</div>
     </div>);})}
    </div>
    <div style={{display:"flex",gap:12,justifyContent:"center",marginTop:8}}>
@@ -658,17 +678,17 @@ function DashPage({ alerts, paidNow, tenants, rp, jobs, comp, outgoings, wide, s
   return (
     <div>
  {actions.length > 0 && (
- <div style={{ ...card, marginBottom:10 }}>
+ <div style={{ ...card, ...MB10 }}>
  <div style={{ padding:"11px 14px", background:S.dark, borderRadius:"15px 15px 0 0", ...RW }}>
-  <span style={{ fontSize:13, fontWeight:600, color:"#fff" }}>Action needed</span>
-  <span style={{ background:"#ef4444", color:"#fff", fontSize:11, fontWeight:700, padding:"2px 8px", borderRadius:99 }}>{actions.filter(a=>a.priority==="r").length} urgent</span>
+  <span style={{ ...S13, ...F6, color:"#fff" }}>Action needed</span>
+  <span style={{ background:"#ef4444", color:"#fff", fontSize:11, ...F7, padding:"2px 8px", borderRadius:99 }}>{actions.filter(a=>a.priority==="r").length} urgent</span>
  </div>
  {actions.map((a, i) => (
   <div key={i} onClick={a.act?()=>{setLetterPrefill(a.act);setTab("more");setMore("ailetters");}:undefined} style={{ padding:"10px 14px", display:"flex", alignItems:"flex-start", gap:10, borderBottom:i<actions.length-1?"1px solid #f8fafc":"none", background:a.priority==="r"?"#fffafa":"#fffbeb", cursor:a.act?"pointer":"default" }}>
     <span style={{ fontSize:16, flexShrink:0 }}>{a.icon}</span>
     <div style={{ flex:1 }}>
- <div style={{ fontSize:12, fontWeight:600, color:a.priority==="r"?S.red:S.amber }}>{a.category}{a.act&&<span style={{fontSize:10,marginLeft:6,color:S.blue,fontWeight:600}}>✉ tap</span>}</div>
- <div style={{ fontSize:12, color:S.dark, lineHeight:1.4 }}>{a.msg}</div>
+ <div style={{ ...S12, ...F6, color:a.priority==="r"?S.red:S.amber }}>{a.category}{a.act&&<span style={{fontSize:10,marginLeft:6,color:S.blue,...F6}}>✉ tap</span>}</div>
+ <div style={{ ...S12, color:S.dark, lineHeight:1.4 }}>{a.msg}</div>
     </div>
   </div>
  ))}
@@ -676,67 +696,68 @@ function DashPage({ alerts, paidNow, tenants, rp, jobs, comp, outgoings, wide, s
  )}
  <GoalTracker tenants={tenants} savings={savings} setSavings={setSavings} />
  {actions.length === 0 && (
- <div style={{ ...card, ...cardPad, background:"#f0fdf4", borderColor:"#bbf7d0", marginBottom:10, ...FC, gap:10 }}>
+ <div style={{ ...card, ...cardPad, background:"#f0fdf4", borderColor:"#bbf7d0", ...MB10, ...FC, gap:10 }}>
  <span style={{ fontSize:20 }}>✅</span>
  <div>
-  <div style={{ fontSize:13, fontWeight:600, color:S.green }}>All clear</div>
+  <div style={{ ...S13, ...F6, color:S.green }}>All clear</div>
   <div style={{ fontSize:11, color:"#15803d" }}>Nothing urgent needs your attention today</div>
  </div>
  </div>
  )}
- <div style={{ background:"linear-gradient(135deg,#0f172a,#1e293b)", borderRadius:15, padding:"14px 16px", marginBottom:12, color:"#fff" }}>
+ <div style={{ background:"linear-gradient(135deg,#0f172a,#1e293b)", borderRadius:15, padding:"18px 18px", marginBottom:12, color:"#fff" }}>
  <div style={{ ...RW }}>
  <div>
- <div style={{ fontSize:10, color:"#94a3b8", fontWeight:700, textTransform:"uppercase", letterSpacing:".5px" }}>Year to date · {CYR}</div>
- <div style={{ fontSize:24, fontWeight:700, color:ytdNet>=0?"#4ade80":"#f87171", marginTop:2 }}>{ytdNet>=0?"+":"-"}{gbp(Math.abs(ytdNet))}</div>
+ <div style={{ fontSize:10, color:"#94a3b8", ...F7, textTransform:"uppercase", letterSpacing:".5px" }}>Year to date · {CYR}</div>
+ <div style={{ fontSize:32, ...F7, color:ytdNet>=0?"#4ade80":"#f87171", marginTop:2, lineHeight:1.1 }}>{ytdNet>=0?"+":"-"}{gbp(Math.abs(ytdNet))}</div>
  <div style={{ fontSize:11, color:"#94a3b8", marginTop:1 }}>{gbp(ytdRent)} rent – {gbp(ytdCosts)} costs</div>
  </div>
- <div style={{ textAlign:"right" }}>
+ <div style={{ ...TR }}>
  <div style={{ fontSize:10, color:"#94a3b8" }}>Avg/month</div>
- <div style={{ fontSize:15, fontWeight:700, color:ytdNet>=0?"#4ade80":"#f87171" }}>{ytdNet>=0?"+":"-"}{gbp(Math.abs(Math.round(ytdNet/(CMO+1))))}</div>
+ <div style={{ fontSize:15, ...F7, color:ytdNet>=0?"#4ade80":"#f87171" }}>{ytdNet>=0?"+":"-"}{gbp(Math.abs(Math.round(ytdNet/(CMO+1))))}</div>
  </div>
  </div>
  </div>
- {(function(){var um=MTGS.map(function(m){return {l:m.l,ldr:m.ldr,r:m.r,d:du(m.e)};}).filter(function(m){return m.d!=null&&m.d>=0;}).sort(function(a,b){return a.d-b.d;});if(!um.length)return null;var n=um[0],c=n.d<=90?"#ef4444":"#f59e0b",bg=n.d<=90?"#fef2f2":"#fffbeb";return (<div style={{background:bg,border:"1px solid "+c+"40",borderRadius:15,padding:"12px 14px",marginBottom:12,...RW}}><div><div style={{fontSize:10,color:c,fontWeight:700,textTransform:"uppercase",letterSpacing:".5px"}}>Next mortgage expiry</div><div style={{fontSize:14,fontWeight:700,marginTop:2}}>{n.l}</div><div style={{...G11,marginTop:1}}>{n.ldr} &middot; {n.r}%</div></div><div style={{textAlign:"right"}}><div style={{fontSize:26,fontWeight:700,color:c,lineHeight:1}}>{n.d}</div><div style={{fontSize:10,color:S.gray,marginTop:2}}>days left</div></div></div>);})()}
- <div style={{...RW,marginBottom:10}}>
- <button onClick={()=>{const d=new Date(selYr,selMo-1,1);setSelYr(d.getFullYear());setSelMo(d.getMonth());}} style={{width:36,height:36,borderRadius:"50%",border:"1px solid #e2e8f0",background:"#fff",cursor:"pointer",fontSize:18}}>&#8249;</button>
- <span style={{fontSize:15,fontWeight:700}}>{MFULL[selMo]} {selYr}</span>
- <button onClick={()=>{const d=new Date(selYr,selMo+1,1);if(d<=new Date(CYR,CMO,1)){setSelYr(d.getFullYear());setSelMo(d.getMonth());}}} disabled={isCur} style={{width:36,height:36,borderRadius:"50%",border:"1px solid #e2e8f0",background:isCur?"#f8fafc":"#fff",cursor:isCur?"default":"pointer",fontSize:18,color:isCur?S.gray:"inherit"}}>&#8250;</button>
+ <button className="np" onClick={()=>window.print()} style={{...BW,...BD,...R10,...CP,...F6,...S12,padding:"8px 12px",marginBottom:10,color:S.mid,width:"100%"}}>&#128196; Export as PDF (current view)</button>
+ {(function(){var um=MTGS.map(function(m){return {l:m.l,ldr:m.ldr,r:m.r,d:du(m.e)};}).filter(function(m){return m.d!=null&&m.d>=0;}).sort(function(a,b){return a.d-b.d;});if(!um.length)return null;var n=um[0],c=n.d<=90?"#ef4444":"#f59e0b",bg=n.d<=90?"#fef2f2":"#fffbeb";return (<div style={{background:bg,border:"1px solid "+c+"40",borderRadius:15,padding:"12px 14px",marginBottom:12,...RW}}><div><div style={{fontSize:10,color:c,...F7,textTransform:"uppercase",letterSpacing:".5px"}}>Next mortgage expiry</div><div style={{fontSize:14,...F7,marginTop:2}}>{n.l}</div><div style={{...G11,marginTop:1}}>{n.ldr} &middot; {n.r}%</div></div><div style={{...TR}}><div style={{fontSize:26,...F7,color:c,lineHeight:1}}>{n.d}</div><div style={{fontSize:10,color:S.gray,marginTop:2}}>days left</div></div></div>);})()}
+ <div style={{...RW,...MB10}}>
+ <button onClick={()=>{const d=new Date(selYr,selMo-1,1);setSelYr(d.getFullYear());setSelMo(d.getMonth());}} style={{width:36,height:36,borderRadius:"50%",...BD,...BW,...CP,fontSize:18}}>&#8249;</button>
+ <span style={{fontSize:15,...F7}}>{MFULL[selMo]} {selYr}</span>
+ <button onClick={()=>{const d=new Date(selYr,selMo+1,1);if(d<=new Date(CYR,CMO,1)){setSelYr(d.getFullYear());setSelMo(d.getMonth());}}} disabled={isCur} style={{width:36,height:36,borderRadius:"50%",...BD,background:isCur?"#f8fafc":"#fff",cursor:isCur?"default":"pointer",fontSize:18,color:isCur?S.gray:"inherit"}}>&#8250;</button>
  </div>
- {isCur&&(function(){var un=tenants.filter(function(t){return !rp[t.id+"-"+CYR+"-"+CMO];});if(!un.length)return null;return(<div style={{marginBottom:10}}><button onClick={function(){setQuickLogOpen(!quickLogOpen);}} style={{width:"100%",padding:"10px 14px",borderRadius:12,border:"1px solid #e2e8f0",background:"#fff",cursor:"pointer",fontSize:13,fontWeight:600,...RW,fontFamily:"system-ui"}}><span>✓ Quick log rent ({un.length} unpaid)</span><span style={{color:S.gray}}>{quickLogOpen?"▲":"▼"}</span></button>{quickLogOpen&&(<div style={{background:"#fff",borderRadius:12,border:"1px solid #e2e8f0",marginTop:6,overflow:"hidden"}}>{un.map(function(t){var pp=PROPS.find(function(p){return p.id===t.pid;});return(<div key={t.id} style={{padding:"10px 14px",...RW,borderBottom:"1px solid #f8fafc"}}><div><div style={{fontSize:13,fontWeight:600}}>{t.nm}</div><div style={{...G11}}>{pp?pp.n:""} &middot; {gbp(t.rn)}</div></div><button onClick={function(){toggleRent(t.id,CYR,CMO);}} style={{padding:"6px 12px",borderRadius:8,border:"none",background:S.green,color:"#fff",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"system-ui"}}>✓ Paid</button></div>);})}</div>)}</div>);})()}
+ {isCur&&(function(){var un=tenants.filter(function(t){return !rp[t.id+"-"+CYR+"-"+CMO];});if(!un.length)return null;return(<div style={{...MB10}}><button onClick={function(){setQuickLogOpen(!quickLogOpen);}} style={{width:"100%",padding:"10px 14px",borderRadius:12,...BD,...BW,...CP,...S13,...F6,...RW,...FF}}><span>✓ Quick log rent ({un.length} unpaid)</span><span style={{color:S.gray}}>{quickLogOpen?"▲":"▼"}</span></button>{quickLogOpen&&(<div style={{...BW,borderRadius:12,...BD,marginTop:6,overflow:"hidden"}}>{un.map(function(t){var pp=PROPS.find(function(p){return p.id===t.pid;});return(<div key={t.id} style={{padding:"10px 14px",...RW,borderBottom:"1px solid #f8fafc"}}><div><div style={{...S13,...F6}}>{t.nm}</div><div style={{...G11}}>{pp?pp.n:""} &middot; {gbp(t.rn)}</div></div><button onClick={function(){toggleRent(t.id,CYR,CMO);}} style={{padding:"6px 12px",borderRadius:8,...BN,background:S.green,color:"#fff",...S12,...F6,...CP,...FF}}>✓ Paid</button></div>);})}</div>)}</div>);})()}
  <div style={{...card,...cardPad}}>
- <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:10}}>
+ <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,...MB10}}>
  <div style={{background:"#f0fdf4",borderRadius:12,padding:12}}>
-  <div style={{fontSize:11,color:S.gtx,fontWeight:600}}>Income</div>
-  <div style={{fontSize:20,fontWeight:700,color:S.green}}>{gbp(pr)}</div>
+  <div style={{fontSize:11,color:S.gtx,...F6}}>Income</div>
+  <div style={{fontSize:20,...F7,color:S.green}}>{gbp(pr)}</div>
   <div style={{...G11}}>{tenants.filter(t=>rp[t.id+"-"+selYr+"-"+selMo]).length} of {tenants.length} paid</div>
  </div>
  <div style={{background:"#fff5f5",borderRadius:12,padding:12}}>
-  <div style={{fontSize:11,color:S.rtx,fontWeight:600}}>Outgoings</div>
-  <div style={{fontSize:20,fontWeight:700,color:S.red}}>{gbp(totalOut)}</div>
+  <div style={{fontSize:11,color:S.rtx,...F6}}>Outgoings</div>
+  <div style={{fontSize:20,...F7,color:S.red}}>{gbp(totalOut)}</div>
   <div style={{...G11}}>mortgages + bills + jobs</div>
  </div>
  </div>
  <div style={{borderTop:"1px solid #f1f5f9",paddingTop:10}}>
  {[["Mortgages",gbp(tm)],["Bills",gbp(oc)],["Job costs",gbp(jc)]].map(([l,v])=>(
   <div key={l} style={{...FB,marginBottom:5}}>
-    <span style={{fontSize:12,color:S.gray}}>{l}</span><span style={{fontSize:12,fontWeight:600}}>{v}</span>
+    <span style={{...S12,color:S.gray}}>{l}</span><span style={{...S12,...F6}}>{v}</span>
   </div>
  ))}
- <div style={{...RW,background:ncf>=0?"#f0fdf4":"#fff5f5",borderRadius:10,padding:"10px 12px",marginTop:6}}>
-  <span style={{fontSize:13,fontWeight:700,color:ncf>=0?S.green:S.red}}>Net this month</span>
-  <span style={{fontSize:16,fontWeight:700,color:ncf>=0?S.green:S.red}}>{ncf>=0?"+":"-"}{gbp(Math.abs(ncf))}</span>
+ <div style={{...RW,background:ncf>=0?"#f0fdf4":"#fff5f5",...R10,padding:"10px 12px",marginTop:6}}>
+  <span style={{...S13,...F7,color:ncf>=0?S.green:S.red}}>Net this month</span>
+  <span style={{fontSize:16,...F7,color:ncf>=0?S.green:S.red}}>{ncf>=0?"+":"-"}{gbp(Math.abs(ncf))}</span>
  </div>
  </div>
  {isCur && (tr-pr>0 ? (
  <div style={{marginTop:10,background:"#fffbeb",borderRadius:12,padding:"12px 14px",...RW,border:"1px solid #fde68a"}}>
-  <div><div style={{fontSize:14,fontWeight:700,color:S.amber}}>Rent still to collect</div><div style={{fontSize:11,color:S.atx}}>{tenants.length-tenants.filter(t=>rp[t.id+"-"+CYR+"-"+CMO]).length} tenants unpaid</div></div>
-  <div style={{fontSize:22,fontWeight:700,color:S.amber}}>{gbp(tr-pr)}</div>
+  <div><div style={{fontSize:14,...F7,color:S.amber}}>Rent still to collect</div><div style={{fontSize:11,color:S.atx}}>{tenants.length-tenants.filter(t=>rp[t.id+"-"+CYR+"-"+CMO]).length} tenants unpaid</div></div>
+  <div style={{fontSize:22,...F7,color:S.amber}}>{gbp(tr-pr)}</div>
  </div>
  ) : (
  <div style={{marginTop:10,background:"#f0fdf4",borderRadius:12,padding:"12px 14px",...RW,border:"1px solid #bbf7d0"}}>
-  <div style={{fontSize:14,fontWeight:700,color:S.green}}>All rent collected</div>
-  <div style={{fontSize:22,fontWeight:700,color:S.green}}>{gbp(pr)}</div>
+  <div style={{fontSize:14,...F7,color:S.green}}>All rent collected</div>
+  <div style={{fontSize:22,...F7,color:S.green}}>{gbp(pr)}</div>
  </div>
  ))}
  </div>
@@ -776,17 +797,17 @@ function RentPage({ tenants, rp, toggleRent, expMap, toggleExp, addTenant }) {
   const rentPct     = totalRent > 0 ? Math.round(paidRent / totalRent * 100) : 0;
   return (
     <div>
- <div style={{ ...FC, gap:8, marginBottom:10, flexWrap:"wrap" }}>
- <button onClick={() => { const d = new Date(selYr, selMo - 1, 1); setSelYr(d.getFullYear()); setSelMo(d.getMonth()); }} style={{ padding:"6px 12px", borderRadius:9, border:"1px solid #e2e8f0", background:"#fff", cursor:"pointer", fontSize:14 }}>‹</button>
- <span style={{ fontSize:14, fontWeight:600 }}>{MFULL[selMo]} {selYr}</span>
- <button onClick={() => { const d = new Date(selYr, selMo + 1, 1); if (d <= new Date(CYR, CMO, 1)) { setSelYr(d.getFullYear()); setSelMo(d.getMonth()); } }} style={{ padding:"6px 12px", borderRadius:9, border:"1px solid #e2e8f0", background:"#fff", cursor:"pointer", fontSize:14 }}>›</button>
- {(selYr !== CYR || selMo !== CMO) && <span style={{ fontSize:11, color:S.amber, fontWeight:600 }}>Editing past month</span>}
+ <div style={{ ...FC, gap:8, ...MB10, flexWrap:"wrap" }}>
+ <button onClick={() => { const d = new Date(selYr, selMo - 1, 1); setSelYr(d.getFullYear()); setSelMo(d.getMonth()); }} style={{ padding:"6px 12px", borderRadius:9, ...BD, ...BW, ...CP, fontSize:14 }}>‹</button>
+ <span style={{ fontSize:14, ...F6 }}>{MFULL[selMo]} {selYr}</span>
+ <button onClick={() => { const d = new Date(selYr, selMo + 1, 1); if (d <= new Date(CYR, CMO, 1)) { setSelYr(d.getFullYear()); setSelMo(d.getMonth()); } }} style={{ padding:"6px 12px", borderRadius:9, ...BD, ...BW, ...CP, fontSize:14 }}>›</button>
+ {(selYr !== CYR || selMo !== CMO) && <span style={{ fontSize:11, color:S.amber, ...F6 }}>Editing past month</span>}
  </div>
- <div style={{ ...card, ...cardPad, marginBottom:10 }}>
+ <div style={{ ...card, ...cardPad, ...MB10 }}>
  <div style={{ ...FB, alignItems:"flex-start", marginBottom:8 }}>
  <div>
-  <span style={{ fontSize:22, fontWeight:700 }}>{gbp(paidRent)}</span>
-  <span style={{ color:S.gray, fontSize:13 }}> / {gbp(totalRent)}</span>
+  <span style={{ fontSize:22, ...F7 }}>{gbp(paidRent)}</span>
+  <span style={{ color:S.gray, ...S13 }}> / {gbp(totalRent)}</span>
   <div style={{ ...G11, marginTop:3 }}>{paidCount} of {tenants.length} paid</div>
  </div>
  <Badge color={stillDue === 0 ? "green" : "amber"}>{stillDue === 0 ? "All paid" : paidCount + " paid"}</Badge>
@@ -795,9 +816,9 @@ function RentPage({ tenants, rp, toggleRent, expMap, toggleExp, addTenant }) {
  <div style={{ height:"100%", background:"#22c55e", borderRadius:99, width:rentPct+"%" }} />
  </div>
  {stillDue > 0 && (
- <div style={{ ...RW, background:"#fff5f5", borderRadius:10, padding:"8px 12px" }}>
-  <span style={{ fontSize:12, color:S.red, fontWeight:600 }}>Still to come in</span>
-  <span style={{ fontSize:14, fontWeight:700, color:S.red }}>{gbp(stillDue)}</span>
+ <div style={{ ...RW, background:"#fff5f5", ...R10, padding:"8px 12px" }}>
+  <span style={{ ...S12, color:S.red, ...F6 }}>Still to come in</span>
+  <span style={{ fontSize:14, ...F7, color:S.red }}>{gbp(stillDue)}</span>
  </div>
  )}
  </div>
@@ -807,7 +828,7 @@ function RentPage({ tenants, rp, toggleRent, expMap, toggleExp, addTenant }) {
  const all  = pt.length > 0 && paid.length === pt.length;
  if (p.vc && !pt.length) return (
  <div key={p.id} style={{ ...card, ...cardPad, background:"#fffbeb", borderColor:"#fde68a" }}>
-  <div style={{ fontSize:13, fontWeight:600, color:"#92400e" }}>{p.n}</div>
+  <div style={{ ...S13, ...F6, color:"#92400e" }}>{p.n}</div>
   <div style={{ fontSize:11, color:S.amber }}>Vacant</div>
  </div>
  );
@@ -818,11 +839,11 @@ function RentPage({ tenants, rp, toggleRent, expMap, toggleExp, addTenant }) {
   <div key={p.id} style={{ ...card, ...cardPad, ...(ip ? { background:"#f0fdf4", borderColor:"#bbf7d0" } : {}) }}>
     <div style={{ ...RW }}>
  <div>
- <div style={{ fontSize:13, fontWeight:600 }}>{p.n}</div>
+ <div style={{ ...S13, ...F6 }}>{p.n}</div>
  <div style={{ ...G11 }}>{t.nm} · due {t.dy}{sx(t.dy)}</div>
  <div style={{ ...G11 }}>{gbp(t.rn)}/mo</div>
  </div>
- <button onClick={() => toggleRent(t.id, selYr, selMo)} style={{ width:50, height:50, borderRadius:"50%", border:"none", cursor:"pointer", background:ip?"#22c55e":"#e2e8f0", color:ip?"#fff":S.gray, fontSize:20, ...FC, justifyContent:"center" }}>
+ <button onClick={() => toggleRent(t.id, selYr, selMo)} style={{ width:50, height:50, borderRadius:"50%", ...BN, ...CP, background:ip?"#22c55e":"#e2e8f0", color:ip?"#fff":S.gray, fontSize:20, ...FC, justifyContent:"center" }}>
  {ip ? "✓" : "○"}
  </button>
     </div>
@@ -832,9 +853,9 @@ function RentPage({ tenants, rp, toggleRent, expMap, toggleExp, addTenant }) {
  const open = expMap[p.id];
  return (
  <div key={p.id} style={{ ...card, ...(all ? { borderColor:"#bbf7d0" } : {}) }}>
-  <button onClick={() => toggleExp(p.id)} style={{ ...RW, padding:"13px 14px", cursor:"pointer", background:all?"#f0fdf4":"#fff", width:"100%", border:"none", textAlign:"left", fontFamily:"system-ui" }}>
+  <button onClick={() => toggleExp(p.id)} style={{ ...RW, padding:"13px 14px", ...CP, background:all?"#f0fdf4":"#fff", width:"100%", ...BN, textAlign:"left", ...FF }}>
     <div>
- <div style={{ fontSize:13, fontWeight:600 }}>{p.n} <span style={{ ...G11, fontWeight:400 }}>HMO</span></div>
+ <div style={{ ...S13, ...F6 }}>{p.n} <span style={{ ...G11, fontWeight:400 }}>HMO</span></div>
  <div style={{ ...G11 }}>{paid.length}/{pt.length} paid · {gbp(pt.reduce((s, t) => s + t.rn, 0))}/mo</div>
     </div>
     <div style={{ ...FC, gap:8 }}>
@@ -849,10 +870,10 @@ function RentPage({ tenants, rp, toggleRent, expMap, toggleExp, addTenant }) {
  return (
  <div key={t.id} style={{ padding:"11px 14px", ...RW, borderBottom:"1px solid #f8fafc", background:ip?"#f0fdf4":"#fff" }}>
    <div>
-     <div style={{ fontSize:13 }}>{t.rm} · <span style={{ fontWeight:600 }}>{t.nm}</span></div>
+     <div style={{ ...S13 }}>{t.rm} · <span style={{ ...F6 }}>{t.nm}</span></div>
      <div style={{ ...G11 }}>{gbp(t.rn)}/mo · due {t.dy}{sx(t.dy)}</div>
    </div>
-   <button onClick={() => toggleRent(t.id, selYr, selMo)} style={{ width:40, height:40, borderRadius:"50%", border:"none", cursor:"pointer", background:ip?"#22c55e":"#e2e8f0", color:ip?"#fff":S.gray, fontSize:16, ...FC, justifyContent:"center" }}>
+   <button onClick={() => toggleRent(t.id, selYr, selMo)} style={{ width:40, height:40, borderRadius:"50%", ...BN, ...CP, background:ip?"#22c55e":"#e2e8f0", color:ip?"#fff":S.gray, fontSize:16, ...FC, justifyContent:"center" }}>
      {ip ? "✓" : "○"}
    </button>
  </div>
@@ -868,11 +889,11 @@ function RentPage({ tenants, rp, toggleRent, expMap, toggleExp, addTenant }) {
    </div>
    <div style={{ display:"flex", gap:8, marginTop:8 }}>
      <Btn onClick={() => doAdd(p.id)} style={{ flex:1, padding:10, marginBottom:0 }}>Add Tenant</Btn>
-     <button onClick={() => setAddingTo(null)} style={{ padding:"10px 14px", borderRadius:10, background:S.light, border:"none", cursor:"pointer", fontFamily:"system-ui", fontWeight:600 }}>Cancel</button>
+     <button onClick={() => setAddingTo(null)} style={{ padding:"10px 14px", ...R10, background:S.light, ...BN, ...CP, ...FF, ...F6 }}>Cancel</button>
    </div>
  </div>
  ) : (
- <button onClick={() => setAddingTo(p.id)} style={{ fontSize:12, color:S.mid, fontWeight:600, background:"none", border:"none", cursor:"pointer", ...FC, gap:4, padding:"4px 0", fontFamily:"system-ui" }}>+ Add room</button>
+ <button onClick={() => setAddingTo(p.id)} style={{ ...S12, color:S.mid, ...F6, background:"none", ...BN, ...CP, ...FC, gap:4, padding:"4px 0", ...FF }}>+ Add room</button>
  )}
  </div>
     </div>
@@ -908,7 +929,7 @@ function JobsPage({ jobs, addJob, updateJob, deleteJob, wide }) {
  <div style={{ ...card, ...cardPad, ...(j.status === "done" ? { opacity:.8 } : {}) }}>
  {isEdit ? (
  <div>
-  <div style={{ fontSize:12, fontWeight:600, color:S.gray, marginBottom:8 }}>Edit Job</div>
+  <div style={{ ...S12, ...F6, color:S.gray, marginBottom:8 }}>Edit Job</div>
   <Inp value={editF.desc} onChange={e => setEditF(x => ({ ...x, desc:e.target.value }))} placeholder="Description" />
   <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:8 }}>
     <Inp placeholder="Cost (£)" type="number" value={editF.cost} onChange={e => setEditF(x => ({ ...x, cost:e.target.value }))} style={{ marginBottom:0 }} />
@@ -920,26 +941,26 @@ function JobsPage({ jobs, addJob, updateJob, deleteJob, wide }) {
   </Sel>
   <div style={{ display:"flex", gap:8 }}>
     <Btn onClick={() => saveEdit(j.id)} style={{ flex:1, padding:10, marginBottom:0 }}>Save</Btn>
-    <button onClick={() => setEdit(null)} style={{ padding:"10px 14px", borderRadius:10, background:S.light, border:"none", cursor:"pointer", fontFamily:"system-ui", fontWeight:600 }}>Cancel</button>
+    <button onClick={() => setEdit(null)} style={{ padding:"10px 14px", ...R10, background:S.light, ...BN, ...CP, ...FF, ...F6 }}>Cancel</button>
   </div>
  </div>
  ) : (
  <div style={{ display:"flex", alignItems:"flex-start", gap:8 }}>
   <div style={{ flex:1 }}>
-    <div style={{ fontSize:13, fontWeight:600, color:j.status==="done"?S.gray:S.dark, textDecoration:j.status==="done"?"line-through":"none" }}>{j.desc}</div>
+    <div style={{ ...S13, ...F6, color:j.status==="done"?S.gray:S.dark, textDecoration:j.status==="done"?"line-through":"none" }}>{j.desc}</div>
     {p && <div style={{ ...G11 }}>{p.n}</div>}
     <div style={{ display:"flex", flexWrap:"wrap", gap:6, marginTop:6 }}>
  {j.cat  && <Badge color="gray">{j.cat}</Badge>}
- {j.cost > 0 && <span style={{ fontSize:12, fontWeight:600 }}>{gbp(j.cost)}</span>}
+ {j.cost > 0 && <span style={{ ...S12, ...F6 }}>{gbp(j.cost)}</span>}
  {!j.cost && j.status === "open" && <span style={{ fontSize:11, color:S.amber }}>No cost yet — edit to add</span>}
  {j.cont && <span style={{ ...G11 }}>{j.cont}</span>}
  <span style={{ fontSize:11, color:"#cbd5e1" }}>{j.date}</span>
     </div>
   </div>
   <div style={{ display:"flex", gap:6, flexShrink:0 }}>
-    <button onClick={() => { setEdit(j.id); setEditF({ desc:j.desc, cost:j.cost||"", cont:j.cont||"", cat:j.cat||"" }); }} style={{ width:36, height:36, borderRadius:"50%", border:"none", cursor:"pointer", background:S.light, fontSize:14 }}>✏️</button>
-    <button onClick={() => updateJob(j.id, { status:j.status==="done"?"open":"done" })} style={{ width:36, height:36, borderRadius:"50%", border:"none", cursor:"pointer", background:j.status==="done"?"#bbf7d0":"#dcfce7", fontSize:16 }}>✓</button>
-    <button onClick={() => deleteJob(j.id)} style={{ width:36, height:36, borderRadius:"50%", border:"none", cursor:"pointer", background:S.rbg, fontSize:14 }}>✕</button>
+    <button onClick={() => { setEdit(j.id); setEditF({ desc:j.desc, cost:j.cost||"", cont:j.cont||"", cat:j.cat||"" }); }} style={{ width:36, height:36, borderRadius:"50%", ...BN, ...CP, background:S.light, fontSize:14 }}>✏️</button>
+    <button onClick={() => updateJob(j.id, { status:j.status==="done"?"open":"done" })} style={{ width:36, height:36, borderRadius:"50%", ...BN, ...CP, background:j.status==="done"?"#bbf7d0":"#dcfce7", fontSize:16 }}>✓</button>
+    <button onClick={() => deleteJob(j.id)} style={{ width:36, height:36, borderRadius:"50%", ...BN, ...CP, background:S.rbg, fontSize:14 }}>✕</button>
   </div>
  </div>
  )}
@@ -952,9 +973,9 @@ function JobsPage({ jobs, addJob, updateJob, deleteJob, wide }) {
  <Btn onClick={() => setShow(true)}>+ Log Maintenance Job</Btn>
  {show && (
  <div style={{ ...card, ...cardPad }}>
- <div style={{ ...FB, marginBottom:10 }}>
-  <span style={{ fontWeight:600 }}>New Job</span>
-  <button onClick={() => setShow(false)} style={{ background:"none", border:"none", fontSize:18, cursor:"pointer" }}>✕</button>
+ <div style={{ ...FB, ...MB10 }}>
+  <span style={{ ...F6 }}>New Job</span>
+  <button onClick={() => setShow(false)} style={{ background:"none", ...BN, fontSize:18, ...CP }}>✕</button>
  </div>
  <Sel value={f.pid} onChange={e => setF(x => ({ ...x, pid:e.target.value }))}>
   <option value="">Select property...</option>
@@ -971,17 +992,17 @@ function JobsPage({ jobs, addJob, updateJob, deleteJob, wide }) {
  <div style={{ ...G11, margin:"6px 0 10px" }}>💡 Log the job now — add the cost afterwards when you know it</div>
  <div style={{ display:"flex", gap:8 }}>
   <Btn onClick={submit} style={{ flex:1, padding:10, marginBottom:0 }}>Save Job</Btn>
-  <button onClick={() => setShow(false)} style={{ padding:"10px 14px", borderRadius:10, background:S.light, border:"none", cursor:"pointer", fontFamily:"system-ui", fontWeight:600 }}>Cancel</button>
+  <button onClick={() => setShow(false)} style={{ padding:"10px 14px", ...R10, background:S.light, ...BN, ...CP, ...FF, ...F6 }}>Cancel</button>
  </div>
  </div>
  )}
  <div style={grid}>
  <div>
- {oj.length > 0 && <><div style={{ fontSize:11, fontWeight:700, color:S.gray, textTransform:"uppercase", letterSpacing:".5px", marginBottom:8 }}>Open ({oj.length})</div>{oj.map(j => <JCard key={j.id} j={j} />)}</>}
- {!jobs.length && !show && <div style={{ textAlign:"center", padding:"50px 0", color:S.gray }}><div style={{ fontSize:36, marginBottom:10 }}>🔧</div><div>No jobs logged yet</div></div>}
+ {oj.length > 0 && <><div style={{ fontSize:11, ...F7, color:S.gray, textTransform:"uppercase", letterSpacing:".5px", marginBottom:8 }}>Open ({oj.length})</div>{oj.map(j => <JCard key={j.id} j={j} />)}</>}
+ {!jobs.length && !show && <div style={{ ...TC, padding:"50px 0", color:S.gray }}><div style={{ fontSize:36, ...MB10 }}>🔧</div><div>No jobs logged yet</div></div>}
  </div>
  <div>
- {dj.length > 0 && <><div style={{ fontSize:11, fontWeight:700, color:S.gray, textTransform:"uppercase", letterSpacing:".5px", marginBottom:8 }}>Completed ({dj.length})</div>{dj.map(j => <JCard key={j.id} j={j} />)}</>}
+ {dj.length > 0 && <><div style={{ fontSize:11, ...F7, color:S.gray, textTransform:"uppercase", letterSpacing:".5px", marginBottom:8 }}>Completed ({dj.length})</div>{dj.map(j => <JCard key={j.id} j={j} />)}</>}
  </div>
  </div>
     </div>
@@ -1005,25 +1026,25 @@ function MtgsPage() {
   };
   return (
     <div>
- <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10, marginBottom:10 }}>
- <div style={{ background:"#fff", borderRadius:14, border:"1px solid #e2e8f0", padding:12 }}>
+ <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10, ...MB10 }}>
+ <div style={{ ...BW, borderRadius:14, ...BD, padding:12 }}>
  <div style={{ ...G11, marginBottom:3 }}>Total Debt</div>
- <div style={{ fontSize:19, fontWeight:700 }}>{gbp(MTGS.reduce((s, m) => s + m.b, 0))}</div>
+ <div style={{ fontSize:19, ...F7 }}>{gbp(MTGS.reduce((s, m) => s + m.b, 0))}</div>
  </div>
- <div style={{ background:"#fff", borderRadius:14, border:"1px solid #e2e8f0", padding:12 }}>
+ <div style={{ ...BW, borderRadius:14, ...BD, padding:12 }}>
  <div style={{ ...G11, marginBottom:3 }}>Monthly</div>
- <div style={{ fontSize:19, fontWeight:700 }}>{gbp(MTGS.reduce((s, m) => s + m.m, 0))}</div>
+ <div style={{ fontSize:19, ...F7 }}>{gbp(MTGS.reduce((s, m) => s + m.m, 0))}</div>
  </div>
  </div>
- <div style={{ ...card, ...cardPad, marginBottom:10, background:"linear-gradient(135deg,#f8fafc,#fff)" }}>
- <div style={{ fontSize:12, fontWeight:700, color:S.mid, marginBottom:4 }}>🧮 Rate scenario</div>
+ <div style={{ ...card, ...cardPad, ...MB10, background:"linear-gradient(135deg,#f8fafc,#fff)" }}>
+ <div style={{ ...S12, ...F7, color:S.mid, marginBottom:4 }}>🧮 Rate scenario</div>
  <div style={{ ...FC, gap:10, marginBottom:6 }}>
  <input type="range" min="2" max="9" step="0.1" value={testRate} onChange={e=>setTestRate(parseFloat(e.target.value))} style={{ flex:1 }} />
- <span style={{ fontSize:17, fontWeight:700, minWidth:48 }}>{testRate.toFixed(1)}%</span>
+ <span style={{ fontSize:17, ...F7, minWidth:48 }}>{testRate.toFixed(1)}%</span>
  </div>
  <div style={{ ...G11 }}>
-  At {testRate.toFixed(1)}%: <span style={{ fontWeight:700, color:S.dark }}>{gbp(newBtlTotal)}/mo</span>
-  {Math.abs(rateDiff)>=5 && <span style={{ color:rateDiff>0?S.red:S.green, fontWeight:600 }}>
+  At {testRate.toFixed(1)}%: <span style={{ ...F7, color:S.dark }}>{gbp(newBtlTotal)}/mo</span>
+  {Math.abs(rateDiff)>=5 && <span style={{ color:rateDiff>0?S.red:S.green, ...F6 }}>
    {" "}({rateDiff>0?"+":""}{gbp(Math.abs(rateDiff))}/mo {rateDiff>0?"more":"less"})
   </span>}
  </div>
@@ -1034,9 +1055,9 @@ function MtgsPage() {
  const bg = d != null && d <= 180 ? "#fff5f5" : d != null && d <= 365 ? "#fffbeb" : "#fff";
  return (
  <div key={i} style={{ ...card, ...cardPad, background:bg }}>
-  <div style={{ ...FB, alignItems:"flex-start", marginBottom:10 }}>
+  <div style={{ ...FB, alignItems:"flex-start", ...MB10 }}>
     <div style={{ flex:1, paddingRight:8 }}>
- <div style={{ fontSize:13, fontWeight:600 }}>{m.l}</div>
+ <div style={{ ...S13, ...F6 }}>{m.l}</div>
  <div style={{ ...G11 }}>{m.ldr}{m.ac ? " · " + m.ac : ""}</div>
     </div>
     <Badge color={color}>{label}</Badge>
@@ -1045,7 +1066,7 @@ function MtgsPage() {
     {[["Balance",gbp(m.b)],["Rate",m.r!=null?m.r+"%":"Unknown"],["/month",gbp(m.m)]].map(([l2,v]) => (
  <div key={l2} style={{ background:"#f8fafc", borderRadius:9, padding:9 }}>
  <div style={{ ...G11 }}>{l2}</div>
- <div style={{ fontSize:12, fontWeight:700, color:l2==="Rate"&&m.r>5.5?S.red:S.dark }}>{v}</div>
+ <div style={{ ...S12, ...F7, color:l2==="Rate"&&m.r>5.5?S.red:S.dark }}>{v}</div>
  </div>
     ))}
   </div>
@@ -1089,23 +1110,23 @@ function MoreMenu({ tenants, contractors, deals, setMore, data }) {
  {id:"timeline", icon:"📅", label:"Timeline", sub:"Upcoming dates & events"},
  {id:"notes", icon:"📝", label:"Notes", sub:"General notepad"},
  ].map(function(item,i) { return item.g ? (
- <div key={i} style={{ fontSize:10, fontWeight:700, color:S.mid, padding:"16px 4px 6px", textTransform:"uppercase", letterSpacing:1.2, borderBottom:"1px solid #e2e8f0", marginBottom:8, marginTop:i===0?0:4 }}>{item.g}</div>
+ <div key={i} style={{ fontSize:10, ...F7, color:S.mid, padding:"16px 4px 6px", textTransform:"uppercase", letterSpacing:1.2, borderBottom:"1px solid #e2e8f0", marginBottom:8, marginTop:i===0?0:4 }}>{item.g}</div>
  ) : (
- <button key={item.id} onClick={() => setMore(item.id)} style={{ background:"#fff", border:"1px solid #e2e8f0", borderRadius:13, padding:"13px 14px", ...RW, marginBottom:8, cursor:"pointer", width:"100%", textAlign:"left", fontFamily:"system-ui" }}>
+ <button key={item.id} onClick={() => setMore(item.id)} style={{ ...BW, ...BD, borderRadius:13, padding:"13px 14px", ...RW, marginBottom:8, ...CP, width:"100%", textAlign:"left", ...FF }}>
  <div style={{ ...FC, flex:1 }}>
-  <div style={{ width:38, height:38, background:S.light, borderRadius:10, ...FC, justifyContent:"center", fontSize:17, marginRight:11, flexShrink:0 }}>{item.icon}</div>
+  <div style={{ width:38, height:38, background:S.light, ...R10, ...FC, justifyContent:"center", fontSize:17, marginRight:11, flexShrink:0 }}>{item.icon}</div>
   <div>
-    <div style={{ fontSize:14, fontWeight:600 }}>{item.label}</div>
+    <div style={{ fontSize:14, ...F6 }}>{item.label}</div>
     <div style={{ ...G11, marginTop:2 }}>{item.sub}</div>
   </div>
  </div>
  <span style={{ color:"#cbd5e1", fontSize:18 }}>›</span>
  </button>
  ); })}
- <div style={{ marginTop:8, padding:14, background:"#fff", border:"1px solid #e2e8f0", borderRadius:13 }}>
- <div style={{ fontSize:13, fontWeight:600, marginBottom:4 }}>💾 Backup your data</div>
- <div style={{ ...G11, marginBottom:10 }}>Download a backup file and save it to Google Drive. Restore it any time if something goes wrong.</div>
- <button onClick={exportBackup} style={{ width:"100%", padding:"10px", borderRadius:10, background:S.dark, color:"#fff", border:"none", cursor:"pointer", fontFamily:"system-ui", fontWeight:600, fontSize:13 }}>Download Backup</button>
+ <div style={{ marginTop:8, padding:14, ...BW, ...BD, borderRadius:13 }}>
+ <div style={{ ...S13, ...F6, marginBottom:4 }}>💾 Backup your data</div>
+ <div style={{ ...G11, ...MB10 }}>Download a backup file and save it to Google Drive. Restore it any time if something goes wrong.</div>
+ <button onClick={exportBackup} style={{ width:"100%", padding:"10px", ...R10, background:S.dark, color:"#fff", ...BN, ...CP, ...FF, ...F6, ...S13 }}>Download Backup</button>
  </div>
     </div>
   );
@@ -1124,14 +1145,14 @@ function CompPage({ comp, updateComp, wide }) {
   const grid = wide ? { display:"grid", gridTemplateColumns:"1fr 1fr", gap:16 } : {};
   return (
     <div>
- <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10, marginBottom:10 }}>
- <div style={{ background:urg>0?S.rbg:"#f0fdf4", borderRadius:14, border:"1px solid #e2e8f0", padding:12 }}>
+ <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10, ...MB10 }}>
+ <div style={{ background:urg>0?S.rbg:"#f0fdf4", borderRadius:14, ...BD, padding:12 }}>
  <div style={{ ...G11, marginBottom:3 }}>Due / Overdue</div>
- <div style={{ fontSize:24, fontWeight:700, color:urg>0?S.red:S.green }}>{urg}</div>
+ <div style={{ fontSize:24, ...F7, color:urg>0?S.red:S.green }}>{urg}</div>
  </div>
- <div style={{ background:unk>0?S.abg:"#f0fdf4", borderRadius:14, border:"1px solid #e2e8f0", padding:12 }}>
+ <div style={{ background:unk>0?S.abg:"#f0fdf4", borderRadius:14, ...BD, padding:12 }}>
  <div style={{ ...G11, marginBottom:3 }}>Unknown</div>
- <div style={{ fontSize:24, fontWeight:700, color:unk>0?S.amber:S.green }}>{unk}</div>
+ <div style={{ fontSize:24, ...F7, color:unk>0?S.amber:S.green }}>{unk}</div>
  </div>
  </div>
  <div style={grid}>
@@ -1141,7 +1162,7 @@ function CompPage({ comp, updateComp, wide }) {
  return (
   <div key={p.id} style={card}>
     <div style={{ padding:"11px 14px", background:"#f8fafc", borderBottom:"1px solid #f1f5f9" }}>
- <div style={{ fontSize:13, fontWeight:600 }}>{p.n}</div>
+ <div style={{ ...S13, ...F6 }}>{p.n}</div>
  <div style={{ ...G11 }}>{p.town} · {p.ty}</div>
     </div>
     {items.map((item, i) => {
@@ -1151,7 +1172,7 @@ function CompPage({ comp, updateComp, wide }) {
  <div key={item.id} style={{ padding:"11px 14px", borderBottom:i<items.length-1?"1px solid #f8fafc":"none" }}>
  <div style={{ ...RW, marginBottom:7 }}>
    <div>
-     <div style={{ fontSize:13, fontWeight:600 }}>{ct ? ct.l : item.type}</div>
+     <div style={{ ...S13, ...F6 }}>{ct ? ct.l : item.type}</div>
      <div style={{ ...G11 }}>{ct ? ct.n : ""} · {item.next ? "Due: "+new Date(item.next).toLocaleDateString("en-GB") : "Add dates below"}</div>
    </div>
    <Badge color={color}>{label}</Badge>
@@ -1159,14 +1180,14 @@ function CompPage({ comp, updateComp, wide }) {
  <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:7, marginBottom:7 }}>
    <div>
      <div style={{ ...G11, marginBottom:3 }}>Last cert</div>
-     <input type="date" value={item.last||""} onChange={e => updateComp(item.id, { last:e.target.value })} style={{ width:"100%", border:"1px solid #e2e8f0", borderRadius:9, padding:"6px 8px", fontSize:12, fontFamily:"system-ui" }} />
+     <input type="date" value={item.last||""} onChange={e => updateComp(item.id, { last:e.target.value })} style={{ width:"100%", ...BD, borderRadius:9, padding:"6px 8px", ...S12, ...FF }} />
    </div>
    <div>
      <div style={{ ...G11, marginBottom:3 }}>Next due</div>
-     <input type="date" value={item.next||""} onChange={e => updateComp(item.id, { next:e.target.value })} style={{ width:"100%", border:"1px solid #e2e8f0", borderRadius:9, padding:"6px 8px", fontSize:12, fontFamily:"system-ui" }} />
+     <input type="date" value={item.next||""} onChange={e => updateComp(item.id, { next:e.target.value })} style={{ width:"100%", ...BD, borderRadius:9, padding:"6px 8px", ...S12, ...FF }} />
    </div>
  </div>
- <input placeholder="Notes..." value={item.notes||""} onChange={e => updateComp(item.id, { notes:e.target.value })} style={{ width:"100%", border:"1px solid #e2e8f0", borderRadius:9, padding:"6px 8px", fontSize:12, fontFamily:"system-ui" }} />
+ <input placeholder="Notes..." value={item.notes||""} onChange={e => updateComp(item.id, { notes:e.target.value })} style={{ width:"100%", ...BD, borderRadius:9, padding:"6px 8px", ...S12, ...FF }} />
  </div>
  );
     })}
@@ -1192,22 +1213,22 @@ function TenantsPage({ tenants, updateTenant, notes, setNote, wide }) {
  <div key={p.id} style={card}>
   <div style={{ padding:"11px 14px", background:"#f8fafc", borderBottom:"1px solid #f1f5f9", ...FB }}>
     <div>
- <div style={{ fontSize:13, fontWeight:600 }}>{p.n}</div>
+ <div style={{ ...S13, ...F6 }}>{p.n}</div>
  <div style={{ ...G11 }}>{p.town} · {p.ty}</div>
     </div>
-    <div style={{ textAlign:"right" }}>
- <div style={{ fontSize:13, fontWeight:700 }}>{gbp(pt.reduce((s,t)=>s+t.rn,0))}/mo</div>
+    <div style={{ ...TR }}>
+ <div style={{ ...S13, ...F7 }}>{gbp(pt.reduce((s,t)=>s+t.rn,0))}/mo</div>
  <div style={{ ...G11 }}>{pt.length} tenant{pt.length!==1?"s":""}</div>
     </div>
   </div>
-  {!pt.length && <div style={{ padding:"11px 14px", fontSize:12, color:S.amber }}>Vacant</div>}
+  {!pt.length && <div style={{ padding:"11px 14px", ...S12, color:S.amber }}>Vacant</div>}
   {pt.map((t, i) => {
     const isEd = editing === t.id;
     return (
  <div key={t.id} style={{ padding:"12px 14px", borderBottom:i<pt.length-1?"1px solid #f8fafc":"none" }}>
  {isEd ? (
  <div>
-   <div style={{ fontSize:11, fontWeight:600, color:S.gray, marginBottom:8 }}>Editing — {t.nm}</div>
+   <div style={{ fontSize:11, ...F6, color:S.gray, marginBottom:8 }}>Editing — {t.nm}</div>
    <Inp placeholder="Name" value={ef.nm} onChange={e=>setEf(f=>({...f,nm:e.target.value}))} />
    <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:8 }}>
      <div>
@@ -1227,26 +1248,26 @@ function TenantsPage({ tenants, updateTenant, notes, setNote, wide }) {
      <div style={{ ...G11, marginBottom:3 }}>Notes</div>
      <Inp value={ef.nt} onChange={e=>setEf(f=>({...f,nt:e.target.value}))} style={{marginBottom:0}} />
    </div>
-   <div style={{marginTop:8}}><div style={{...G11,marginBottom:3}}>Move-out date</div><input type="date" value={ef.mo||""} onChange={e=>setEf(f=>({...f,mo:e.target.value}))} style={{width:"100%",border:"1px solid #e2e8f0",borderRadius:10,padding:"10px 12px",fontSize:14,fontFamily:"system-ui",outline:"none",marginBottom:8}} /></div>
-   <div style={{marginTop:0}}><div style={{...G11,marginBottom:3}}>Tenancy start date</div><input type="date" value={ef.sd||""} onChange={e=>setEf(f=>({...f,sd:e.target.value}))} style={{width:"100%",border:"1px solid #e2e8f0",borderRadius:10,padding:"10px 12px",fontSize:14,fontFamily:"system-ui",outline:"none",marginBottom:8}} /></div>
+   <div style={{marginTop:8}}><div style={{...G11,marginBottom:3}}>Move-out date</div><input type="date" value={ef.mo||""} onChange={e=>setEf(f=>({...f,mo:e.target.value}))} style={{width:"100%",...BD,...R10,padding:"10px 12px",fontSize:14,...FF,outline:"none",marginBottom:8}} /></div>
+   <div style={{marginTop:0}}><div style={{...G11,marginBottom:3}}>Tenancy start date</div><input type="date" value={ef.sd||""} onChange={e=>setEf(f=>({...f,sd:e.target.value}))} style={{width:"100%",...BD,...R10,padding:"10px 12px",fontSize:14,...FF,outline:"none",marginBottom:8}} /></div>
    <div style={{ display:"flex", gap:8, marginTop:12 }}>
      <Btn onClick={() => saveEdit(t.id)} style={{ flex:1, padding:10, marginBottom:0 }}>Save Changes</Btn>
-     <button onClick={() => setEditing(null)} style={{ padding:"10px 14px", borderRadius:10, background:S.light, border:"none", cursor:"pointer", fontFamily:"system-ui", fontWeight:600 }}>Cancel</button>
+     <button onClick={() => setEditing(null)} style={{ padding:"10px 14px", ...R10, background:S.light, ...BN, ...CP, ...FF, ...F6 }}>Cancel</button>
    </div>
  </div>
  ) : (
  <div style={{ ...FB, alignItems:"flex-start" }}>
    <div style={{ flex:1 }}>
-     <div style={{ fontSize:13, fontWeight:600, marginBottom:2 }}>{p.ty==="HMO"?t.rm+" · ":""}{t.nm}</div>
+     <div style={{ ...S13, ...F6, marginBottom:2 }}>{p.ty==="HMO"?t.rm+" · ":""}{t.nm}</div>
      <div style={{ ...G11 }}>Pays on {t.dy}{sx(t.dy)} · {gbp(t.rn)}/mo</div>
      {t.dp != null && <div style={{ ...G11 }}>Deposit: {gbp(t.dp)}</div>}
      {t.startDate && <div style={{ ...G11 }}>Started: {new Date(t.startDate).toLocaleDateString("en-GB")}{(() => { const m2 = Math.round((now - new Date(t.startDate))/(30.44*86400000)); return m2 >= 12 ? " · "+Math.floor(m2/12)+"yr"+(m2%12>0?" "+m2%12+"mo":"") : m2>0?" · "+m2+"mo":""; })()}</div>}
      {t.nt && <div style={{ fontSize:11, color:S.amber, marginTop:3 }}>{t.nt}</div>}
-     {t.moveOut && <div style={{ fontSize:11, color:S.red, fontWeight:600 }}>Moving out: {new Date(t.moveOut).toLocaleDateString("en-GB")}</div>}
+     {t.moveOut && <div style={{ fontSize:11, color:S.red, ...F6 }}>Moving out: {new Date(t.moveOut).toLocaleDateString("en-GB")}</div>}
    </div>
    <div style={{ display:"flex", flexDirection:"column", alignItems:"flex-end", gap:4, marginLeft:8, flexShrink:0 }}>
-     <div style={{ fontSize:13, fontWeight:700 }}>{gbp(t.rn*12)}/yr</div>
-     <button onClick={() => startEdit(t)} style={{ fontSize:11, background:S.light, border:"none", borderRadius:8, padding:"4px 12px", cursor:"pointer", fontWeight:600, fontFamily:"system-ui", color:S.dark }}>✏️ Edit</button>
+     <div style={{ ...S13, ...F7 }}>{gbp(t.rn*12)}/yr</div>
+     <button onClick={() => startEdit(t)} style={{ fontSize:11, background:S.light, ...BN, borderRadius:8, padding:"4px 12px", ...CP, ...F6, ...FF, color:S.dark }}>✏️ Edit</button>
    </div>
  </div>
  )}
@@ -1255,7 +1276,7 @@ function TenantsPage({ tenants, updateTenant, notes, setNote, wide }) {
   })}
   <div style={{ padding:"10px 14px", borderTop:"1px solid #f8fafc" }}>
     <div style={{ ...G11, marginBottom:4 }}>Property notes</div>
-    <textarea placeholder="Access codes, parking, ongoing issues..." value={note} onChange={e => setNote(p.id, e.target.value)} style={{ width:"100%", border:"1px solid #e2e8f0", borderRadius:9, padding:8, fontSize:12, fontFamily:"system-ui", resize:"none", height:54 }} />
+    <textarea placeholder="Access codes, parking, ongoing issues..." value={note} onChange={e => setNote(p.id, e.target.value)} style={{ width:"100%", ...BD, borderRadius:9, padding:8, ...S12, ...FF, resize:"none", height:54 }} />
   </div>
  </div>
  );
@@ -1304,7 +1325,7 @@ function FinPage({ tenants, jobs, rp, outgoings, wide }) {
     <div>
  <div style={{ display:"flex", gap:8, marginBottom:14, flexWrap:"wrap" }}>
  {[["summary","Summary"],["charts","Charts"],["per-property","Per Property"]].map(([v,l]) => (
- <button key={v} onClick={() => setView(v)} style={{ padding:"8px 14px", borderRadius:10, border:"1px solid #e2e8f0", background:view===v?S.dark:"#fff", color:view===v?"#fff":S.dark, fontWeight:600, fontSize:13, cursor:"pointer", fontFamily:"system-ui" }}>
+ <button key={v} onClick={() => setView(v)} style={{ padding:"8px 14px", ...R10, ...BD, background:view===v?S.dark:"#fff", color:view===v?"#fff":S.dark, ...F6, ...S13, ...CP, ...FF }}>
   {l}
  </button>
  ))}
@@ -1324,9 +1345,9 @@ function FinPage({ tenants, jobs, rp, outgoings, wide }) {
     {l:"This Month Net", v:(ncf>=0?"":"-")+gbp(Math.abs(ncf)), s:"After all costs", g:ncf>0},
     {l:"Annual Income", v:gbp(tr*12),s:"Gross", g:true},
   ].map((k, i) => (
-    <div key={i} style={{ background:"#fff", borderRadius:14, border:"1px solid #e2e8f0", padding:12 }}>
+    <div key={i} style={{ ...BW, borderRadius:14, ...BD, padding:12 }}>
  <div style={{ ...G11, marginBottom:3 }}>{k.l}</div>
- <div style={{ fontSize:18, fontWeight:700, color:k.g?S.green:S.dark }}>{k.v}</div>
+ <div style={{ fontSize:18, ...F7, color:k.g?S.green:S.dark }}>{k.v}</div>
  <div style={{ ...G11, marginTop:2 }}>{k.s}</div>
     </div>
   ))}
@@ -1380,27 +1401,27 @@ function FinPage({ tenants, jobs, rp, outgoings, wide }) {
     {l:"YTD Outgoings", v:gbp(ytdOut), g:false},
     {l:"YTD Net", v:(ytdNet>=0?"":"-")+gbp(Math.abs(ytdNet)), g:ytdNet>0},
   ].map((k, i) => (
-    <div key={i} style={{ background:"#fff", borderRadius:14, border:"1px solid #e2e8f0", padding:12 }}>
+    <div key={i} style={{ ...BW, borderRadius:14, ...BD, padding:12 }}>
  <div style={{ ...G11, marginBottom:3 }}>{k.l}</div>
- <div style={{ fontSize:18, fontWeight:700, color:k.g?S.green:S.dark }}>{k.v}</div>
+ <div style={{ fontSize:18, ...F7, color:k.g?S.green:S.dark }}>{k.v}</div>
     </div>
   ))}
  </div>
  <div style={card}>
   <div style={{ padding:"11px 14px", background:"#f8fafc", borderBottom:"1px solid #f1f5f9", overflowX:"auto" }}>
-    <div style={{ display:"grid", gridTemplateColumns:"60px 1fr 1fr 1fr 1fr 1fr", gap:4, fontSize:11, fontWeight:600, color:S.gray, minWidth:340 }}>
- <span>Month</span><span style={{ textAlign:"right" }}>Rent</span><span style={{ textAlign:"right" }}>Mortgage</span><span style={{ textAlign:"right" }}>Jobs</span><span style={{ textAlign:"right" }}>Bills</span><span style={{ textAlign:"right" }}>Net</span>
+    <div style={{ display:"grid", gridTemplateColumns:"60px 1fr 1fr 1fr 1fr 1fr", gap:4, fontSize:11, ...F6, color:S.gray, minWidth:340 }}>
+ <span>Month</span><span style={{ ...TR }}>Rent</span><span style={{ ...TR }}>Mortgage</span><span style={{ ...TR }}>Jobs</span><span style={{ ...TR }}>Bills</span><span style={{ ...TR }}>Net</span>
     </div>
   </div>
   {months.map(row => (
     <div key={row.m} style={{ padding:"9px 14px", borderBottom:"1px solid #f8fafc", overflowX:"auto" }}>
- <div style={{ display:"grid", gridTemplateColumns:"60px 1fr 1fr 1fr 1fr 1fr", gap:4, fontSize:12, minWidth:340 }}>
- <span style={{ color:S.gray, fontWeight:600 }}>{MSHORT[row.m]}</span>
- <span style={{ textAlign:"right", color:S.green }}>{row.rent > 0 ? gbp(row.rent) : "--"}</span>
- <span style={{ textAlign:"right", color:S.red }}>{gbp(row.mtg)}</span>
- <span style={{ textAlign:"right", color:row.costs>0?S.red:S.gray }}>{row.costs > 0 ? gbp(row.costs) : "--"}</span>
- <span style={{ textAlign:"right", color:row.outs>0?S.red:S.gray }}>{row.outs > 0 ? gbp(row.outs) : "--"}</span>
- <span style={{ textAlign:"right", fontWeight:700, color:row.rent>0?(row.net>0?S.green:row.net<0?S.red:S.gray):S.gray }}>{row.rent>0?(row.net>=0?"":"-")+gbp(Math.abs(row.net)):"--"}</span>
+ <div style={{ display:"grid", gridTemplateColumns:"60px 1fr 1fr 1fr 1fr 1fr", gap:4, ...S12, minWidth:340 }}>
+ <span style={{ color:S.gray, ...F6 }}>{MSHORT[row.m]}</span>
+ <span style={{ ...TR, color:S.green }}>{row.rent > 0 ? gbp(row.rent) : "--"}</span>
+ <span style={{ ...TR, color:S.red }}>{gbp(row.mtg)}</span>
+ <span style={{ ...TR, color:row.costs>0?S.red:S.gray }}>{row.costs > 0 ? gbp(row.costs) : "--"}</span>
+ <span style={{ ...TR, color:row.outs>0?S.red:S.gray }}>{row.outs > 0 ? gbp(row.outs) : "--"}</span>
+ <span style={{ ...TR, ...F7, color:row.rent>0?(row.net>0?S.green:row.net<0?S.red:S.gray):S.gray }}>{row.rent>0?(row.net>=0?"":"-")+gbp(Math.abs(row.net)):"--"}</span>
  </div>
     </div>
   ))}
@@ -1446,8 +1467,8 @@ function FinCharts({ tenants, jobs, rp, outgoings }) {
   return (
     <div>
  <div style={{ ...card, ...cardPad }}>
- <div style={{ fontSize:13, fontWeight:600, marginBottom:4 }}>Rent vs Mortgage — {MSHORT[CMO]}</div>
- <div style={{ display:"flex", gap:12, marginBottom:10 }}>
+ <div style={{ ...S13, ...F6, marginBottom:4 }}>Rent vs Mortgage — {MSHORT[CMO]}</div>
+ <div style={{ display:"flex", gap:12, ...MB10 }}>
  <div style={{ ...FC, gap:4 }}><div style={{ width:10, height:10, borderRadius:2, background:"#22c55e" }}/><span style={{ ...G11 }}>Rent collected</span></div>
  <div style={{ ...FC, gap:4 }}><div style={{ width:10, height:10, borderRadius:2, background:"#ef4444" }}/><span style={{ ...G11 }}>Mortgage</span></div>
  </div>
@@ -1458,20 +1479,20 @@ function FinCharts({ tenants, jobs, rp, outgoings }) {
  <div style={{ width:14, background:"#22c55e", borderRadius:"3px 3px 0 0", height: Math.max(2, (d.rent/maxProp)*(barH-20)) + "px" }} title={gbp(d.rent)} />
  <div style={{ width:14, background:"#ef4444", borderRadius:"3px 3px 0 0", height: Math.max(2, (d.mtg/maxProp)*(barH-20)) + "px" }} title={gbp(d.mtg)} />
     </div>
-    <div style={{ fontSize:9, color:S.gray, textAlign:"center", lineHeight:1.2 }}>{d.name}</div>
+    <div style={{ fontSize:9, color:S.gray, ...TC, lineHeight:1.2 }}>{d.name}</div>
   </div>
  ))}
  </div>
  </div>
  <div style={{ ...card, ...cardPad }}>
- <div style={{ fontSize:13, fontWeight:600, marginBottom:12 }}>Net Profit — Last 6 Months</div>
+ <div style={{ ...S13, ...F6, marginBottom:12 }}>Net Profit — Last 6 Months</div>
  <div style={{ display:"flex", alignItems:"flex-end", gap:6, height:barH }}>
  {netTrend.map((d, i) => {
   const h = Math.max(3, (Math.abs(d.net)/maxNet)*(barH-24));
   const isPos = d.net >= 0;
   return (
     <div key={i} style={{ flex:1, display:"flex", flexDirection:"column", alignItems:"center", gap:2 }}>
- <div style={{ fontSize:9, color:isPos?S.green:S.red, fontWeight:600 }}>{d.net===0?"":isPos?"+"+gbp(d.net):"-"+gbp(Math.abs(d.net))}</div>
+ <div style={{ fontSize:9, color:isPos?S.green:S.red, ...F6 }}>{d.net===0?"":isPos?"+"+gbp(d.net):"-"+gbp(Math.abs(d.net))}</div>
  <div style={{ width:"100%", background:isPos?"#22c55e":"#ef4444", borderRadius:"3px 3px 0 0", height:h+"px" }} />
  <div style={{ fontSize:10, color:S.gray }}>{d.label}</div>
     </div>
@@ -1481,16 +1502,16 @@ function FinCharts({ tenants, jobs, rp, outgoings }) {
  <div style={{ ...G11, marginTop:8 }}>Net = rent collected minus mortgages, job costs and bills</div>
  </div>
  <div style={{ ...card, ...cardPad }}>
- <div style={{ fontSize:13, fontWeight:600, marginBottom:4 }}>Outgoings by Category — {MSHORT[CMO]}</div>
+ <div style={{ ...S13, ...F6, marginBottom:4 }}>Outgoings by Category — {MSHORT[CMO]}</div>
  {outEntries.length === 0 ? (
- <div style={{ fontSize:12, color:S.gray, padding:"16px 0" }}>No outgoings entered for this month yet</div>
+ <div style={{ ...S12, color:S.gray, padding:"16px 0" }}>No outgoings entered for this month yet</div>
  ) : (
  <div>
   {outEntries.map(([label, amt], i) => (
     <div key={label} style={{ marginBottom:8 }}>
  <div style={{ ...FB, marginBottom:3 }}>
- <span style={{ fontSize:12 }}>{label}</span>
- <span style={{ fontSize:12, fontWeight:600, color:S.red }}>{gbp(amt)}</span>
+ <span style={{ ...S12 }}>{label}</span>
+ <span style={{ ...S12, ...F6, color:S.red }}>{gbp(amt)}</span>
  </div>
  <div style={{ height:6, background:S.light, borderRadius:99, overflow:"hidden" }}>
  <div style={{ height:"100%", background:barColors[i%barColors.length], borderRadius:99, width:Math.round(amt/maxOut*100)+"%" }} />
@@ -1536,11 +1557,11 @@ function OutgoingsPage({ outgoings, addOutgoing, deleteOutgoing, fixedOutgoings,
   return (
     <div>
  <div style={{ ...FC, gap:8, marginBottom:14, flexWrap:"wrap" }}>
- <button onClick={() => { const d = new Date(selYr, selMo-1, 1); setSelYr(d.getFullYear()); setSelMo(d.getMonth()); }} style={{ padding:"6px 12px", borderRadius:9, border:"1px solid #e2e8f0", background:"#fff", cursor:"pointer", fontSize:14 }}>‹</button>
- <span style={{ fontSize:14, fontWeight:600 }}>{MFULL[selMo]} {selYr}</span>
- <button onClick={() => { const d = new Date(selYr, selMo+1, 1); if(d <= new Date(CYR, CMO, 1)){ setSelYr(d.getFullYear()); setSelMo(d.getMonth()); }}} style={{ padding:"6px 12px", borderRadius:9, border:"1px solid #e2e8f0", background:"#fff", cursor:"pointer", fontSize:14 }}>›</button>
+ <button onClick={() => { const d = new Date(selYr, selMo-1, 1); setSelYr(d.getFullYear()); setSelMo(d.getMonth()); }} style={{ padding:"6px 12px", borderRadius:9, ...BD, ...BW, ...CP, fontSize:14 }}>‹</button>
+ <span style={{ fontSize:14, ...F6 }}>{MFULL[selMo]} {selYr}</span>
+ <button onClick={() => { const d = new Date(selYr, selMo+1, 1); if(d <= new Date(CYR, CMO, 1)){ setSelYr(d.getFullYear()); setSelMo(d.getMonth()); }}} style={{ padding:"6px 12px", borderRadius:9, ...BD, ...BW, ...CP, fontSize:14 }}>›</button>
  </div>
- <div style={{ background:S.abg, borderRadius:11, padding:"10px 14px", marginBottom:14, fontSize:12, color:S.atx }}>
+ <div style={{ background:S.abg, borderRadius:11, padding:"10px 14px", marginBottom:14, ...S12, color:S.atx }}>
  💡 Tick "Mark as fixed" when adding a regular bill — it will automatically appear as a green suggestion every month. Amounts can still be edited each time.
  </div>
  <div style={grid}>
@@ -1559,33 +1580,33 @@ function OutgoingsPage({ outgoings, addOutgoing, deleteOutgoing, fixedOutgoings,
   <div key={p.id} style={card}>
     <div style={{ padding:"11px 14px", background:"#f8fafc", borderBottom:"1px solid #f1f5f9", ...RW }}>
  <div>
- <div style={{ fontSize:13, fontWeight:600 }}>{p.n}</div>
+ <div style={{ ...S13, ...F6 }}>{p.n}</div>
  <div style={{ ...G11 }}>{p.town} · {p.ty}</div>
  </div>
- <div style={{ textAlign:"right" }}>
- <div style={{ fontSize:13, fontWeight:700, color:total>0?S.red:S.gray }}>{gbp(total)}</div>
+ <div style={{ ...TR }}>
+ <div style={{ ...S13, ...F7, color:total>0?S.red:S.gray }}>{gbp(total)}</div>
  <div style={{ fontSize:10, color:S.gray }}>total this month</div>
  </div>
     </div>
     <div style={{ padding:"7px 14px", borderBottom:"1px solid #f1f5f9", ...RW, background:"#f8fafc" }}>
  <span style={{ ...G11 }}>💳 Mortgage</span>
- <span style={{ fontSize:11, fontWeight:600, color:S.mid }}>{gbp(p.mm)}/mo</span>
+ <span style={{ fontSize:11, ...F6, color:S.mid }}>{gbp(p.mm)}/mo</span>
     </div>
     {pJobs.map(j => (
  <div key={j.id} style={{ padding:"9px 14px", borderBottom:"1px solid #f8fafc", ...RW, background:"#fffbeb" }}>
  <div style={{ ...FC, gap:6 }}>
- <span style={{ fontSize:12 }}>🔧</span>
- <span style={{ fontSize:12, color:S.atx }}>{j.desc}</span>
+ <span style={{ ...S12 }}>🔧</span>
+ <span style={{ ...S12, color:S.atx }}>{j.desc}</span>
  </div>
- <span style={{ fontSize:12, fontWeight:700, color:S.amber }}>{gbp(j.cost)}</span>
+ <span style={{ ...S12, ...F7, color:S.amber }}>{gbp(j.cost)}</span>
  </div>
     ))}
     {autoSug.length > 0 && (
  <div style={{ padding:"10px 14px", borderBottom:"1px solid #f8fafc", background:"#f0fdf4" }}>
- <div style={{ fontSize:11, color:S.gtx, fontWeight:600, marginBottom:6 }}>📌 Fixed bills — tap to add:</div>
+ <div style={{ fontSize:11, color:S.gtx, ...F6, marginBottom:6 }}>📌 Fixed bills — tap to add:</div>
  <div style={{ display:"flex", flexWrap:"wrap", gap:6 }}>
  {autoSug.map((f2, i) => (
-   <button key={i} onClick={() => repeatItem(p.id, f2)} style={{ background:"#fff", border:"1px solid #bbf7d0", borderRadius:8, padding:"4px 10px", fontSize:12, cursor:"pointer", fontFamily:"system-ui", color:S.gtx, fontWeight:600 }}>
+   <button key={i} onClick={() => repeatItem(p.id, f2)} style={{ ...BW, border:"1px solid #bbf7d0", borderRadius:8, padding:"4px 10px", ...S12, ...CP, ...FF, color:S.gtx, ...F6 }}>
      + {f2.label} ({gbp(f2.amount)})
    </button>
  ))}
@@ -1594,10 +1615,10 @@ function OutgoingsPage({ outgoings, addOutgoing, deleteOutgoing, fixedOutgoings,
     )}
     {unrepeat.length > 0 && (
  <div style={{ padding:"10px 14px", borderBottom:"1px solid #f8fafc", background:"#fffbeb" }}>
- <div style={{ fontSize:11, color:S.atx, fontWeight:600, marginBottom:6 }}>From last month — tap to add:</div>
+ <div style={{ fontSize:11, color:S.atx, ...F6, marginBottom:6 }}>From last month — tap to add:</div>
  <div style={{ display:"flex", flexWrap:"wrap", gap:6 }}>
  {unrepeat.map((po, i) => (
-   <button key={i} onClick={() => repeatItem(p.id, po)} style={{ background:"#fff", border:"1px solid #fde68a", borderRadius:8, padding:"4px 10px", fontSize:12, cursor:"pointer", fontFamily:"system-ui", color:S.atx, fontWeight:600 }}>
+   <button key={i} onClick={() => repeatItem(p.id, po)} style={{ ...BW, border:"1px solid #fde68a", borderRadius:8, padding:"4px 10px", ...S12, ...CP, ...FF, color:S.atx, ...F6 }}>
      + {po.label} ({gbp(po.amount)})
    </button>
  ))}
@@ -1616,19 +1637,19 @@ function OutgoingsPage({ outgoings, addOutgoing, deleteOutgoing, fixedOutgoings,
   addOutgoing(p.id, selYr, selMo, { label:editForm.label, amount:parseFloat(editForm.amount)||0 });
   setEditingItem(null);
      }} style={{flex:1,padding:10,marginBottom:0}}>Save</Btn>
-     <button onClick={()=>setEditingItem(null)} style={{padding:"10px 14px",borderRadius:10,background:S.light,border:"none",cursor:"pointer",fontFamily:"system-ui",fontWeight:600}}>Cancel</button>
+     <button onClick={()=>setEditingItem(null)} style={{padding:"10px 14px",...R10,background:S.light,...BN,...CP,...FF,...F6}}>Cancel</button>
    </div>
  </div>
  ):(
  <div style={{...RW}}>
    <div>
-     <span style={{fontSize:13}}>{o.label}</span>
-     {fixedItems(p.id).find(f2=>f2.label===o.label) && <span style={{fontSize:10,color:S.gtx,fontWeight:600,marginLeft:6}}>📌 fixed</span>}
+     <span style={{...S13}}>{o.label}</span>
+     {fixedItems(p.id).find(f2=>f2.label===o.label) && <span style={{fontSize:10,color:S.gtx,...F6,marginLeft:6}}>📌 fixed</span>}
    </div>
    <div style={{...FC,gap:8}}>
-     <span style={{fontSize:13,fontWeight:600,color:S.red}}>{gbp(o.amount)}</span>
-     <button onClick={()=>{setEditingItem(o.id);setEditForm({label:o.label,amount:String(o.amount)});}} style={{width:28,height:28,borderRadius:"50%",border:"none",cursor:"pointer",background:S.light,fontSize:12}}>✏️</button>
-     <button onClick={()=>deleteOutgoing(p.id,selYr,selMo,o.id)} style={{width:28,height:28,borderRadius:"50%",border:"none",cursor:"pointer",background:S.rbg,fontSize:12}}>✕</button>
+     <span style={{...S13,...F6,color:S.red}}>{gbp(o.amount)}</span>
+     <button onClick={()=>{setEditingItem(o.id);setEditForm({label:o.label,amount:String(o.amount)});}} style={{width:28,height:28,borderRadius:"50%",...BN,...CP,background:S.light,...S12}}>✏️</button>
+     <button onClick={()=>deleteOutgoing(p.id,selYr,selMo,o.id)} style={{width:28,height:28,borderRadius:"50%",...BN,...CP,background:S.rbg,...S12}}>✕</button>
    </div>
  </div>
  )}
@@ -1639,17 +1660,17 @@ function OutgoingsPage({ outgoings, addOutgoing, deleteOutgoing, fixedOutgoings,
  <div>
  <Inp placeholder={isHMO ? "e.g. Energy, Water, Council Tax..." : "e.g. Insurance..."} value={form.label} onChange={e => setForm(f => ({ ...f, label:e.target.value }))} />
  <Inp placeholder="Amount (£)" type="number" value={form.amount} onChange={e => setForm(f => ({ ...f, amount:e.target.value }))} />
- <label style={{ ...FC, gap:8, fontSize:12, color:S.dark, marginBottom:10, cursor:"pointer" }}>
+ <label style={{ ...FC, gap:8, ...S12, color:S.dark, ...MB10, ...CP }}>
    <input type="checkbox" checked={form.fixed} onChange={e=>setForm(f=>({...f,fixed:e.target.checked}))} />
    Mark as fixed bill (auto-suggest every month)
  </label>
  <div style={{ display:"flex", gap:8 }}>
    <Btn onClick={() => submit(p.id)} style={{ flex:1, padding:10, marginBottom:0 }}>Add</Btn>
-   <button onClick={() => { setAddingTo(null); setForm({ label:"", amount:"", fixed:false }); }} style={{ padding:"10px 14px", borderRadius:10, background:S.light, border:"none", cursor:"pointer", fontFamily:"system-ui", fontWeight:600 }}>Cancel</button>
+   <button onClick={() => { setAddingTo(null); setForm({ label:"", amount:"", fixed:false }); }} style={{ padding:"10px 14px", ...R10, background:S.light, ...BN, ...CP, ...FF, ...F6 }}>Cancel</button>
  </div>
  </div>
  ) : (
- <button onClick={() => setAddingTo(p.id)} style={{ fontSize:12, color:S.mid, fontWeight:600, background:"none", border:"none", cursor:"pointer", ...FC, gap:4, padding:"4px 0", fontFamily:"system-ui" }}>+ Add outgoing</button>
+ <button onClick={() => setAddingTo(p.id)} style={{ ...S12, color:S.mid, ...F6, background:"none", ...BN, ...CP, ...FC, gap:4, padding:"4px 0", ...FF }}>+ Add outgoing</button>
  )}
     </div>
   </div>
@@ -1675,9 +1696,9 @@ function ContractorsPage({ contractors, addContractor, deleteContractor, wide })
  <Btn onClick={() => setShow(true)}>+ Add Contractor</Btn>
  {show && (
  <div style={{ ...card, ...cardPad }}>
- <div style={{ ...FB, marginBottom:10 }}>
-  <span style={{ fontWeight:600 }}>New Contractor</span>
-  <button onClick={() => setShow(false)} style={{ background:"none", border:"none", fontSize:18, cursor:"pointer" }}>✕</button>
+ <div style={{ ...FB, ...MB10 }}>
+  <span style={{ ...F6 }}>New Contractor</span>
+  <button onClick={() => setShow(false)} style={{ background:"none", ...BN, fontSize:18, ...CP }}>✕</button>
  </div>
  <Inp placeholder="Name *" value={f.name} onChange={e => setF(x => ({ ...x, name:e.target.value }))} />
  <Sel value={f.trade} onChange={e => setF(x => ({ ...x, trade:e.target.value }))}>
@@ -1688,24 +1709,24 @@ function ContractorsPage({ contractors, addContractor, deleteContractor, wide })
  <Inp placeholder="Notes" value={f.notes} onChange={e => setF(x => ({ ...x, notes:e.target.value }))} />
  <div style={{ display:"flex", gap:8 }}>
   <Btn onClick={submit} style={{ flex:1, padding:10, marginBottom:0 }}>Save</Btn>
-  <button onClick={() => setShow(false)} style={{ padding:"10px 14px", borderRadius:10, background:S.light, border:"none", cursor:"pointer", fontFamily:"system-ui", fontWeight:600 }}>Cancel</button>
+  <button onClick={() => setShow(false)} style={{ padding:"10px 14px", ...R10, background:S.light, ...BN, ...CP, ...FF, ...F6 }}>Cancel</button>
  </div>
  </div>
  )}
- {!contractors.length && !show && <div style={{ textAlign:"center", padding:"50px 0", color:S.gray }}><div style={{ fontSize:36, marginBottom:10 }}>📞</div><div>No contractors saved yet</div></div>}
+ {!contractors.length && !show && <div style={{ ...TC, padding:"50px 0", color:S.gray }}><div style={{ fontSize:36, ...MB10 }}>📞</div><div>No contractors saved yet</div></div>}
  <div style={grid}>
  {contractors.map(c => (
  <div key={c.id} style={{ ...card, ...cardPad }}>
   <div style={{ ...FB, alignItems:"flex-start" }}>
     <div style={{ flex:1 }}>
  <div style={{ ...FC, gap:8, marginBottom:4 }}>
- <span style={{ fontSize:13, fontWeight:600 }}>{c.name}</span>
+ <span style={{ ...S13, ...F6 }}>{c.name}</span>
  {c.trade && <Badge color={TC[c.trade]||"gray"}>{c.trade}</Badge>}
  </div>
- <a href={"tel:"+c.phone} style={{ color:S.blue, fontWeight:600, fontSize:13 }}>{c.phone}</a>
+ <a href={"tel:"+c.phone} style={{ color:S.blue, ...F6, ...S13 }}>{c.phone}</a>
  {c.notes && <div style={{ ...G11, marginTop:4 }}>{c.notes}</div>}
     </div>
-    <button onClick={() => deleteContractor(c.id)} style={{ width:32, height:32, borderRadius:"50%", border:"none", cursor:"pointer", background:S.rbg, fontSize:13, marginLeft:8 }}>✕</button>
+    <button onClick={() => deleteContractor(c.id)} style={{ width:32, height:32, borderRadius:"50%", ...BN, ...CP, background:S.rbg, ...S13, marginLeft:8 }}>✕</button>
   </div>
  </div>
  ))}
@@ -1731,56 +1752,56 @@ function DealsPage({ deals, addDeal, updateDeal, deleteDeal, wide }) {
  <Btn onClick={() => setShow(true)}>+ Add Deal</Btn>
  {show && (
  <div style={{ ...card, ...cardPad }}>
- <div style={{ ...FB, marginBottom:10 }}>
-  <span style={{ fontWeight:600 }}>New Deal</span>
-  <button onClick={() => setShow(false)} style={{ background:"none", border:"none", fontSize:18, cursor:"pointer" }}>✕</button>
+ <div style={{ ...FB, ...MB10 }}>
+  <span style={{ ...F6 }}>New Deal</span>
+  <button onClick={() => setShow(false)} style={{ background:"none", ...BN, fontSize:18, ...CP }}>✕</button>
  </div>
  <Inp placeholder="Address *" value={f.addr} onChange={e => setF(x => ({ ...x, addr:e.target.value }))} />
  <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:8 }}>
   <Sel value={f.type} onChange={e => setF(x => ({ ...x, type:e.target.value }))} style={{ marginBottom:0 }}><option>BTL</option><option>HMO</option></Sel>
   <Sel value={f.status} onChange={e => setF(x => ({ ...x, status:e.target.value }))} style={{ marginBottom:0 }}>{DEALST.map(s => <option key={s}>{s}</option>)}</Sel>
  </div>
- <textarea placeholder="Notes..." value={f.notes} onChange={e => setF(x => ({ ...x, notes:e.target.value }))} style={{ width:"100%", border:"1px solid #e2e8f0", borderRadius:10, padding:"10px 12px", fontSize:14, fontFamily:"system-ui", resize:"none", height:60, marginTop:8, outline:"none" }} />
+ <textarea placeholder="Notes..." value={f.notes} onChange={e => setF(x => ({ ...x, notes:e.target.value }))} style={{ width:"100%", ...BD, ...R10, padding:"10px 12px", fontSize:14, ...FF, resize:"none", height:60, marginTop:8, outline:"none" }} />
  <div style={{ display:"flex", gap:8, marginTop:8 }}>
   <Btn onClick={submit} style={{ flex:1, padding:10, marginBottom:0 }}>Add to Pipeline</Btn>
-  <button onClick={() => setShow(false)} style={{ padding:"10px 14px", borderRadius:10, background:S.light, border:"none", cursor:"pointer", fontFamily:"system-ui", fontWeight:600 }}>Cancel</button>
+  <button onClick={() => setShow(false)} style={{ padding:"10px 14px", ...R10, background:S.light, ...BN, ...CP, ...FF, ...F6 }}>Cancel</button>
  </div>
  </div>
  )}
- {!deals.length && !show && <div style={{ textAlign:"center", padding:"50px 0", color:S.gray }}><div style={{ fontSize:36, marginBottom:10 }}>🎯</div><div>No deals tracked yet</div></div>}
+ {!deals.length && !show && <div style={{ ...TC, padding:"50px 0", color:S.gray }}><div style={{ fontSize:36, ...MB10 }}>🎯</div><div>No deals tracked yet</div></div>}
  <div style={grid}>
  {active.map(d => (
  <div key={d.id} style={{ ...card, ...cardPad }}>
   <div style={{ ...FB, alignItems:"flex-start", marginBottom:8 }}>
     <div style={{ flex:1 }}>
- <div style={{ fontSize:13, fontWeight:600 }}>{d.addr}</div>
+ <div style={{ ...S13, ...F6 }}>{d.addr}</div>
  <div style={{ ...G11 }}>{d.type}</div>
     </div>
     <div style={{ ...FC, gap:8 }}>
  <Badge color={DC[d.status]||"gray"}>{d.status}</Badge>
- <button onClick={() => deleteDeal(d.id)} style={{ width:28, height:28, borderRadius:"50%", border:"none", cursor:"pointer", background:S.rbg, fontSize:12 }}>✕</button>
+ <button onClick={() => deleteDeal(d.id)} style={{ width:28, height:28, borderRadius:"50%", ...BN, ...CP, background:S.rbg, ...S12 }}>✕</button>
     </div>
   </div>
   {d.notes && <div style={{ ...G11, marginBottom:8 }}>{d.notes}</div>}
   <div style={{ display:"flex", gap:6, flexWrap:"wrap" }}>
     {DEALST.filter(s => s !== d.status && s !== "Dead").map(s => (
- <button key={s} onClick={() => updateDeal(d.id, { status:s })} style={{ background:S.light, color:S.mid, padding:"4px 10px", borderRadius:8, border:"none", cursor:"pointer", fontSize:12, fontWeight:600, fontFamily:"system-ui" }}>{s}</button>
+ <button key={s} onClick={() => updateDeal(d.id, { status:s })} style={{ background:S.light, color:S.mid, padding:"4px 10px", borderRadius:8, ...BN, ...CP, ...S12, ...F6, ...FF }}>{s}</button>
     ))}
-    <button onClick={() => updateDeal(d.id, { status:"Dead" })} style={{ background:S.rbg, color:S.rtx, padding:"4px 10px", borderRadius:8, border:"none", cursor:"pointer", fontSize:12, fontWeight:600, fontFamily:"system-ui" }}>Dead</button>
+    <button onClick={() => updateDeal(d.id, { status:"Dead" })} style={{ background:S.rbg, color:S.rtx, padding:"4px 10px", borderRadius:8, ...BN, ...CP, ...S12, ...F6, ...FF }}>Dead</button>
   </div>
  </div>
  ))}
  </div>
  {arch.length > 0 && (
  <>
- <div style={{ fontSize:11, fontWeight:700, color:S.gray, textTransform:"uppercase", letterSpacing:".5px", margin:"8px 0" }}>Archive ({arch.length})</div>
+ <div style={{ fontSize:11, ...F7, color:S.gray, textTransform:"uppercase", letterSpacing:".5px", margin:"8px 0" }}>Archive ({arch.length})</div>
  {arch.map(d => (
   <div key={d.id} style={{ ...card, ...cardPad, opacity:.6 }}>
     <div style={{ ...RW }}>
- <div><div style={{ fontSize:13, fontWeight:600 }}>{d.addr}</div><div style={{ ...G11 }}>{d.type}</div></div>
+ <div><div style={{ ...S13, ...F6 }}>{d.addr}</div><div style={{ ...G11 }}>{d.type}</div></div>
  <div style={{ ...FC, gap:8 }}>
  <Badge color={DC[d.status]||"gray"}>{d.status}</Badge>
- <button onClick={() => deleteDeal(d.id)} style={{ width:28, height:28, borderRadius:"50%", border:"none", cursor:"pointer", background:S.rbg, fontSize:12 }}>✕</button>
+ <button onClick={() => deleteDeal(d.id)} style={{ width:28, height:28, borderRadius:"50%", ...BN, ...CP, background:S.rbg, ...S12 }}>✕</button>
  </div>
     </div>
   </div>
@@ -1794,21 +1815,21 @@ function GrowthProjector({tv}) {
   const [gr, setGr] = useState(5);
   const years = [1, 3, 5, 10];
   return (
-    <div style={{background:"#fff", borderRadius:14, border:"1px solid #e2e8f0", padding:14, marginBottom:12}}>
- <div style={{fontSize:13, fontWeight:600, marginBottom:8}}>Portfolio Growth Projector</div>
- <div style={{...FC, gap:10, marginBottom:10}}>
+    <div style={{...BW, borderRadius:14, ...BD, padding:14, marginBottom:12}}>
+ <div style={{...S13, ...F6, marginBottom:8}}>Portfolio Growth Projector</div>
+ <div style={{...FC, gap:10, ...MB10}}>
  <input type="range" min="1" max="10" step="0.5" value={gr}
  onChange={function(e){setGr(parseFloat(e.target.value));}}
  style={{flex:1}} />
- <span style={{fontSize:16, fontWeight:700, color:"#16a34a", minWidth:38}}>{gr}%</span>
+ <span style={{fontSize:16, ...F7, color:"#16a34a", minWidth:38}}>{gr}%</span>
  </div>
  <div style={{display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:8}}>
  {years.map(function(yr) {
  var p = Math.round(tv * Math.pow(1 + gr/100, yr));
  return (
-  <div key={yr} style={{background:"#f0fdf4", borderRadius:10, padding:10, textAlign:"center"}}>
+  <div key={yr} style={{background:"#f0fdf4", ...R10, padding:10, ...TC}}>
     <div style={{fontSize:10, color:"#94a3b8"}}>{yr}yr</div>
-    <div style={{fontSize:13, fontWeight:700, color:"#16a34a"}}>{gbp(p)}</div>
+    <div style={{...S13, ...F7, color:"#16a34a"}}>{gbp(p)}</div>
     <div style={{fontSize:10, color:"#15803d"}}>+{gbp(p-tv)}</div>
   </div>
  );
@@ -1842,7 +1863,7 @@ function GrowthPage({ tenants, propPurchase, setPropPurchase }) {
   const gy  = ((tr*12)/tv*100).toFixed(1);
   return (
     <div>
- <div style={{ background:S.abg, borderRadius:11, padding:"10px 14px", marginBottom:12, fontSize:12, color:S.atx }}>
+ <div style={{ background:S.abg, borderRadius:11, padding:"10px 14px", marginBottom:12, ...S12, color:S.atx }}>
  💡 Tap ✏️ on any property to update its current value or remaining mortgage balance. This lets you track your equity growth over time.
  </div>
  <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10, marginBottom:12 }}>
@@ -1854,16 +1875,16 @@ function GrowthPage({ tenants, propPurchase, setPropPurchase }) {
  {l:"Annual Rent", v:gbp(tr*12), s:"Gross before costs", g:true},
  {l:"Avg LTV", v:ltv+"%", s:"Across portfolio", g:ltv<60},
  ].map((k,i) => (
- <div key={i} style={{ background:"#fff", borderRadius:14, border:"1px solid #e2e8f0", padding:12 }}>
+ <div key={i} style={{ ...BW, borderRadius:14, ...BD, padding:12 }}>
   <div style={{ ...G11, marginBottom:3 }}>{k.l}</div>
-  <div style={{ fontSize:18, fontWeight:700, color:k.g?S.green:S.dark }}>{k.v}</div>
+  <div style={{ fontSize:18, ...F7, color:k.g?S.green:S.dark }}>{k.v}</div>
   <div style={{ ...G11, marginTop:2 }}>{k.s}</div>
  </div>
  ))}
  </div>
  <div style={{ ...card, ...cardPad, marginBottom:12 }}>
- <div style={{ fontSize:13, fontWeight:600, marginBottom:4 }}>Equity vs Debt — per property</div>
- <div style={{ display:"flex", gap:12, marginBottom:10 }}>
+ <div style={{ ...S13, ...F6, marginBottom:4 }}>Equity vs Debt — per property</div>
+ <div style={{ display:"flex", gap:12, ...MB10 }}>
  <div style={{ ...FC, gap:4 }}><div style={{ width:10, height:10, borderRadius:2, background:"#22c55e" }}/><span style={{ ...G11 }}>Equity</span></div>
  <div style={{ ...FC, gap:4 }}><div style={{ width:10, height:10, borderRadius:2, background:"#ef4444" }}/><span style={{ ...G11 }}>Mortgage</span></div>
  </div>
@@ -1874,7 +1895,7 @@ function GrowthPage({ tenants, propPurchase, setPropPurchase }) {
   var eqH=Math.max(4, Math.round((eq2/maxV)*120));
   var mtgH=Math.max(4, Math.round((mtg2/maxV)*120));
   return (
-    <div key={p.id} style={{ flex:1, textAlign:"center" }}>
+    <div key={p.id} style={{ flex:1, ...TC }}>
  <div style={{ display:"flex", justifyContent:"center", alignItems:"flex-end", gap:2, height:120, marginBottom:4 }}>
  <div style={{ width:12, minWidth:12, background:"#22c55e", borderRadius:"3px 3px 0 0", height:eqH }} />
  <div style={{ width:12, minWidth:12, background:"#ef4444", borderRadius:"3px 3px 0 0", height:mtgH }} />
@@ -1901,7 +1922,7 @@ function GrowthPage({ tenants, propPurchase, setPropPurchase }) {
  <div key={p.id} style={card}>
   <div style={{ padding:"11px 14px", background:"#f8fafc", borderBottom:"1px solid #f1f5f9", ...RW }}>
     <div>
- <div style={{ fontSize:13, fontWeight:600 }}>{p.n}</div>
+ <div style={{ ...S13, ...F6 }}>{p.n}</div>
  <div style={{ ...G11 }}>{p.town} · {p.ty}</div>
     </div>
     <button onClick={() => {
@@ -1909,7 +1930,7 @@ function GrowthPage({ tenants, propPurchase, setPropPurchase }) {
  setEf({ v:String(v), mtg:String(mtg) });
  setPf({ price:pp.price||"", costs:pp.costs||"", reno:pp.reno||"" });
  setEditTab("values");
-    }} style={{ background:S.light, border:"none", borderRadius:8, padding:"4px 10px", fontSize:12, cursor:"pointer", fontWeight:600, fontFamily:"system-ui" }}>
+    }} style={{ background:S.light, ...BN, borderRadius:8, padding:"4px 10px", ...S12, ...CP, ...F6, ...FF }}>
  {isEd ? "Cancel" : "✏️ Edit"}
     </button>
   </div>
@@ -1917,7 +1938,7 @@ function GrowthPage({ tenants, propPurchase, setPropPurchase }) {
     <div style={{ padding:14 }}>
  <div style={{ display:"flex", gap:8, marginBottom:12 }}>
  {["values","roi"].map(t2 => (
- <button key={t2} onClick={()=>setEditTab(t2)} style={{ padding:"6px 12px", borderRadius:8, border:"1px solid #e2e8f0", background:editTab===t2?S.dark:"#fff", color:editTab===t2?"#fff":S.dark, fontSize:12, fontWeight:600, cursor:"pointer", fontFamily:"system-ui" }}>
+ <button key={t2} onClick={()=>setEditTab(t2)} style={{ padding:"6px 12px", borderRadius:8, ...BD, background:editTab===t2?S.dark:"#fff", color:editTab===t2?"#fff":S.dark, ...S12, ...F6, ...CP, ...FF }}>
    {t2==="values"?"Current Values":"Purchase & ROI"}
  </button>
  ))}
@@ -1946,7 +1967,7 @@ function GrowthPage({ tenants, propPurchase, setPropPurchase }) {
  {[["Value",gbp(v)],["Equity",gbp(propEq)],["LTV",propLtv+"%"],["Yield",propYield+"%"]].map(([l,val],i) => (
  <div key={l} style={{ padding:"10px 12px", borderRight:i<3?"1px solid #f8fafc":"none" }}>
    <div style={{ fontSize:10, color:S.gray }}>{l}</div>
-   <div style={{ fontSize:13, fontWeight:700, color:l==="Equity"?S.green:l==="LTV"?(propLtv>75?S.red:propLtv>60?S.amber:S.green):l==="Yield"?S.green:S.dark }}>{val}</div>
+   <div style={{ ...S13, ...F7, color:l==="Equity"?S.green:l==="LTV"?(propLtv>75?S.red:propLtv>60?S.amber:S.green):l==="Yield"?S.green:S.dark }}>{val}</div>
  </div>
  ))}
  </div>
@@ -1954,21 +1975,21 @@ function GrowthPage({ tenants, propPurchase, setPropPurchase }) {
  <div style={{ padding:"10px 14px", borderTop:"1px solid #f8fafc", display:"grid", gridTemplateColumns:"1fr 1fr 1fr", gap:0 }}>
  <div style={{ paddingRight:12, borderRight:"1px solid #f8fafc" }}>
    <div style={{ fontSize:10, color:S.gray }}>Total invested</div>
-   <div style={{ fontSize:12, fontWeight:700 }}>{gbp(totalIn)}</div>
+   <div style={{ ...S12, ...F7 }}>{gbp(totalIn)}</div>
  </div>
  <div style={{ padding:"0 12px", borderRight:"1px solid #f8fafc" }}>
    <div style={{ fontSize:10, color:S.gray }}>Capital gain</div>
-   <div style={{ fontSize:12, fontWeight:700, color:capGain>0?S.green:S.red }}>{capGain>=0?"+":""}{gbp(capGain)}</div>
+   <div style={{ ...S12, ...F7, color:capGain>0?S.green:S.red }}>{capGain>=0?"+":""}{gbp(capGain)}</div>
  </div>
  <div style={{ paddingLeft:12 }}>
    <div style={{ fontSize:10, color:S.gray }}>ROI</div>
-   <div style={{ fontSize:12, fontWeight:700, color:parseFloat(roi)>0?S.green:S.red }}>{roi}%</div>
+   <div style={{ ...S12, ...F7, color:parseFloat(roi)>0?S.green:S.red }}>{roi}%</div>
  </div>
  </div>
  )}
  {roi === null && (
  <div style={{ padding:"8px 14px", borderTop:"1px solid #f8fafc" }}>
- <button onClick={() => { setEditing(p.id); setEditTab("roi"); setPf({ price:"", costs:"", reno:"" }); setEf({ v:String(v), mtg:String(mtg) }); }} style={{ fontSize:11, color:S.blue, fontWeight:600, background:"none", border:"none", cursor:"pointer", fontFamily:"system-ui" }}>+ Add purchase price to see ROI</button>
+ <button onClick={() => { setEditing(p.id); setEditTab("roi"); setPf({ price:"", costs:"", reno:"" }); setEf({ v:String(v), mtg:String(mtg) }); }} style={{ fontSize:11, color:S.blue, ...F6, background:"none", ...BN, ...CP, ...FF }}>+ Add purchase price to see ROI</button>
  </div>
  )}
     </div>
@@ -2026,12 +2047,12 @@ function TaxPage({ tenants, jobs, rp, outgoings, wide }) {
   return (
     <div>
  <div style={{ ...FC, gap:8, marginBottom:14 }}>
- <span style={{ fontSize:13, fontWeight:600 }}>Tax year</span>
+ <span style={{ ...S13, ...F6 }}>Tax year</span>
  <Sel value={selTaxYr} onChange={e => setSelTaxYr(parseInt(e.target.value))} style={{ marginBottom:0, width:"auto" }}>
  {[currentTaxYr-1, currentTaxYr].map(y => <option key={y} value={y}>{y}/{y+1}</option>)}
  </Sel>
  </div>
- <div style={{ background:S.abg, borderRadius:11, padding:"10px 14px", marginBottom:14, fontSize:12, color:S.atx, lineHeight:1.6 }}>
+ <div style={{ background:S.abg, borderRadius:11, padding:"10px 14px", marginBottom:14, ...S12, color:S.atx, lineHeight:1.6 }}>
  ⚠️ This is an <strong>estimate only</strong> based on data in the app. Always verify with your accountant before submitting your self assessment.
  </div>
  <div style={{ display:"grid", gridTemplateColumns:wide?"1fr 1fr 1fr":"1fr 1fr", gap:10, marginBottom:12 }}>
@@ -2043,42 +2064,42 @@ function TaxPage({ tenants, jobs, rp, outgoings, wide }) {
  {l:"Net Profit", v:gbp(netProfit), s:"Before tax", g:netProfit>0},
  {l:"Est. Tax (20%)", v:gbp(taxEstimate), s:"After mortgage interest credit",g:false},
  ].map((k,i) => (
- <div key={i} style={{ background:"#fff", borderRadius:14, border:"1px solid #e2e8f0", padding:12 }}>
+ <div key={i} style={{ ...BW, borderRadius:14, ...BD, padding:12 }}>
   <div style={{ ...G11, marginBottom:3 }}>{k.l}</div>
-  <div style={{ fontSize:18, fontWeight:700, color:k.g?S.green:S.dark }}>{k.v}</div>
+  <div style={{ fontSize:18, ...F7, color:k.g?S.green:S.dark }}>{k.v}</div>
   <div style={{ ...G11, marginTop:2 }}>{k.s}</div>
  </div>
  ))}
  </div>
- <div style={{ ...card, ...cardPad, marginBottom:10 }}>
- <div style={{ fontSize:13, fontWeight:600, marginBottom:4 }}>Section 24 — Mortgage Interest</div>
- <div style={{ fontSize:12, color:S.gray, lineHeight:1.6, marginBottom:8 }}>
- As a personal landlord you can no longer deduct mortgage interest as an expense. Instead you get a 20% tax credit on the interest. Est. annual interest across your portfolio: <span style={{ fontWeight:700, color:S.dark }}>{gbp(estMtgInterest)}</span> giving a credit of <span style={{ fontWeight:700, color:S.green }}>{gbp(mtgInterestCredit)}</span>.
+ <div style={{ ...card, ...cardPad, ...MB10 }}>
+ <div style={{ ...S13, ...F6, marginBottom:4 }}>Section 24 — Mortgage Interest</div>
+ <div style={{ ...S12, color:S.gray, lineHeight:1.6, marginBottom:8 }}>
+ As a personal landlord you can no longer deduct mortgage interest as an expense. Instead you get a 20% tax credit on the interest. Est. annual interest across your portfolio: <span style={{ ...F7, color:S.dark }}>{gbp(estMtgInterest)}</span> giving a credit of <span style={{ ...F7, color:S.green }}>{gbp(mtgInterestCredit)}</span>.
  </div>
- <div style={{ fontSize:11, color:S.amber, fontWeight:600 }}>⚠ Verify exact interest figures with each lender — this uses an estimate based on current balances and rates.</div>
+ <div style={{ fontSize:11, color:S.amber, ...F6 }}>⚠ Verify exact interest figures with each lender — this uses an estimate based on current balances and rates.</div>
  </div>
  <Btn onClick={copyText} style={{ background: copied ? S.green : S.dark }}>
  {copied ? "✓ Copied to clipboard!" : "📋 Copy P&L Summary for Accountant"}
  </Btn>
  <div style={{ ...card }}>
- <div style={{ padding:"11px 14px", background:"#f8fafc", borderBottom:"1px solid #f1f5f9", fontSize:13, fontWeight:600 }}>Monthly Breakdown</div>
+ <div style={{ padding:"11px 14px", background:"#f8fafc", borderBottom:"1px solid #f1f5f9", ...S13, ...F6 }}>Monthly Breakdown</div>
  {txMonths.map(({ y, m, mk }) => {
  const rent  = tenants.filter(t => rp[t.id+"-"+y+"-"+m]).reduce((s, t) => s + t.rn, 0);
  const costs = jobs.filter(j => j.status==="done" && j.date && j.date.startsWith(mk)).reduce((s, j) => s + (j.cost||0), 0);
  const bills = PROPS.reduce((s, p) => s + (outgoings[p.id+"-"+mk]||[]).reduce((z, o) => z + (o.amount||0), 0), 0);
  const net   = rent - costs - bills;
  return (
-  <div key={mk} style={{ padding:"9px 14px", borderBottom:"1px solid #f8fafc", display:"grid", gridTemplateColumns:"55px 1fr 1fr 1fr 1fr", gap:4, fontSize:12 }}>
-    <span style={{ color:S.gray, fontWeight:600 }}>{MSHORT[m]} {y !== CYR ? "'"+String(y).slice(2) : ""}</span>
-    <span style={{ textAlign:"right", color:rent>0?S.green:S.gray }}>{rent>0?gbp(rent):"--"}</span>
-    <span style={{ textAlign:"right", color:costs>0?S.red:S.gray }}>{costs>0?gbp(costs):"--"}</span>
-    <span style={{ textAlign:"right", color:bills>0?S.red:S.gray }}>{bills>0?gbp(bills):"--"}</span>
-    <span style={{ textAlign:"right", fontWeight:700, color:rent>0?(net>0?S.green:S.red):S.gray }}>{rent>0?gbp(Math.abs(net)):"--"}</span>
+  <div key={mk} style={{ padding:"9px 14px", borderBottom:"1px solid #f8fafc", display:"grid", gridTemplateColumns:"55px 1fr 1fr 1fr 1fr", gap:4, ...S12 }}>
+    <span style={{ color:S.gray, ...F6 }}>{MSHORT[m]} {y !== CYR ? "'"+String(y).slice(2) : ""}</span>
+    <span style={{ ...TR, color:rent>0?S.green:S.gray }}>{rent>0?gbp(rent):"--"}</span>
+    <span style={{ ...TR, color:costs>0?S.red:S.gray }}>{costs>0?gbp(costs):"--"}</span>
+    <span style={{ ...TR, color:bills>0?S.red:S.gray }}>{bills>0?gbp(bills):"--"}</span>
+    <span style={{ ...TR, ...F7, color:rent>0?(net>0?S.green:S.red):S.gray }}>{rent>0?gbp(Math.abs(net)):"--"}</span>
   </div>
  );
  })}
- <div style={{ padding:"9px 14px", background:"#f8fafc", display:"grid", gridTemplateColumns:"55px 1fr 1fr 1fr 1fr", gap:4, fontSize:11, fontWeight:600, color:S.gray }}>
- <span></span><span style={{ textAlign:"right" }}>Rent</span><span style={{ textAlign:"right" }}>Jobs</span><span style={{ textAlign:"right" }}>Bills</span><span style={{ textAlign:"right" }}>Net</span>
+ <div style={{ padding:"9px 14px", background:"#f8fafc", display:"grid", gridTemplateColumns:"55px 1fr 1fr 1fr 1fr", gap:4, fontSize:11, ...F6, color:S.gray }}>
+ <span></span><span style={{ ...TR }}>Rent</span><span style={{ ...TR }}>Jobs</span><span style={{ ...TR }}>Bills</span><span style={{ ...TR }}>Net</span>
  </div>
  </div>
     </div>
@@ -2089,21 +2110,21 @@ function NotesPage({ generalNotes, setGeneralNotes, notes, setNote, wide }) {
   return (
     <div>
  <div style={{ ...card, ...cardPad, marginBottom:14 }}>
- <div style={{ fontSize:13, fontWeight:600, marginBottom:8 }}>📝 General Notes</div>
+ <div style={{ ...S13, ...F6, marginBottom:8 }}>📝 General Notes</div>
  <div style={{ ...G11, marginBottom:8 }}>Jot down anything — ideas, reminders, things to follow up on.</div>
  <textarea
  value={generalNotes || ""}
  onChange={e => setGeneralNotes(e.target.value)}
  placeholder="Start typing..."
- style={{ width:"100%", border:"1px solid #e2e8f0", borderRadius:10, padding:"12px", fontSize:14, fontFamily:"system-ui", resize:"none", height:180, outline:"none", lineHeight:1.6 }}
+ style={{ width:"100%", ...BD, ...R10, padding:"12px", fontSize:14, ...FF, resize:"none", height:180, outline:"none", lineHeight:1.6 }}
  />
  </div>
- <div style={{ fontSize:13, fontWeight:600, marginBottom:10, color:S.dark }}>Property Notes</div>
+ <div style={{ ...S13, ...F6, ...MB10, color:S.dark }}>Property Notes</div>
  <div style={grid}>
  {PROPS.map(p => (
  <div key={p.id} style={card}>
   <div style={{ padding:"11px 14px", background:"#f8fafc", borderBottom:"1px solid #f1f5f9" }}>
-    <div style={{ fontSize:13, fontWeight:600 }}>{p.n}</div>
+    <div style={{ ...S13, ...F6 }}>{p.n}</div>
     <div style={{ ...G11 }}>{p.town} · {p.ty}</div>
   </div>
   <div style={{ padding:"10px 14px" }}>
@@ -2111,7 +2132,7 @@ function NotesPage({ generalNotes, setGeneralNotes, notes, setNote, wide }) {
  value={notes[p.id] || ""}
  onChange={e => setNote(p.id, e.target.value)}
  placeholder="Access codes, boiler location, parking, ongoing issues..."
- style={{ width:"100%", border:"1px solid #e2e8f0", borderRadius:9, padding:"8px 10px", fontSize:13, fontFamily:"system-ui", resize:"none", height:80, outline:"none", lineHeight:1.5 }}
+ style={{ width:"100%", ...BD, borderRadius:9, padding:"8px 10px", ...S13, ...FF, resize:"none", height:80, outline:"none", lineHeight:1.5 }}
     />
   </div>
  </div>
@@ -2154,16 +2175,16 @@ function TimelinePage({ tenants, comp, wide }) {
   return (
     <div>
  <div style={{ ...FC, gap:8, marginBottom:14 }}>
- <span style={{ fontSize:13, fontWeight:600 }}>Show next</span>
+ <span style={{ ...S13, ...F6 }}>Show next</span>
  {[30,60,90].map(d => (
- <button key={d} onClick={()=>setDays(d)} style={{ padding:"6px 14px", borderRadius:9, border:"1px solid #e2e8f0", background:days===d?S.dark:"#fff", color:days===d?"#fff":S.dark, fontWeight:600, fontSize:13, cursor:"pointer", fontFamily:"system-ui" }}>
+ <button key={d} onClick={()=>setDays(d)} style={{ padding:"6px 14px", borderRadius:9, ...BD, background:days===d?S.dark:"#fff", color:days===d?"#fff":S.dark, ...F6, ...S13, ...CP, ...FF }}>
   {d}d
  </button>
  ))}
  </div>
  {events.length === 0 && (
- <div style={{ textAlign:"center", padding:"50px 0", color:S.gray }}>
- <div style={{ fontSize:36, marginBottom:10 }}>📅</div>
+ <div style={{ ...TC, padding:"50px 0", color:S.gray }}>
+ <div style={{ fontSize:36, ...MB10 }}>📅</div>
  <div>Nothing coming up in the next {days} days</div>
  </div>
  )}
@@ -2175,12 +2196,12 @@ function TimelinePage({ tenants, comp, wide }) {
     <div style={{ display:"flex", gap:10, alignItems:"flex-start" }}>
  <span style={{ fontSize:20, flexShrink:0 }}>{ev.icon}</span>
  <div>
- <div style={{ fontSize:13, fontWeight:600 }}>{ev.label}</div>
+ <div style={{ ...S13, ...F6 }}>{ev.label}</div>
  <div style={{ ...G11 }}>{ev.sub}</div>
  </div>
     </div>
-    <div style={{ textAlign:"right", flexShrink:0, marginLeft:8 }}>
- <div style={{ fontSize:13, fontWeight:700, color:ev.color }}>{dUntil === 0 ? "Today" : dUntil === 1 ? "Tomorrow" : "in "+dUntil+"d"}</div>
+    <div style={{ ...TR, flexShrink:0, marginLeft:8 }}>
+ <div style={{ ...S13, ...F7, color:ev.color }}>{dUntil === 0 ? "Today" : dUntil === 1 ? "Tomorrow" : "in "+dUntil+"d"}</div>
  <div style={{ ...G11 }}>{formatDate(ev.date)}</div>
     </div>
   </div>
@@ -2205,22 +2226,22 @@ function RentPlannerPage({ tenants, updateTenant, wide }) {
   return (
     <div>
  <div style={{ ...card, ...cardPad, marginBottom:12 }}>
- <div style={{ fontSize:13, fontWeight:600, marginBottom:4 }}>Increase rate</div>
+ <div style={{ ...S13, ...F6, marginBottom:4 }}>Increase rate</div>
  <div style={{ ...FC, gap:12, marginBottom:8 }}>
  <input type="range" min="1" max="20" step="0.5" value={sv} onChange={e=>setSv(parseFloat(e.target.value))} onMouseUp={e=>setRate(parseFloat(e.target.value))} onTouchEnd={e=>setRate(parseFloat(e.target.value))} style={{ flex:1 }} />
- <span style={{ fontSize:18, fontWeight:700, minWidth:50 }}>{sv}%</span>
+ <span style={{ fontSize:18, ...F7, minWidth:50 }}>{sv}%</span>
  </div>
  <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10 }}>
- <div style={{ background:S.light, borderRadius:10, padding:10 }}>
+ <div style={{ background:S.light, ...R10, padding:10 }}>
   <div style={{ ...G11 }}>Current total rent</div>
-  <div style={{ fontSize:16, fontWeight:700 }}>{gbp(total)}/mo</div>
+  <div style={{ fontSize:16, ...F7 }}>{gbp(total)}/mo</div>
  </div>
- <div style={{ background:"#f0fdf4", borderRadius:10, padding:10 }}>
+ <div style={{ background:"#f0fdf4", ...R10, padding:10 }}>
   <div style={{ ...G11 }}>After {rate}% increase</div>
-  <div style={{ fontSize:16, fontWeight:700, color:S.green }}>{gbp(newTotal)}/mo</div>
+  <div style={{ fontSize:16, ...F7, color:S.green }}>{gbp(newTotal)}/mo</div>
  </div>
  </div>
- <div style={{ fontSize:11, color:S.green, fontWeight:600, marginTop:8 }}>
+ <div style={{ fontSize:11, color:S.green, ...F6, marginTop:8 }}>
  +{gbp(newTotal - total)}/mo · +{gbp((newTotal-total)*12)}/yr across all tenants
  </div>
  </div>
@@ -2234,11 +2255,11 @@ function RentPlannerPage({ tenants, updateTenant, wide }) {
   <div key={p.id} style={card}>
     <div style={{ padding:"11px 14px", background:"#f8fafc", borderBottom:"1px solid #f1f5f9", ...FB }}>
  <div>
- <div style={{ fontSize:13, fontWeight:600 }}>{p.n}</div>
+ <div style={{ ...S13, ...F6 }}>{p.n}</div>
  <div style={{ ...G11 }}>{p.town}</div>
  </div>
- <div style={{ textAlign:"right" }}>
- <div style={{ ...G11 }}>{gbp(propTotal)} → <span style={{ color:S.green, fontWeight:700 }}>{gbp(propNew)}</span></div>
+ <div style={{ ...TR }}>
+ <div style={{ ...G11 }}>{gbp(propTotal)} → <span style={{ color:S.green, ...F7 }}>{gbp(propNew)}</span></div>
  <div style={{ fontSize:11, color:S.green }}>+{gbp(propNew-propTotal)}/mo</div>
  </div>
     </div>
@@ -2247,11 +2268,11 @@ function RentPlannerPage({ tenants, updateTenant, wide }) {
  return (
  <div key={t.id} style={{ padding:"10px 14px", borderBottom:i<pt.length-1?"1px solid #f8fafc":"none", ...RW }}>
  <div>
-   <div style={{ fontSize:13, fontWeight:600 }}>{p.ty==="HMO"?t.rm+" · ":""}{t.nm}</div>
-   <div style={{ ...G11 }}>{gbp(t.rn)}/mo → <span style={{ color:S.green, fontWeight:600 }}>{gbp(newRent)}/mo</span></div>
+   <div style={{ ...S13, ...F6 }}>{p.ty==="HMO"?t.rm+" · ":""}{t.nm}</div>
+   <div style={{ ...G11 }}>{gbp(t.rn)}/mo → <span style={{ color:S.green, ...F6 }}>{gbp(newRent)}/mo</span></div>
  </div>
  <button onClick={() => applyRent(t, newRent)}
-   style={{ background: confirmed===t.id ? S.green : S.dark, color:"#fff", border:"none", borderRadius:8, padding:"6px 12px", fontSize:12, fontWeight:600, cursor:"pointer", fontFamily:"system-ui", transition:"background .3s" }}>
+   style={{ background: confirmed===t.id ? S.green : S.dark, color:"#fff", ...BN, borderRadius:8, padding:"6px 12px", ...S12, ...F6, ...CP, ...FF, transition:"background .3s" }}>
    {confirmed===t.id ? "✓ Done" : "Apply"}
  </button>
  </div>
@@ -2336,13 +2357,13 @@ Property: ${p?.n || "the property"}
   };
   return (
     <div>
- <div style={{ ...card, ...cardPad, marginBottom:10 }}>
+ <div style={{ ...card, ...cardPad, ...MB10 }}>
  <div style={{ ...RW }}>
  <div>
   <div style={{ ...G11 }}>API Key</div>
-  <div style={{ fontSize:12, fontWeight:600, color:apiKey?S.green:S.red }}>{apiKey ? "✓ Key saved ("+apiKey.slice(-6)+")" : "✕ No key set"}</div>
+  <div style={{ ...S12, ...F6, color:apiKey?S.green:S.red }}>{apiKey ? "✓ Key saved ("+apiKey.slice(-6)+")" : "✕ No key set"}</div>
  </div>
- <button onClick={() => { setEditKey(!editKey); setKeyInput(""); }} style={{ padding:"6px 12px", borderRadius:8, border:"1px solid #e2e8f0", background:S.light, fontSize:12, fontWeight:600, cursor:"pointer", fontFamily:"system-ui" }}>
+ <button onClick={() => { setEditKey(!editKey); setKeyInput(""); }} style={{ padding:"6px 12px", borderRadius:8, ...BD, background:S.light, ...S12, ...F6, ...CP, ...FF }}>
   {apiKey ? "Change Key" : "Add Key"}
  </button>
  </div>
@@ -2351,12 +2372,12 @@ Property: ${p?.n || "the property"}
   <Inp placeholder="Paste API key from console.anthropic.com" value={keyInput} onChange={e=>setKeyInput(e.target.value)} type="password" />
   <div style={{ display:"flex", gap:8 }}>
     <Btn onClick={() => { localStorage.setItem("ash-api-key", keyInput); setApiKey(keyInput); setEditKey(false); }} style={{ flex:1, padding:10, marginBottom:0 }}>Save Key</Btn>
-    {apiKey && <button onClick={() => { localStorage.removeItem("ash-api-key"); setApiKey(""); setEditKey(false); }} style={{ padding:"10px 14px", borderRadius:10, background:S.rbg, color:S.rtx, border:"none", cursor:"pointer", fontFamily:"system-ui", fontWeight:600 }}>Remove</button>}
+    {apiKey && <button onClick={() => { localStorage.removeItem("ash-api-key"); setApiKey(""); setEditKey(false); }} style={{ padding:"10px 14px", ...R10, background:S.rbg, color:S.rtx, ...BN, ...CP, ...FF, ...F6 }}>Remove</button>}
   </div>
  </div>
  )}
  </div>
- <div style={{ background:S.abg, borderRadius:11, padding:"10px 14px", marginBottom:14, fontSize:12, color:S.atx }}>
+ <div style={{ background:S.abg, borderRadius:11, padding:"10px 14px", marginBottom:14, ...S12, color:S.atx }}>
  ✉️ Pick the type of message, select a tenant and tap Generate. The AI writes a personal letter in your voice — not robotic. Edit it before sending.
  </div>
  <div style={{ ...card, ...cardPad }}>
@@ -2376,15 +2397,15 @@ Property: ${p?.n || "the property"}
   <div style={{ ...G11, marginBottom:4 }}>Increase rate: {customRate}%</div>
   <div style={{ ...FC, gap:10, marginBottom:4 }}>
     <input type="range" min="1" max="20" step="0.5" value={customRate} onChange={e=>setCustomRate(parseFloat(e.target.value))} style={{ flex:1 }} />
-    <span style={{ fontSize:14, fontWeight:700 }}>{customRate}%</span>
+    <span style={{ fontSize:14, ...F7 }}>{customRate}%</span>
   </div>
-  {t && <div style={{ ...G11 }}>{gbp(t.rn)}/mo → <span style={{ color:S.green, fontWeight:700 }}>{gbp(newRent)}/mo</span></div>}
+  {t && <div style={{ ...G11 }}>{gbp(t.rn)}/mo → <span style={{ color:S.green, ...F7 }}>{gbp(newRent)}/mo</span></div>}
  </div>
  )}
  {type === "custom" && (
  <div style={{ marginBottom:8 }}>
   <div style={{ ...G11, marginBottom:4 }}>Describe what you need</div>
-  <textarea value={customMsg} onChange={e=>setCustomMsg(e.target.value)} placeholder="e.g. I need to arrange an inspection next week..." style={{ width:"100%", border:"1px solid #e2e8f0", borderRadius:10, padding:"10px 12px", fontSize:14, fontFamily:"system-ui", resize:"none", height:70, outline:"none" }} />
+  <textarea value={customMsg} onChange={e=>setCustomMsg(e.target.value)} placeholder="e.g. I need to arrange an inspection next week..." style={{ width:"100%", ...BD, ...R10, padding:"10px 12px", fontSize:14, ...FF, resize:"none", height:70, outline:"none" }} />
  </div>
  )}
  <Btn onClick={generate} style={{ marginBottom:0 }}>
@@ -2393,13 +2414,13 @@ Property: ${p?.n || "the property"}
  </div>
  {result && (
  <div style={{ ...card, ...cardPad, marginTop:10 }}>
- <div style={{ ...RW, marginBottom:10 }}>
-  <div style={{ fontSize:13, fontWeight:600 }}>Generated message</div>
-  <button onClick={copy} style={{ background:copied?S.green:S.light, color:copied?"#fff":S.dark, border:"none", borderRadius:8, padding:"5px 12px", fontSize:12, fontWeight:600, cursor:"pointer", fontFamily:"system-ui" }}>
+ <div style={{ ...RW, ...MB10 }}>
+  <div style={{ ...S13, ...F6 }}>Generated message</div>
+  <button onClick={copy} style={{ background:copied?S.green:S.light, color:copied?"#fff":S.dark, ...BN, borderRadius:8, padding:"5px 12px", ...S12, ...F6, ...CP, ...FF }}>
     {copied ? "✓ Copied!" : "Copy"}
   </button>
  </div>
- <div style={{ fontSize:13, lineHeight:1.8, color:S.dark, whiteSpace:"pre-wrap" }}>{result}</div>
+ <div style={{ ...S13, lineHeight:1.8, color:S.dark, whiteSpace:"pre-wrap" }}>{result}</div>
  <div style={{ ...G11, marginTop:10 }}>✏️ Review and edit before sending. This is a starting point, not a final draft.</div>
  </div>
  )}
@@ -2434,7 +2455,7 @@ function DealCheckPage({ wide }) {
   };
   return (
     <div>
- <div style={{ background:S.abg, borderRadius:11, padding:"10px 14px", marginBottom:14, fontSize:12, color:S.atx }}>
+ <div style={{ background:S.abg, borderRadius:11, padding:"10px 14px", marginBottom:14, ...S12, color:S.atx }}>
  Enter the numbers for a property you're looking at. We'll tell you instantly whether it stacks up against your existing portfolio.
  </div>
  <div style={{ ...card, ...cardPad }}>
@@ -2470,10 +2491,10 @@ function DealCheckPage({ wide }) {
  {result && (
  <div>
  <div style={{ ...card, ...cardPad, background: result.stacks ? "#f0fdf4" : "#fff5f5", borderColor: result.stacks ? "#bbf7d0" : "#fecaca", marginTop:10 }}>
-  <div style={{ fontSize:15, fontWeight:700, color:result.stacks?S.green:S.red, marginBottom:4 }}>
+  <div style={{ fontSize:15, ...F7, color:result.stacks?S.green:S.red, marginBottom:4 }}>
     {result.stacks ? "✅ This deal stacks up" : "⚠️ This deal needs scrutiny"}
   </div>
-  <div style={{ fontSize:12, color:S.dark, lineHeight:1.7 }}>
+  <div style={{ ...S12, color:S.dark, lineHeight:1.7 }}>
     {result.stacks
  ? `At ${result.grossYield}% gross yield and ${gbp(result.ncf)}/mo net cash flow after the mortgage, this property performs solidly. Your existing portfolio averages around 6.5% so this is competitive.`
  : `At ${result.grossYield}% gross yield${result.ncf < 0 ? " and negative cash flow of "+gbp(Math.abs(result.ncf))+"/mo" : ""}, this deal is below the threshold you should be targeting. Consider negotiating the price down or finding higher rent potential.`
@@ -2490,9 +2511,9 @@ function DealCheckPage({ wide }) {
     {l:"Stamp duty", v:gbp(result.sdlt), g:false},
     {l:"Mortgage", v:gbp(result.mortgage), g:false},
   ].map((k,i)=>(
-    <div key={i} style={{ background:"#fff", borderRadius:14, border:"1px solid #e2e8f0", padding:12 }}>
+    <div key={i} style={{ ...BW, borderRadius:14, ...BD, padding:12 }}>
  <div style={{ ...G11, marginBottom:3 }}>{k.l}</div>
- <div style={{ fontSize:16, fontWeight:700, color:k.g?S.green:S.dark }}>{k.v}</div>
+ <div style={{ fontSize:16, ...F7, color:k.g?S.green:S.dark }}>{k.v}</div>
     </div>
   ))}
  </div>
@@ -2511,10 +2532,10 @@ function DealCheckPage({ wide }) {
   }).then(r=>r.json()).then(d=>{
     setAiRes(d.content?d.content.map(c=>c.text||"").join(""):"Error."); setAiLoad(false);
   }).catch(()=>{setAiRes("Connection error."); setAiLoad(false);});
- }} style={{ width:"100%", padding:12, borderRadius:12, border:"none", cursor:"pointer", fontFamily:"system-ui", fontWeight:700, fontSize:13, background:S.dark, color:"#fff", marginTop:12 }}>
+ }} style={{ width:"100%", padding:12, borderRadius:12, ...BN, ...CP, ...FF, ...F7, ...S13, background:S.dark, color:"#fff", marginTop:12 }}>
   {aiLoad ? "🤔 Thinking..." : "🤖 Get AI Feedback on This Deal"}
  </button>
- {aiRes && <div style={{ ...card, ...cardPad, marginTop:10 }}><div style={{ fontSize:13, lineHeight:1.8, whiteSpace:"pre-wrap" }}>{aiRes}</div></div>}
+ {aiRes && <div style={{ ...card, ...cardPad, marginTop:10 }}><div style={{ ...S13, lineHeight:1.8, whiteSpace:"pre-wrap" }}>{aiRes}</div></div>}
  </div>
  )}
     </div>
@@ -2542,37 +2563,37 @@ function PersonalOutPage({ tenants, rp, jobs, outgoings, personalOut, addPersona
   return (
     <div>
  <div style={{ ...FC, gap:8, marginBottom:14 }}>
- <button onClick={() => { const d = new Date(selYr, selMo-1, 1); setSelYr(d.getFullYear()); setSelMo(d.getMonth()); }} style={{ padding:"6px 12px", borderRadius:9, border:"1px solid #e2e8f0", background:"#fff", cursor:"pointer", fontSize:14 }}>‹</button>
- <span style={{ fontSize:14, fontWeight:600 }}>{MFULL[selMo]} {selYr}</span>
- <button onClick={() => { const d = new Date(selYr, selMo+1, 1); if(d <= new Date(CYR, CMO, 1)){ setSelYr(d.getFullYear()); setSelMo(d.getMonth()); }}} style={{ padding:"6px 12px", borderRadius:9, border:"1px solid #e2e8f0", background:"#fff", cursor:"pointer", fontSize:14 }}>›</button>
+ <button onClick={() => { const d = new Date(selYr, selMo-1, 1); setSelYr(d.getFullYear()); setSelMo(d.getMonth()); }} style={{ padding:"6px 12px", borderRadius:9, ...BD, ...BW, ...CP, fontSize:14 }}>‹</button>
+ <span style={{ fontSize:14, ...F6 }}>{MFULL[selMo]} {selYr}</span>
+ <button onClick={() => { const d = new Date(selYr, selMo+1, 1); if(d <= new Date(CYR, CMO, 1)){ setSelYr(d.getFullYear()); setSelMo(d.getMonth()); }}} style={{ padding:"6px 12px", borderRadius:9, ...BD, ...BW, ...CP, fontSize:14 }}>›</button>
  </div>
  <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr 1fr", gap:10, marginBottom:12 }}>
- <div style={{ background:"#f0fdf4", borderRadius:12, padding:12 }}><div style={{ fontSize:10, color:S.gtx, fontWeight:600 }}>Portfolio net</div><div style={{ fontSize:16, fontWeight:700, color:S.green }}>{gbp(portNet)}</div></div>
- <div style={{ background:"#fff5f5", borderRadius:12, padding:12 }}><div style={{ fontSize:10, color:S.rtx, fontWeight:600 }}>Personal costs</div><div style={{ fontSize:16, fontWeight:700, color:S.red }}>{gbp(pTotal)}</div></div>
- <div style={{ background:keepNet>=0?"#f0fdf4":"#fff5f5", borderRadius:12, padding:12 }}><div style={{ fontSize:10, color:keepNet>=0?S.gtx:S.rtx, fontWeight:600 }}>You keep</div><div style={{ fontSize:16, fontWeight:700, color:keepNet>=0?S.green:S.red }}>{keepNet>=0?"":"-"}{gbp(Math.abs(keepNet))}</div></div>
+ <div style={{ background:"#f0fdf4", borderRadius:12, padding:12 }}><div style={{ fontSize:10, color:S.gtx, ...F6 }}>Portfolio net</div><div style={{ fontSize:16, ...F7, color:S.green }}>{gbp(portNet)}</div></div>
+ <div style={{ background:"#fff5f5", borderRadius:12, padding:12 }}><div style={{ fontSize:10, color:S.rtx, ...F6 }}>Personal costs</div><div style={{ fontSize:16, ...F7, color:S.red }}>{gbp(pTotal)}</div></div>
+ <div style={{ background:keepNet>=0?"#f0fdf4":"#fff5f5", borderRadius:12, padding:12 }}><div style={{ fontSize:10, color:keepNet>=0?S.gtx:S.rtx, ...F6 }}>You keep</div><div style={{ fontSize:16, ...F7, color:keepNet>=0?S.green:S.red }}>{keepNet>=0?"":"-"}{gbp(Math.abs(keepNet))}</div></div>
  </div>
  <div style={card}>
- <div style={{ padding:"11px 14px", background:"#f8fafc", borderBottom:"1px solid #f1f5f9", fontSize:13, fontWeight:600 }}>Personal expenses</div>
+ <div style={{ padding:"11px 14px", background:"#f8fafc", borderBottom:"1px solid #f1f5f9", ...S13, ...F6 }}>Personal expenses</div>
  {unrepeat.length > 0 && (
  <div style={{ padding:"10px 14px", borderBottom:"1px solid #f8fafc", background:"#fffbeb" }}>
-  <div style={{ fontSize:11, color:S.atx, fontWeight:600, marginBottom:6 }}>From last month — tap to add:</div>
+  <div style={{ fontSize:11, color:S.atx, ...F6, marginBottom:6 }}>From last month — tap to add:</div>
   <div style={{ display:"flex", flexWrap:"wrap", gap:6 }}>
     {unrepeat.map((po, i) => (
- <button key={i} onClick={() => addPersonalOut(selYr, selMo, { label:po.label, amount:po.amount })} style={{ background:"#fff", border:"1px solid #fde68a", borderRadius:8, padding:"4px 10px", fontSize:12, cursor:"pointer", fontFamily:"system-ui", color:S.atx, fontWeight:600 }}>+ {po.label} ({gbp(po.amount)})</button>
+ <button key={i} onClick={() => addPersonalOut(selYr, selMo, { label:po.label, amount:po.amount })} style={{ ...BW, border:"1px solid #fde68a", borderRadius:8, padding:"4px 10px", ...S12, ...CP, ...FF, color:S.atx, ...F6 }}>+ {po.label} ({gbp(po.amount)})</button>
     ))}
   </div>
  </div>
  )}
  {items.map(o => (
  <div key={o.id} style={{ padding:"9px 14px", borderBottom:"1px solid #f8fafc", ...RW }}>
-  <span style={{ fontSize:13 }}>{o.label}</span>
+  <span style={{ ...S13 }}>{o.label}</span>
   <div style={{ ...FC, gap:8 }}>
-    <span style={{ fontSize:13, fontWeight:600, color:S.red }}>{gbp(o.amount)}</span>
-    <button onClick={() => deletePersonalOut(selYr, selMo, o.id)} style={{ width:28, height:28, borderRadius:"50%", border:"none", cursor:"pointer", background:S.rbg, fontSize:12 }}>✕</button>
+    <span style={{ ...S13, ...F6, color:S.red }}>{gbp(o.amount)}</span>
+    <button onClick={() => deletePersonalOut(selYr, selMo, o.id)} style={{ width:28, height:28, borderRadius:"50%", ...BN, ...CP, background:S.rbg, ...S12 }}>✕</button>
   </div>
  </div>
  ))}
- {!items.length && !adding && <div style={{ padding:"14px", fontSize:12, color:S.gray, textAlign:"center" }}>No personal expenses logged this month</div>}
+ {!items.length && !adding && <div style={{ padding:"14px", ...S12, color:S.gray, ...TC }}>No personal expenses logged this month</div>}
  <div style={{ padding:"10px 14px" }}>
  {adding ? (
   <div>
@@ -2580,17 +2601,88 @@ function PersonalOutPage({ tenants, rp, jobs, outgoings, personalOut, addPersona
     <Inp placeholder="Amount (£)" type="number" value={form.amount} onChange={e => setForm(f => ({ ...f, amount:e.target.value }))} />
     <div style={{ display:"flex", gap:8 }}>
  <Btn onClick={submit} style={{ flex:1, padding:10, marginBottom:0 }}>Add</Btn>
- <button onClick={() => { setAdding(false); setForm({ label:"", amount:"" }); }} style={{ padding:"10px 14px", borderRadius:10, background:S.light, border:"none", cursor:"pointer", fontFamily:"system-ui", fontWeight:600 }}>Cancel</button>
+ <button onClick={() => { setAdding(false); setForm({ label:"", amount:"" }); }} style={{ padding:"10px 14px", ...R10, background:S.light, ...BN, ...CP, ...FF, ...F6 }}>Cancel</button>
     </div>
   </div>
  ) : (
-  <button onClick={() => setAdding(true)} style={{ fontSize:12, color:S.mid, fontWeight:600, background:"none", border:"none", cursor:"pointer", ...FC, gap:4, padding:"4px 0", fontFamily:"system-ui" }}>+ Add expense</button>
+  <button onClick={() => setAdding(true)} style={{ ...S12, color:S.mid, ...F6, background:"none", ...BN, ...CP, ...FC, gap:4, padding:"4px 0", ...FF }}>+ Add expense</button>
  )}
  </div>
  </div>
     </div>
   );
 }
+function PortfolioOutPage({ portfolioOut, addPortfolioOut, deletePortfolioOut }) {
+  const [selYr, setSelYr] = useState(CYR);
+  const [selMo, setSelMo] = useState(CMO);
+  const [adding, setAdding] = useState(false);
+  const [form, setForm] = useState({ label:"", amount:"", cat:"Accountant" });
+  const CATS = ["Accountant","Insurance","Software","Legal","Training","Other"];
+  const pk = mKey(selYr, selMo);
+  const items = portfolioOut[pk] || [];
+  const mTotal = items.reduce((s, o) => s + (o.amount||0), 0);
+  let yTotal = 0;
+  for (let m = 0; m <= CMO; m++) yTotal += (portfolioOut[mKey(CYR,m)]||[]).reduce((s,o) => s + (o.amount||0), 0);
+  const submit = () => { if (!form.label || !form.amount) return; addPortfolioOut(selYr, selMo, { label:form.label, amount:parseFloat(form.amount)||0, cat:form.cat }); setForm({ label:"", amount:"", cat:"Accountant" }); setAdding(false); };
+  const prevPk = mKey(selMo===0?selYr-1:selYr, selMo===0?11:selMo-1);
+  const prevItems = portfolioOut[prevPk] || [];
+  const unrepeat = prevItems.filter(po => !items.find(i => i.label === po.label));
+  return (
+    <div>
+ <div style={{ ...FC, gap:8, marginBottom:14 }}>
+ <button onClick={() => { const d = new Date(selYr, selMo-1, 1); setSelYr(d.getFullYear()); setSelMo(d.getMonth()); }} style={{ padding:"6px 12px", borderRadius:9, ...BD, ...BW, ...CP, fontSize:14 }}>‹</button>
+ <span style={{ fontSize:14, ...F6 }}>{MFULL[selMo]} {selYr}</span>
+ <button onClick={() => { const d = new Date(selYr, selMo+1, 1); if(d <= new Date(CYR, CMO, 1)){ setSelYr(d.getFullYear()); setSelMo(d.getMonth()); }}} style={{ padding:"6px 12px", borderRadius:9, ...BD, ...BW, ...CP, fontSize:14 }}>›</button>
+ </div>
+ <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10, marginBottom:12 }}>
+ <div style={{ background:"#fff5f5", ...R10, padding:12 }}><div style={{ fontSize:10, color:S.rtx, ...F6 }}>This month</div><div style={{ fontSize:16, ...F7, color:S.red }}>{gbp(mTotal)}</div></div>
+ <div style={{ background:"#fff5f5", ...R10, padding:12 }}><div style={{ fontSize:10, color:S.rtx, ...F6 }}>YTD</div><div style={{ fontSize:16, ...F7, color:S.red }}>{gbp(yTotal)}</div></div>
+ </div>
+ <div style={card}>
+ <div style={{ padding:"11px 14px", background:"#f8fafc", borderBottom:"1px solid #f1f5f9", ...S13, ...F6 }}>Portfolio-level costs</div>
+ {unrepeat.length > 0 && (
+ <div style={{ padding:"10px 14px", borderBottom:"1px solid #f8fafc", background:"#fffbeb" }}>
+  <div style={{ ...S12, color:S.atx, ...F6, marginBottom:6 }}>From last month — tap to add:</div>
+  <div style={{ display:"flex", flexWrap:"wrap", gap:6 }}>
+    {unrepeat.map((po, i) => (
+ <button key={i} onClick={() => addPortfolioOut(selYr, selMo, { label:po.label, amount:po.amount, cat:po.cat||"Other" })} style={{ ...BW, border:"1px solid #fde68a", ...R10, padding:"4px 10px", ...S12, ...CP, ...FF, color:S.atx, ...F6 }}>+ {po.label} ({gbp(po.amount)})</button>
+    ))}
+  </div>
+ </div>
+ )}
+ {items.map(o => (
+ <div key={o.id} style={{ padding:"9px 14px", borderBottom:"1px solid #f8fafc", ...RW }}>
+  <div>
+    <div style={{ ...S13 }}>{o.label}</div>
+    <div style={{ ...S12, color:S.gray }}>{o.cat||"Other"}</div>
+  </div>
+  <div style={{ ...FC, gap:8 }}>
+    <span style={{ ...S13, ...F6, color:S.red }}>{gbp(o.amount)}</span>
+    <button onClick={() => deletePortfolioOut(selYr, selMo, o.id)} style={{ width:28, height:28, borderRadius:"50%", ...BN, ...CP, background:S.rbg, ...S12 }}>✕</button>
+  </div>
+ </div>
+ ))}
+ {!items.length && !adding && <div style={{ padding:"14px", ...S12, color:S.gray, ...TC }}>No portfolio costs logged this month</div>}
+ <div style={{ padding:"10px 14px" }}>
+ {adding ? (
+  <div>
+    <Inp placeholder="e.g. Accountant, Landlord insurance..." value={form.label} onChange={e => setForm(f => ({ ...f, label:e.target.value }))} />
+    <Inp placeholder="Amount (£)" type="number" value={form.amount} onChange={e => setForm(f => ({ ...f, amount:e.target.value }))} />
+    <Sel value={form.cat} onChange={e => setForm(f => ({ ...f, cat:e.target.value }))}>{CATS.map(c => <option key={c} value={c}>{c}</option>)}</Sel>
+    <div style={{ display:"flex", gap:8 }}>
+ <Btn onClick={submit} style={{ flex:1, padding:10, marginBottom:0 }}>Add</Btn>
+ <button onClick={() => { setAdding(false); setForm({ label:"", amount:"", cat:"Accountant" }); }} style={{ padding:"10px 14px", ...R10, background:S.light, ...BN, ...CP, ...FF, ...F6 }}>Cancel</button>
+    </div>
+  </div>
+ ) : (
+  <button onClick={() => setAdding(true)} style={{ ...S12, color:S.mid, ...F6, background:"none", ...BN, ...CP, ...FC, gap:4, padding:"4px 0", ...FF }}>+ Add cost</button>
+ )}
+ </div>
+ </div>
+    </div>
+  );
+}
+
 function RentGapPage({ tenants, updateTenant }) {
   const [showAll, setShowAll] = useState(false);
   // Estimate "review needed" based on start date or review date
@@ -2615,30 +2707,30 @@ function RentGapPage({ tenants, updateTenant }) {
   return (
     <div>
  <div style={{ background:"linear-gradient(135deg,#fef3c7,#fef9e0)", borderRadius:15, padding:16, marginBottom:12, border:"1px solid #fde68a" }}>
- <div style={{ fontSize:11, color:S.atx, fontWeight:700, textTransform:"uppercase", letterSpacing:".5px", marginBottom:4 }}>Estimated rent gap</div>
- <div style={{ fontSize:28, fontWeight:700, color:S.amber }}>{gbp(totalGap)}/mo</div>
- <div style={{ fontSize:12, color:S.atx, marginTop:2 }}>That's <span style={{ fontWeight:700 }}>{gbp(totalAnnual)}/year</span> across {needsReview.length} tenant{needsReview.length!==1?"s":""}</div>
+ <div style={{ fontSize:11, color:S.atx, ...F7, textTransform:"uppercase", letterSpacing:".5px", marginBottom:4 }}>Estimated rent gap</div>
+ <div style={{ fontSize:28, ...F7, color:S.amber }}>{gbp(totalGap)}/mo</div>
+ <div style={{ ...S12, color:S.atx, marginTop:2 }}>That's <span style={{ ...F7 }}>{gbp(totalAnnual)}/year</span> across {needsReview.length} tenant{needsReview.length!==1?"s":""}</div>
  <div style={{ fontSize:10, color:S.atx, marginTop:8, lineHeight:1.5, opacity:.8 }}>Rough estimate assuming 4%/yr market drift from last review date. Verify with local comparables before increasing rent.</div>
  </div>
- <div style={{ display:"flex", gap:8, marginBottom:10 }}>
- <button onClick={() => setShowAll(false)} style={{ flex:1, padding:"8px 12px", borderRadius:10, border:"1px solid #e2e8f0", background:!showAll?S.dark:"#fff", color:!showAll?"#fff":S.dark, fontSize:12, fontWeight:600, cursor:"pointer", fontFamily:"system-ui" }}>
+ <div style={{ display:"flex", gap:8, ...MB10 }}>
+ <button onClick={() => setShowAll(false)} style={{ flex:1, padding:"8px 12px", ...R10, ...BD, background:!showAll?S.dark:"#fff", color:!showAll?"#fff":S.dark, ...S12, ...F6, ...CP, ...FF }}>
   Needs review ({needsReview.length})
  </button>
- <button onClick={() => setShowAll(true)} style={{ flex:1, padding:"8px 12px", borderRadius:10, border:"1px solid #e2e8f0", background:showAll?S.dark:"#fff", color:showAll?"#fff":S.dark, fontSize:12, fontWeight:600, cursor:"pointer", fontFamily:"system-ui" }}>
+ <button onClick={() => setShowAll(true)} style={{ flex:1, padding:"8px 12px", ...R10, ...BD, background:showAll?S.dark:"#fff", color:showAll?"#fff":S.dark, ...S12, ...F6, ...CP, ...FF }}>
   All tenants ({analysed.length})
  </button>
  </div>
  {displayed.length === 0 && (
- <div style={{ ...card, ...cardPad, textAlign:"center", padding:"30px 14px" }}>
+ <div style={{ ...card, ...cardPad, ...TC, padding:"30px 14px" }}>
  <div style={{ fontSize:32, marginBottom:8 }}>✅</div>
- <div style={{ fontSize:13, fontWeight:600 }}>No rent reviews overdue</div>
+ <div style={{ ...S13, ...F6 }}>No rent reviews overdue</div>
  </div>
  )}
  {displayed.sort((a,b) => (b.monthsSince||0) - (a.monthsSince||0)).map(t => (
  <div key={t.id} style={{ ...card, ...cardPad, borderLeft:t.status==="red"?"4px solid "+S.red:t.status==="amber"?"4px solid "+S.amber:t.status==="unknown"?"4px solid "+S.gray:"4px solid "+S.green }}>
  <div style={{ ...FB, alignItems:"flex-start", marginBottom:6 }}>
   <div style={{ flex:1 }}>
-  <div style={{ fontSize:14, fontWeight:700 }}>{t.nm}</div>
+  <div style={{ fontSize:14, ...F7 }}>{t.nm}</div>
   <div style={{ ...G11 }}>{t.propName}</div>
   </div>
   <Badge color={t.status==="red"?"red":t.status==="amber"?"amber":t.status==="unknown"?"gray":"green"}>{t.label}</Badge>
@@ -2646,15 +2738,15 @@ function RentGapPage({ tenants, updateTenant }) {
  <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr 1fr", gap:6, marginTop:8 }}>
   <div style={{ background:S.light, borderRadius:8, padding:8 }}>
    <div style={{ fontSize:10, color:S.gray }}>Current</div>
-   <div style={{ fontSize:13, fontWeight:700 }}>{gbp(t.rn)}</div>
+   <div style={{ ...S13, ...F7 }}>{gbp(t.rn)}</div>
   </div>
   <div style={{ background:t.estGap>0?"#f0fdf4":S.light, borderRadius:8, padding:8 }}>
    <div style={{ fontSize:10, color:S.gray }}>Est gap</div>
-   <div style={{ fontSize:13, fontWeight:700, color:t.estGap>0?S.green:S.gray }}>{t.estGap>0?"+":""}{gbp(t.estGap)}</div>
+   <div style={{ ...S13, ...F7, color:t.estGap>0?S.green:S.gray }}>{t.estGap>0?"+":""}{gbp(t.estGap)}</div>
   </div>
   <div style={{ background:t.estGap>0?"#f0fdf4":S.light, borderRadius:8, padding:8 }}>
    <div style={{ fontSize:10, color:S.gray }}>Per year</div>
-   <div style={{ fontSize:13, fontWeight:700, color:t.estGap>0?S.green:S.gray }}>{gbp(t.estGap*12)}</div>
+   <div style={{ ...S13, ...F7, color:t.estGap>0?S.green:S.gray }}>{gbp(t.estGap*12)}</div>
   </div>
  </div>
  </div>
@@ -2699,37 +2791,37 @@ function PerformersPage({ tenants, jobs, outgoings, rp }) {
     <div>
  <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10, marginBottom:12 }}>
  <div style={{ background:"linear-gradient(135deg,#dcfce7,#f0fdf4)", borderRadius:13, padding:14, border:"1px solid #bbf7d0" }}>
- <div style={{ fontSize:10, color:S.gtx, fontWeight:700, textTransform:"uppercase", letterSpacing:".5px" }}>🏆 Best</div>
- <div style={{ fontSize:14, fontWeight:700, marginTop:4 }}>{best.n.split(" ").slice(0,3).join(" ")}</div>
+ <div style={{ fontSize:10, color:S.gtx, ...F7, textTransform:"uppercase", letterSpacing:".5px" }}>🏆 Best</div>
+ <div style={{ fontSize:14, ...F7, marginTop:4 }}>{best.n.split(" ").slice(0,3).join(" ")}</div>
  <div style={{ fontSize:11, color:S.gtx, marginTop:2 }}>{gbp(best.avgMonthlyNet)}/mo net · {best.grossYield.toFixed(1)}% yield</div>
  </div>
  <div style={{ background:"linear-gradient(135deg,#fee2e2,#fff5f5)", borderRadius:13, padding:14, border:"1px solid #fecaca" }}>
- <div style={{ fontSize:10, color:S.rtx, fontWeight:700, textTransform:"uppercase", letterSpacing:".5px" }}>⚠ Worst</div>
- <div style={{ fontSize:14, fontWeight:700, marginTop:4 }}>{worst.n.split(" ").slice(0,3).join(" ")}</div>
+ <div style={{ fontSize:10, color:S.rtx, ...F7, textTransform:"uppercase", letterSpacing:".5px" }}>⚠ Worst</div>
+ <div style={{ fontSize:14, ...F7, marginTop:4 }}>{worst.n.split(" ").slice(0,3).join(" ")}</div>
  <div style={{ fontSize:11, color:S.rtx, marginTop:2 }}>{gbp(worst.avgMonthlyNet)}/mo net · {worst.grossYield.toFixed(1)}% yield</div>
  </div>
  </div>
- <div style={{ display:"flex", gap:6, marginBottom:10, overflowX:"auto" }}>
+ <div style={{ display:"flex", gap:6, ...MB10, overflowX:"auto" }}>
  {Object.keys(sortLabels).map(k => (
- <button key={k} onClick={() => setSortBy(k)} style={{ padding:"6px 12px", borderRadius:8, border:"1px solid #e2e8f0", background:sortBy===k?S.dark:"#fff", color:sortBy===k?"#fff":S.dark, fontSize:12, fontWeight:600, cursor:"pointer", fontFamily:"system-ui", whiteSpace:"nowrap" }}>
+ <button key={k} onClick={() => setSortBy(k)} style={{ padding:"6px 12px", borderRadius:8, ...BD, background:sortBy===k?S.dark:"#fff", color:sortBy===k?"#fff":S.dark, ...S12, ...F6, ...CP, ...FF, whiteSpace:"nowrap" }}>
   {sortLabels[k]}
  </button>
  ))}
  </div>
  {sorted.map((p, i) => (
  <div key={p.id} style={{ ...card, ...cardPad, ...FC, gap:12 }}>
- <div style={{ width:32, height:32, borderRadius:"50%", background:i===0?"#dcfce7":i===sorted.length-1?"#fee2e2":S.light, ...FC, justifyContent:"center", fontSize:14, fontWeight:700, color:i===0?S.gtx:i===sorted.length-1?S.rtx:S.mid, flexShrink:0 }}>{i+1}</div>
+ <div style={{ width:32, height:32, borderRadius:"50%", background:i===0?"#dcfce7":i===sorted.length-1?"#fee2e2":S.light, ...FC, justifyContent:"center", fontSize:14, ...F7, color:i===0?S.gtx:i===sorted.length-1?S.rtx:S.mid, flexShrink:0 }}>{i+1}</div>
  <div style={{ flex:1, minWidth:0 }}>
-  <div style={{ fontSize:13, fontWeight:600, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{p.n}</div>
+  <div style={{ ...S13, ...F6, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{p.n}</div>
   <div style={{ ...G11 }}>{p.ty} · {p.town}</div>
  </div>
- <div style={{ textAlign:"right", flexShrink:0 }}>
-  <div style={{ fontSize:13, fontWeight:700, color:p.avgMonthlyNet>=0?S.green:S.red }}>{p.avgMonthlyNet>=0?"+":""}{gbp(p.avgMonthlyNet)}/mo</div>
+ <div style={{ ...TR, flexShrink:0 }}>
+  <div style={{ ...S13, ...F7, color:p.avgMonthlyNet>=0?S.green:S.red }}>{p.avgMonthlyNet>=0?"+":""}{gbp(p.avgMonthlyNet)}/mo</div>
   <div style={{ ...G11 }}>{p.grossYield.toFixed(1)}% yield · {Math.round(p.ltv)}% LTV</div>
  </div>
  </div>
  ))}
- <div style={{ ...G11, textAlign:"center", marginTop:8, lineHeight:1.5 }}>Net profit = 6-month average (rent – mortgage – jobs – bills)</div>
+ <div style={{ ...G11, ...TC, marginTop:8, lineHeight:1.5 }}>Net profit = 6-month average (rent – mortgage – jobs – bills)</div>
     </div>
   );
 }
@@ -2754,15 +2846,15 @@ function EquityPage({ tenants }) {
   return (
     <div>
  <div style={{ background:"linear-gradient(135deg,#1e293b,#0f172a)", borderRadius:15, padding:16, marginBottom:12, color:"#fff" }}>
- <div style={{ fontSize:11, color:"#94a3b8", fontWeight:700, textTransform:"uppercase", letterSpacing:".5px", marginBottom:4 }}>Releasable at {ltvTarget}% LTV</div>
- <div style={{ fontSize:32, fontWeight:700, color:"#4ade80" }}>{gbp(totalReleasable)}</div>
- <div style={{ fontSize:12, color:"#94a3b8", marginTop:3 }}>Would add <span style={{ fontWeight:700, color:"#f87171" }}>{gbp(totalNewDebt)}/mo</span> to total mortgage payments</div>
+ <div style={{ fontSize:11, color:"#94a3b8", ...F7, textTransform:"uppercase", letterSpacing:".5px", marginBottom:4 }}>Releasable at {ltvTarget}% LTV</div>
+ <div style={{ fontSize:32, ...F7, color:"#4ade80" }}>{gbp(totalReleasable)}</div>
+ <div style={{ ...S12, color:"#94a3b8", marginTop:3 }}>Would add <span style={{ ...F7, color:"#f87171" }}>{gbp(totalNewDebt)}/mo</span> to total mortgage payments</div>
  </div>
  <div style={{ ...card, ...cardPad, marginBottom:12 }}>
- <div style={{ fontSize:12, fontWeight:600, marginBottom:6 }}>Target LTV: {ltvTarget}%</div>
+ <div style={{ ...S12, ...F6, marginBottom:6 }}>Target LTV: {ltvTarget}%</div>
  <div style={{ ...FC, gap:10 }}>
  <input type="range" min="60" max="80" step="1" value={ltvTarget} onChange={e=>setLtvTarget(parseInt(e.target.value))} style={{ flex:1 }} />
- <span style={{ fontSize:13, fontWeight:700, color:ltvTarget>=75?S.amber:S.dark, minWidth:34 }}>{ltvTarget}%</span>
+ <span style={{ ...S13, ...F7, color:ltvTarget>=75?S.amber:S.dark, minWidth:34 }}>{ltvTarget}%</span>
  </div>
  <div style={{ ...G11, marginTop:6 }}>Most BTL lenders go up to 75%. Above that is stretched and harder to place.</div>
  </div>
@@ -2773,11 +2865,11 @@ function EquityPage({ tenants }) {
  <div key={p.id} style={{ ...card, ...cardPad, opacity:canRelease?1:.55 }}>
  <div style={{ ...FB, alignItems:"flex-start", marginBottom:8 }}>
  <div>
-  <div style={{ fontSize:14, fontWeight:700 }}>{p.n}</div>
+  <div style={{ fontSize:14, ...F7 }}>{p.n}</div>
   <div style={{ ...G11 }}>{p.ty} · currently {Math.round(pct)}% LTV</div>
  </div>
- <div style={{ textAlign:"right" }}>
-  <div style={{ fontSize:18, fontWeight:700, color:canRelease?S.green:S.gray }}>{gbp(p.releasable)}</div>
+ <div style={{ ...TR }}>
+  <div style={{ fontSize:18, ...F7, color:canRelease?S.green:S.gray }}>{gbp(p.releasable)}</div>
   <div style={{ fontSize:10, color:S.gray }}>releasable</div>
  </div>
  </div>
@@ -2787,17 +2879,17 @@ function EquityPage({ tenants }) {
  </div>
  {canRelease ? (
  <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr 1fr", gap:6, fontSize:11 }}>
- <div><div style={{ color:S.gray }}>New mtg</div><div style={{ fontWeight:700 }}>{gbp(p.newMonthly)}/mo</div></div>
- <div><div style={{ color:S.gray }}>Extra cost</div><div style={{ fontWeight:700, color:p.mtgDiff>0?S.red:S.green }}>+{gbp(p.mtgDiff)}/mo</div></div>
- <div><div style={{ color:S.gray }}>New net</div><div style={{ fontWeight:700, color:p.newNet>=0?S.green:S.red }}>{p.newNet>=0?"":"-"}{gbp(Math.abs(p.newNet))}/mo</div></div>
+ <div><div style={{ color:S.gray }}>New mtg</div><div style={{ ...F7 }}>{gbp(p.newMonthly)}/mo</div></div>
+ <div><div style={{ color:S.gray }}>Extra cost</div><div style={{ ...F7, color:p.mtgDiff>0?S.red:S.green }}>+{gbp(p.mtgDiff)}/mo</div></div>
+ <div><div style={{ color:S.gray }}>New net</div><div style={{ ...F7, color:p.newNet>=0?S.green:S.red }}>{p.newNet>=0?"":"-"}{gbp(Math.abs(p.newNet))}/mo</div></div>
  </div>
  ) : (
- <div style={{ ...G11, fontWeight:600 }}>Already at or above target LTV — no equity to release</div>
+ <div style={{ ...G11, ...F6 }}>Already at or above target LTV — no equity to release</div>
  )}
  </div>
  );
  })}
- <div style={{ ...G11, textAlign:"center", marginTop:8, lineHeight:1.5 }}>Calculations assume interest-only at current rate on file (or 5.5% if unknown). Actual lender offers will vary.</div>
+ <div style={{ ...G11, ...TC, marginTop:8, lineHeight:1.5 }}>Calculations assume interest-only at current rate on file (or 5.5% if unknown). Actual lender offers will vary.</div>
     </div>
   );
 }
